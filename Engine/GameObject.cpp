@@ -42,6 +42,11 @@ void GameObject::SetPosition(float x, float y)
     m_Transform.SetPosition(x, y, 0);
 }
 
+const glm::vec3& GameObject::GetPosition()
+{
+    return m_Transform.GetPosition();
+}
+
 const Transform& GameObject::GetTransform() const
 {
     return m_Transform;

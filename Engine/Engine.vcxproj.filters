@@ -72,6 +72,9 @@
     <ClInclude Include="Singleton.h">
       <Filter>Core\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Exceptions.h">
+      <Filter>Core\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">

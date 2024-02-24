@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include <vector>
 #include "Component.h"
+#include "Exceptions.h"
 
 class Texture2D;
 class Component;
@@ -24,15 +25,24 @@ public:
 	// MUTATORS AND ACCESSORS
 	//=======================================
 	void SetPosition(float x, float y);
+	const glm::vec3& GetPosition();
 	const Transform& GetTransform() const;
 
 	//=======================================
 	// TEMPLATED COMPONENT SYSTEM
 	//=======================================
+
 	template <typename T, typename... Args>
 	T* AddComponent(Args&&... args)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must be a subclass of Component");
+
+		// Check if a component of the same type already exists
+		for (const auto& existingComponent : m_Components) {
+			if (dynamic_cast<T*>(existingComponent.get()) != nullptr) {
+				throw TooManyComponentsException();
+			}
+		}
 
 		// Construct component based on arguments and templated type
 		auto newComponent = std::make_unique<T>(std::forward<Args>(args)...);
@@ -41,7 +51,9 @@ public:
 		T* rawPtr = newComponent.get();
 
 		// Set the owner before adding the component to the container
-		static_cast<Component*>(newComponent.get())->SetOwner(this);
+		Component* component = static_cast<Component*>(newComponent.get());
+		component->SetOwner(this);
+		component->OnInit();
 
 		m_Components.emplace_back(std::move(newComponent));
 		return rawPtr;

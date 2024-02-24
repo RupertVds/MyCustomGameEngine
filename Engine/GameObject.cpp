@@ -5,20 +5,46 @@
 
 GameObject::~GameObject() = default;
 
-void GameObject::Update(){}
+void GameObject::Update()
+{
+    for (std::unique_ptr<Component>& component : m_Components)
+    {
+        component->Update();
+    }
+}
+
+void GameObject::FixedUpdate()
+{
+    for (std::unique_ptr<Component>& component : m_Components)
+    {
+        component->FixedUpdate();
+    }
+}
+
+void GameObject::LateUpdate()
+{
+    for (std::unique_ptr<Component>& component : m_Components)
+    {
+        component->LateUpdate();
+    }
+}
 
 void GameObject::Render() const
 {
-	const auto& pos = m_transform.GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
-}
-
-void GameObject::SetTexture(const std::string& filename)
-{
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+    for (const std::unique_ptr<Component>& component : m_Components)
+    {
+        component->Render();
+    }
 }
 
 void GameObject::SetPosition(float x, float y)
 {
-	m_transform.SetPosition(x, y, 0.0f);
+    m_Transform.SetPosition(x, y, 0);
 }
+
+const Transform& GameObject::GetTransform() const
+{
+    return m_Transform;
+}
+
+

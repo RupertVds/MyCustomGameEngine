@@ -9,6 +9,9 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "Timer.h"
+#include <thread>
+#include <algorithm>
 
 SDL_Window* g_window{};
 
@@ -81,13 +84,40 @@ void Engine::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
+	auto& timer = Timer::GetInstance();
+
+	constexpr float targetFps{ 165.f };
+	float lag = 0.0f;
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
 	while (doContinue)
 	{
+		timer.Update();
+		lag += timer.GetDeltaTime();
+
 		doContinue = input.ProcessInput();
+		while (lag >= timer.GetFixedTimeStep())
+		{
+			sceneManager.FixedUpdate();
+			lag -= timer.GetFixedTimeStep();
+		}
+
 		sceneManager.Update();
+
+		sceneManager.LateUpdate();
+
 		renderer.Render();
+
+		constexpr double targetFrameDuration = 1.0 / (targetFps / 2);  // Adjust this value based on your desired frame rate
+
+		// Calculate the sleep duration to achieve the target frame rate
+		const double sleepDuration = targetFrameDuration - timer.GetDeltaTime();;
+
+		// If the actual frame duration is less than the target, sleep for the remaining time
+		if (sleepDuration > 0.0) 
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(sleepDuration * 1000)));
+		}
 	}
 }

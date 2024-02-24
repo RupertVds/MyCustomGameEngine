@@ -1,16 +1,23 @@
 #include <stdexcept>
 #include <SDL_ttf.h>
-#include "TextObject.h"
+#include "TextComponent.h"
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include "GameObject.h"
+#include "Timer.h"
 
-TextObject::TextObject(const std::string& text, std::shared_ptr<Font> font) 
-	: m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
-{ }
-
-void TextObject::Update()
+TextComponent::TextComponent(GameObject* owner, const std::string& text, std::shared_ptr<Font> font)
+	: 
+	Component(owner),
+	m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
 {
+	m_Transform = m_Owner->GetTransform();
+}
+
+void TextComponent::Update()
+{
+
 	if (m_needsUpdate)
 	{
 		const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
@@ -30,25 +37,25 @@ void TextObject::Update()
 	}
 }
 
-void TextObject::Render() const
+void TextComponent::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
-		const auto& pos = m_transform.GetPosition();
+		const auto& pos = m_Transform.GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}
 }
 
 // This implementation uses the "dirty flag" pattern
-void TextObject::SetText(const std::string& text)
+void TextComponent::SetText(const std::string& text)
 {
 	m_text = text;
 	m_needsUpdate = true;
 }
 
-void TextObject::SetPosition(const float x, const float y)
+void TextComponent::SetPosition(const float x, const float y)
 {
-	m_transform.SetPosition(x, y, 0.0f);
+	m_Transform.SetPosition(x, y, 0.0f);
 }
 
 

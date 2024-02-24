@@ -9,7 +9,7 @@ private:
     float elapsedTime = 0.0f;
 
 public:
-    FPSComponent(GameObject* owner, std::shared_ptr<Font> font) : TextComponent(owner,"FPS: 0", font) {}
+    FPSComponent(std::shared_ptr<Font> font) : TextComponent("FPS: 0", font) {}
 
     virtual void Update() override {
         // Accumulate elapsed time and frame count

@@ -35,13 +35,13 @@ public:
 		static_assert(std::is_base_of<Component, T>::value, "T must be a subclass of Component");
 
 		// Construct component based on arguments and templated type
-		auto newComponent = std::make_unique<T>(this, std::forward<Args>(args)...);
+		auto newComponent = std::make_unique<T>(std::forward<Args>(args)...);
 
 		// Allow raw pointer return
 		T* rawPtr = newComponent.get();
 
 		// Set the owner before adding the component to the container
-		//static_cast<Component*>(newComponent.get())->m_Owner = this;
+		static_cast<Component*>(newComponent.get())->SetOwner(this);
 
 		m_Components.emplace_back(std::move(newComponent));
 		return rawPtr;

@@ -7,10 +7,11 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-TextComponent::TextComponent(GameObject* owner, const std::string& text, std::shared_ptr<Font> font)
-	: 
-	Component(owner),
-	m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
+TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font)
+	: m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
+{}
+
+void TextComponent::OnInit()
 {
 	m_Transform = m_Owner->GetTransform();
 }

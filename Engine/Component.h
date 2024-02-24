@@ -13,12 +13,13 @@ public:
     virtual void LateUpdate() {}
     virtual void Render() const {}
 
-    void SetOwner(GameObject* owner) { m_Owner = owner; OnInit(); }
     inline const GameObject* GetOwner() const { return m_Owner; }
 
     virtual ~Component() = default;
     
 protected:
     GameObject* m_Owner = nullptr;
+private:
+    void SetOwner(GameObject* owner) { m_Owner = owner; OnInit(); }
 };
 

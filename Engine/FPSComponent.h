@@ -2,7 +2,7 @@
 #include "TextComponent.h"
 #include "Timer.h"  // Assuming Timer class is available
 
-class FPSComponent : public TextComponent
+class FPSComponent final : public TextComponent
 {
 private:
     int m_FrameCount = 0;

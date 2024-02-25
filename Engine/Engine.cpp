@@ -85,8 +85,8 @@ void Engine::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 	auto& timer = Timer::GetInstance();
-
-	constexpr float targetFps{ 165.f };
+	
+	constexpr float targetFps{ 60.f };
 	float lag = 0.0f;
 
 	// todo: this update loop could use some work.

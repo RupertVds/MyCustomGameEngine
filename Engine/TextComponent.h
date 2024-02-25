@@ -22,8 +22,8 @@ public:
 	TextComponent& operator=(const TextComponent& other) = delete;
 	TextComponent& operator=(TextComponent&& other) = delete;
 protected:
-	bool m_needsUpdate;
-	std::string m_text;
-	std::shared_ptr<Font> m_font;
-	std::shared_ptr<Texture2D> m_textTexture;
+	bool m_NeedsUpdate;
+	std::string m_Text;
+	std::shared_ptr<Font> m_Font;
+	std::shared_ptr<Texture2D> m_TextTexture;
 };

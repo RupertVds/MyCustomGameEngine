@@ -98,9 +98,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Core\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Core\Source</Filter>
     </ClCompile>
@@ -118,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

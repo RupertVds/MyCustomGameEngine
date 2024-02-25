@@ -9,7 +9,6 @@ class Texture2D;
 class Component;
 class Transform;
 
-// todo: this should become final.
 class GameObject final
 {
 public:
@@ -98,6 +97,4 @@ private:
 	Transform m_Transform{};
 	std::vector<std::unique_ptr<Component>> m_Components;
 	//std::shared_ptr<Texture2D> m_texture{};
-
 };
-

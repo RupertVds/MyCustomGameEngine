@@ -8,16 +8,16 @@
 #include "Timer.h"
 
 TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font)
-	: m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
+	: m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr)
 {}
 
 void TextComponent::Update()
 {
 
-	if (m_needsUpdate)
+	if (m_NeedsUpdate)
 	{
 		const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
-		const auto surf = TTF_RenderText_Blended(m_font->GetFont(), m_text.c_str(), color);
+		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), color);
 		if (surf == nullptr) 
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
@@ -28,23 +28,23 @@ void TextComponent::Update()
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 		}
 		SDL_FreeSurface(surf);
-		m_textTexture = std::make_shared<Texture2D>(texture);
-		m_needsUpdate = false;
+		m_TextTexture = std::make_shared<Texture2D>(texture);
+		m_NeedsUpdate = false;
 	}
 }
 
 void TextComponent::Render() const
 {
-	if (m_textTexture != nullptr)
+	if (m_TextTexture != nullptr)
 	{
 		const auto& pos = m_Owner->GetPosition();
-		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
+		Renderer::GetInstance().RenderTexture(*m_TextTexture, pos.x, pos.y);
 	}
 }
 
 // This implementation uses the "dirty flag" pattern
 void TextComponent::SetText(const std::string& text)
 {
-	m_text = text;
-	m_needsUpdate = true;
+	m_Text = text;
+	m_NeedsUpdate = true;
 }

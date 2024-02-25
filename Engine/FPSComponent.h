@@ -5,28 +5,29 @@
 class FPSComponent : public TextComponent
 {
 private:
-    int frameCount = 0;
-    float elapsedTime = 0.0f;
+    int m_FrameCount = 0;
+    float m_ElapsedTime = 0.0f;
 
 public:
     FPSComponent(std::shared_ptr<Font> font) : TextComponent("FPS: 0", font) {}
 
-    virtual void Update() override {
+    virtual void Update() override
+    {
         // Accumulate elapsed time and frame count
-        elapsedTime += Timer::GetInstance().GetDeltaTime();
-        frameCount++;
+        m_ElapsedTime += Timer::GetInstance().GetDeltaTime();
+        m_FrameCount++;
 
         // Update FPS every second
-        if (elapsedTime >= 0.15f) {
+        if (m_ElapsedTime >= 0.15f) {
             // Calculate FPS
-            float fps = static_cast<float>(frameCount) / elapsedTime;
+            float fps = static_cast<float>(m_FrameCount) / m_ElapsedTime;
 
-            // Update the text with the current FPS
-            SetText("FPS: " + std::to_string(static_cast<float>(fps)));
+            // Update the text with the current FPS, limiting to one decimal place
+            SetText("FPS: " + std::to_string(fps).substr(0, std::to_string(fps).find('.') + 2));
 
             // Reset counters for the next second
-            frameCount = 0;
-            elapsedTime = 0.0f;
+            m_FrameCount = 0;
+            m_ElapsedTime = 0.0f;
         }
 
         // Call the base class Update method

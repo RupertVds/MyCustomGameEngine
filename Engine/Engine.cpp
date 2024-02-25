@@ -86,10 +86,13 @@ void Engine::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = Timer::GetInstance();
 	
-	constexpr float targetFps{ 60.f };
+	constexpr bool useVsync{ true };
+	constexpr float targetFps{ 240.f };
+	constexpr double targetFrameDuration = 1.0 / (targetFps / 2);
 	float lag = 0.0f;
 
-	// todo: this update loop could use some work.
+	SDL_GL_SetSwapInterval(useVsync);   
+
 	bool doContinue = true;
 	while (doContinue)
 	{
@@ -109,15 +112,18 @@ void Engine::Run(const std::function<void()>& load)
 
 		renderer.Render();
 
-		constexpr double targetFrameDuration = 1.0 / (targetFps / 2);  // Adjust this value based on your desired frame rate
-
-		// Calculate the sleep duration to achieve the target frame rate
-		const double sleepDuration = targetFrameDuration - timer.GetDeltaTime();;
-
-		// If the actual frame duration is less than the target, sleep for the remaining time
-		if (sleepDuration > 0.0) 
+		// Use vsync or manual fps limiting with target fps
+		if (!useVsync)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(sleepDuration * 1000)));
+			// Calculate the sleep duration to achieve the target frame rate
+			const double sleepDuration = targetFrameDuration - timer.GetDeltaTime();;
+
+			// If the actual frame duration is less than the target, sleep for the remaining time
+			if (sleepDuration > 0.0) 
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(sleepDuration * 1000)));
+			}
 		}
+
 	}
 }

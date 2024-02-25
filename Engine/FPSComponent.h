@@ -1,6 +1,6 @@
 #pragma once
 #include "TextComponent.h"
-#include "Timer.h"  // Assuming Timer class is available
+#include "Timer.h"
 
 class FPSComponent final : public TextComponent
 {
@@ -18,7 +18,7 @@ public:
         m_FrameCount++;
 
         // Update FPS every second
-        if (m_ElapsedTime >= 0.15f) {
+        if (m_ElapsedTime >= 0.2f) {
             // Calculate FPS
             float fps = static_cast<float>(m_FrameCount) / m_ElapsedTime;
 

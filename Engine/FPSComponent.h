@@ -4,13 +4,17 @@
 
 class FPSComponent final : public TextComponent
 {
-private:
-    int m_FrameCount = 0;
-    float m_ElapsedTime = 0.0f;
-
 public:
+    //=======================================
+    // RULE OF ZERO/FIVE/SIX
+    //=======================================
     FPSComponent(std::shared_ptr<Font> font) : TextComponent("FPS: 0", font) {}
-
+    virtual ~FPSComponent() = default;
+    FPSComponent(const FPSComponent& other) = delete;
+    FPSComponent(FPSComponent&& other) = delete;
+    FPSComponent& operator=(const FPSComponent& other) = delete;
+    FPSComponent& operator=(FPSComponent&& other) = delete;
+public:
     virtual void Update() override
     {
         // Accumulate elapsed time and frame count
@@ -33,4 +37,8 @@ public:
         // Call the base class Update method
         TextComponent::Update();
     }
+
+private:
+    int m_FrameCount = 0;
+    float m_ElapsedTime = 0.0f;
 };

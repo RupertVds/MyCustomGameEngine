@@ -6,8 +6,16 @@
 class SpriteComponent final : public Component
 {
 public:
+    //=======================================
+    // RULE OF ZERO/FIVE/SIX
+    //=======================================
     SpriteComponent(std::shared_ptr<Texture2D> texture) : m_Texture(texture) {}
-
+    virtual ~SpriteComponent() = default;
+    SpriteComponent(const SpriteComponent& other) = delete;
+    SpriteComponent(SpriteComponent&& other) = delete;
+    SpriteComponent& operator=(const SpriteComponent& other) = delete;
+    SpriteComponent& operator=(SpriteComponent&& other) = delete;
+public:
     virtual void Render() const override 
     {
         Renderer::GetInstance().RenderTexture(*m_Texture.get(), m_Owner->GetPosition().x, m_Owner->GetPosition().y);

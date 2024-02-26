@@ -14,7 +14,7 @@ private:
     std::string m_Message;
 };
 
-class TooManyComponentsException : public BaseException {
+class TooManyComponentsException final : public BaseException {
 public:
     TooManyComponentsException() : BaseException("Attempted to add too many components.") {}
 };

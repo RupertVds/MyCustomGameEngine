@@ -13,6 +13,16 @@ class GameObject final
 {
 public:
 	//=======================================
+	// RULE OF ZERO/FIVE/SIX
+	//=======================================
+	GameObject() = default;
+	virtual ~GameObject();
+	GameObject(const GameObject& other) = delete;
+	GameObject(GameObject&& other) = delete;
+	GameObject& operator=(const GameObject& other) = delete;
+	GameObject& operator=(GameObject&& other) = delete;
+public:
+	//=======================================
 	// UPDATE AND RENDER METHODS
 	//=======================================
 	virtual void Update();
@@ -30,7 +40,6 @@ public:
 	//=======================================
 	// TEMPLATED COMPONENT SYSTEM
 	//=======================================
-
 	template <typename T, typename... Args>
 	T* AddComponent(Args&&... args)
 	{
@@ -82,15 +91,6 @@ public:
 	bool HasComponent() const {
 		return GetComponent<T>() != nullptr;
 	}
-	//=======================================
-	// RULE OF FIVE/SIX
-	//=======================================
-	GameObject() = default;
-	virtual ~GameObject();
-	GameObject(const GameObject& other) = delete;
-	GameObject(GameObject&& other) = delete;
-	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) = delete;
 
 
 private:

@@ -6,7 +6,16 @@
 class MovementComponent final : public Component
 {
 public:
+	//=======================================
+	// RULE OF ZERO/FIVE/SIX
+	//=======================================
 	MovementComponent(float speed = 20.f) : m_Speed(speed) {}
+	virtual ~MovementComponent() = default;
+	MovementComponent(const MovementComponent& other) = delete;
+	MovementComponent(MovementComponent&& other) = delete;
+	MovementComponent& operator=(const MovementComponent& other) = delete;
+	MovementComponent& operator=(MovementComponent&& other) = delete;
+public:
 	virtual void Update() 
 	{
 		auto& timer = Timer::GetInstance();

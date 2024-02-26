@@ -3,7 +3,7 @@
 #include <functional>
 
 
-class Engine
+class Engine final
 {
 public:
 	explicit Engine(const std::string& dataPath);

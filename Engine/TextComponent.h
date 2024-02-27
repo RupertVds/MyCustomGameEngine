@@ -4,7 +4,6 @@
 #include "Component.h"
 #include "Transform.h"
 
-
 class Font;
 class Texture2D;
 
@@ -14,7 +13,7 @@ public:
 	//=======================================
 	// RULE OF ZERO/FIVE/SIX
 	//=======================================
-	TextComponent(const std::string& text, std::shared_ptr<Font> font);
+	TextComponent(GameObject* pOwner, const std::string& text, std::shared_ptr<Font> font);
 	virtual ~TextComponent() = default;
 	TextComponent(const TextComponent& other) = delete;
 	TextComponent(TextComponent&& other) = delete;

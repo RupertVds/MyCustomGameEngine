@@ -8,8 +8,6 @@ class Scene final
 	friend Scene& SceneManager::CreateScene(const std::string& name);
 public:
 	void Add(std::shared_ptr<GameObject> object);
-	void Remove(std::shared_ptr<GameObject> object);
-	void RemoveAll();
 
 	void Update();
 	void FixedUpdate();
@@ -24,6 +22,8 @@ public:
 
 private: 
 	explicit Scene(const std::string& name);
+	void Remove(std::shared_ptr<GameObject> object);
+	void RemoveAll();
 
 	std::string m_Name;
 	std::vector <std::shared_ptr<GameObject>> m_Objects{};

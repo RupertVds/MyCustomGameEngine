@@ -18,16 +18,10 @@ public:
     virtual void FixedUpdate() {}
     virtual void LateUpdate() {}
     virtual void Render() const {}
-
-    inline const GameObject* GetOwner() const { return m_Owner; }
-
+    Component(GameObject* pOwner) { m_pOwner = pOwner; OnInit(); };
 protected:
-    Component() = default;
-
-    GameObject* m_Owner = nullptr;
+    inline GameObject* GetOwner() const { return m_pOwner; }
 private:
-
+    GameObject* m_pOwner = nullptr;
     virtual void OnInit() {}
-    void SetOwner(GameObject* owner) { m_Owner = owner; }
 };
-

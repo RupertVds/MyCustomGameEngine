@@ -8,7 +8,7 @@ public:
     //=======================================
     // RULE OF ZERO/FIVE/SIX
     //=======================================
-    FPSComponent(std::shared_ptr<Font> font) : TextComponent("FPS: 0", font) {}
+    FPSComponent(GameObject* pOwner, std::shared_ptr<Font> font) : TextComponent(pOwner, "FPS: 0", font) {}
     virtual ~FPSComponent() = default;
     FPSComponent(const FPSComponent& other) = delete;
     FPSComponent(FPSComponent&& other) = delete;

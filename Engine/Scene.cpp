@@ -29,7 +29,18 @@ void Scene::Update()
 {
 	for(auto& object : m_Objects)
 	{
-		object->Update();
+		if (!object->IsMarkedForDeletion())
+		{
+			object->Update();
+		}
+	}
+
+	for (auto& object : m_Objects)
+	{
+		if (object->IsMarkedForDeletion())
+		{
+			Remove(object);
+		}
 	}
 }
 
@@ -37,7 +48,10 @@ void Scene::FixedUpdate()
 {
 	for (auto& object : m_Objects)
 	{
-		object->FixedUpdate();
+		if (!object->IsMarkedForDeletion())
+		{
+			object->FixedUpdate();
+		}
 	}
 }
 
@@ -45,7 +59,10 @@ void Scene::LateUpdate()
 {
 	for (auto& object : m_Objects)
 	{
-		object->LateUpdate();
+		if (!object->IsMarkedForDeletion())
+		{
+			object->LateUpdate();
+		}
 	}
 }
 
@@ -53,7 +70,10 @@ void Scene::Render() const
 {
 	for (const auto& object : m_Objects)
 	{
-		object->Render();
+		if (!object->IsMarkedForDeletion())
+		{
+			object->Render();
+		}
 	}
 }
 

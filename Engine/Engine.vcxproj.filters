@@ -75,9 +75,6 @@
     <ClInclude Include="Exceptions.h">
       <Filter>Core\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="MovementComponent.h">
-      <Filter>Components\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteComponent.h">
       <Filter>Components\Headers</Filter>
     </ClInclude>

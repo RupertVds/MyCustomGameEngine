@@ -7,8 +7,10 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font)
-	: m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr)
+TextComponent::TextComponent(GameObject* pOwner, const std::string& text, std::shared_ptr<Font> font)
+	: 
+	Component(pOwner),
+	m_NeedsUpdate(true), m_Text(text), m_Font(std::move(font)), m_TextTexture(nullptr)
 {}
 
 void TextComponent::Update()
@@ -37,7 +39,7 @@ void TextComponent::Render() const
 {
 	if (m_TextTexture != nullptr)
 	{
-		const auto& pos = m_Owner->GetPosition();
+		const auto& pos = GetOwner()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_TextTexture, pos.x, pos.y);
 	}
 }

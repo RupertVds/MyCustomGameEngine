@@ -6,8 +6,8 @@
 #include "Exceptions.h"
 
 class Texture2D;
-class Component;
 class Transform;
+class Component;
 
 class GameObject final
 {
@@ -34,37 +34,27 @@ public:
 	// MUTATORS AND ACCESSORS
 	//=======================================
 	void SetPosition(float x, float y);
-	const glm::vec3& GetPosition();
+	const glm::vec3& GetPosition() const;
 	const Transform& GetTransform() const;
+	bool IsMarkedForDeletion() const;
+	void DeleteSelf();
 
 	//=======================================
 	// TEMPLATED COMPONENT SYSTEM
 	//=======================================
+	//template <typename T>
+	//void AddComponent(std::unique_ptr<Component> component)
+	//{
+	//	if (HasComponent<T>()) throw TooManyComponentsException();
+	//	m_Components.emplace_back(std::move(component));
+	//}
+
 	template <typename T, typename... Args>
-	T* AddComponent(Args&&... args)
+	void AddComponent(Args&&... args)	
 	{
-		static_assert(std::is_base_of<Component, T>::value, "T must be a subclass of Component");
-
-		// Check if a component of the same type already exists
-		for (const auto& existingComponent : m_Components) {
-			if (dynamic_cast<T*>(existingComponent.get()) != nullptr) {
-				throw TooManyComponentsException();
-			}
-		}
-
-		// Construct component based on arguments and templated type
-		auto newComponent = std::make_unique<T>(std::forward<Args>(args)...);
-
-		// Allow raw pointer return
-		T* rawPtr = newComponent.get();
-
-		// Set the owner before adding the component to the container
-		Component* component = static_cast<Component*>(newComponent.get());
-		component->SetOwner(this);
-		component->OnInit();
-
-		m_Components.emplace_back(std::move(newComponent));
-		return rawPtr;
+		if (HasComponent<T>()) throw TooManyComponentsException();
+		std::unique_ptr<T> component{ std::make_unique<T>(this, std::forward<Args>(args)...) };
+		m_Components.emplace_back(std::move(component));
 	}
 
 	template <typename T>
@@ -94,7 +84,7 @@ public:
 
 
 private:
+	bool m_IsMarkedForDeletion{ false };
 	Transform m_Transform{};
 	std::vector<std::unique_ptr<Component>> m_Components;
-	//std::shared_ptr<Texture2D> m_texture{};
 };

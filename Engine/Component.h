@@ -18,8 +18,8 @@ public:
     virtual void FixedUpdate() {}
     virtual void LateUpdate() {}
     virtual void Render() const {}
-    Component(GameObject* pOwner) { m_pOwner = pOwner; OnInit(); };
 protected:
+    Component(GameObject* pOwner) { m_pOwner = pOwner; OnInit(); };
     inline GameObject* GetOwner() const { return m_pOwner; }
 private:
     GameObject* m_pOwner = nullptr;

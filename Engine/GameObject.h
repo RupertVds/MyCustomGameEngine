@@ -16,7 +16,7 @@ public:
 	// RULE OF ZERO/FIVE/SIX
 	//=======================================
 	GameObject() = default;
-	virtual ~GameObject();
+	~GameObject();
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) = delete;
 	GameObject& operator=(const GameObject& other) = delete;
@@ -25,10 +25,10 @@ public:
 	//=======================================
 	// UPDATE AND RENDER METHODS
 	//=======================================
-	virtual void Update();
-	virtual void FixedUpdate();
-	virtual void LateUpdate();
-	virtual void Render() const;
+	void Update();
+	void FixedUpdate();
+	void LateUpdate();
+	void Render() const;
 
 	//=======================================
 	// MUTATORS AND ACCESSORS

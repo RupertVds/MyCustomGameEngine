@@ -16,11 +16,6 @@ public:
     SpriteComponent& operator=(const SpriteComponent& other) = delete;
     SpriteComponent& operator=(SpriteComponent&& other) = delete;
 public:
-    virtual void OnInit() override
-    {
-        m_Texture = nullptr;
-    }
-
     virtual void Render() const override 
     {
         Renderer::GetInstance().RenderTexture(*m_Texture.get(), GetOwner()->GetPosition().x, GetOwner()->GetPosition().y);

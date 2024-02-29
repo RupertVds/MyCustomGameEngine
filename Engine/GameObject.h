@@ -12,36 +12,24 @@ class Component;
 class GameObject final
 {
 public:
-	//=======================================
-	// RULE OF ZERO/FIVE/SIX
-	//=======================================
 	GameObject() = default;
 	~GameObject();
 	GameObject(const GameObject& other) = delete;
-	GameObject(GameObject&& other) = delete;
+	GameObject(GameObject&& other) noexcept = delete;
 	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) = delete;
+	GameObject& operator=(GameObject&& other) noexcept = delete;
 public:
-	//=======================================
-	// UPDATE AND RENDER METHODS
-	//=======================================
 	void Update();
 	void FixedUpdate();
 	void LateUpdate();
 	void Render() const;
 
-	//=======================================
-	// MUTATORS AND ACCESSORS
-	//=======================================
 	void SetPosition(float x, float y);
 	const glm::vec3& GetPosition() const;
 	const Transform& GetTransform() const;
 	bool IsMarkedForDeletion() const;
 	void DeleteSelf();
 
-	//=======================================
-	// TEMPLATED COMPONENT SYSTEM
-	//=======================================
 	//template <typename T>
 	//void AddComponent(std::unique_ptr<Component> component)
 	//{

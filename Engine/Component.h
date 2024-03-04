@@ -19,8 +19,8 @@ public:
     virtual void Render() const {}
 protected:
     virtual void OnInit() {}
-    Component(GameObject* pOwner) : m_pOwner{ pOwner } {}
+    explicit Component(GameObject* pOwner) : m_pOwner{ pOwner } {}
     inline GameObject* const GetOwner() const { return m_pOwner; }
 private:
-    GameObject* const m_pOwner = nullptr;
+    GameObject* const m_pOwner{};
 };

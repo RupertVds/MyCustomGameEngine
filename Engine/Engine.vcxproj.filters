@@ -75,7 +75,10 @@
     <ClInclude Include="Exceptions.h">
       <Filter>Core\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteComponent.h">
+    <ClInclude Include="CircularMovementComponent.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
       <Filter>Components\Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -121,6 +124,15 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularMovementComponent.cpp">
+      <Filter>Components\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Components\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

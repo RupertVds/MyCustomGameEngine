@@ -5,7 +5,7 @@ void RenderComponent::Render() const
 {
 	if (m_Texture != nullptr)
 	{
-		const auto& pos = GetOwner()->GetPosition();
+		const auto& pos = GetOwner()->GetWorldPosition();
 		Renderer::GetInstance().RenderTexture(*m_Texture.get(), pos.x, pos.y);
 	}
 }

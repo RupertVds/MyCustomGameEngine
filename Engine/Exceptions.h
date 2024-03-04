@@ -18,3 +18,8 @@ class TooManyComponentsException final : public BaseException {
 public:
     TooManyComponentsException() : BaseException("Attempted to add too many components.") {}
 };
+
+class SetParentIsInvalidException final : public BaseException {
+public:
+    SetParentIsInvalidException() : BaseException("Attempted to set parent but the parent is invalid.") {}
+};

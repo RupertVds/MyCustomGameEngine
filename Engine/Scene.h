@@ -23,9 +23,11 @@ public:
 private: 
 	explicit Scene(const std::string& name);
 	void Remove(std::shared_ptr<GameObject> object);
+	void RemoveRecursive(std::shared_ptr<GameObject> object);
 	void RemoveAll();
 
 	std::string m_Name;
+	std::shared_ptr<GameObject> m_RootObject;
 	std::vector <std::shared_ptr<GameObject>> m_Objects{};
 
 	static unsigned int m_IdCounter; 

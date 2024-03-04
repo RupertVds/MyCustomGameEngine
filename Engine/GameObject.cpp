@@ -45,10 +45,10 @@ GameObject* GameObject::GetParent() const
     return m_Parent;
 }
 
-void GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
+void GameObject::SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition)
 {
-    if (parent == m_Parent ||
-        parent == this ||
+    if (parent.get() == m_Parent ||
+        parent.get() == this ||
         IsChild(parent))
     {
         throw SetParentIsInvalidException();
@@ -68,15 +68,15 @@ void GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
         }
     }
 
-    if(m_Parent) parent->RemoveChild(this);
+    if(m_Parent) m_Parent->RemoveChild(shared_from_this());
 
-    m_Parent = parent;
+    m_Parent = parent.get();
 
-    if (m_Parent) parent->AddChild(this);
+    if (m_Parent) m_Parent->AddChild(shared_from_this());
 
 }
 
-bool GameObject::IsChild(GameObject*& parent)
+bool GameObject::IsChild(const std::shared_ptr<GameObject>& parent)
 {
     return std::find(m_Children.begin(), m_Children.end(), parent) != m_Children.end();
 }
@@ -86,22 +86,22 @@ size_t GameObject::GetChildCount() const
     return m_Children.size();
 }
 
-const std::vector<GameObject*>& GameObject::GetChildren() const
+const std::vector<std::shared_ptr<GameObject>>& GameObject::GetChildren() const
 {
     return m_Children;
 }
 
-GameObject* GameObject::GetChildAtIndex(int index) const
+const std::shared_ptr<GameObject>& GameObject::GetChildAtIndex(int index) const
 {
     return m_Children[index];
 }
 
-void GameObject::AddChild(GameObject* child)
+void GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 {
-    m_Children.emplace_back(std::move(child));
+    m_Children.emplace_back(child);
 }
 
-void GameObject::RemoveChild(GameObject* child)
+void GameObject::RemoveChild(const std::shared_ptr<GameObject>& child)
 {
     m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), child), m_Children.end());
 }
@@ -151,6 +151,16 @@ void GameObject::SetLocalPosition(const glm::vec3& pos)
 void GameObject::DeleteSelf()
 {
     m_IsMarkedForDeletion = true;
-}
 
+    for (auto& child : m_Children)
+    {
+        child->DeleteSelf();
+    }
+    //m_Children.clear();
+
+    if (m_Parent)
+    {
+        m_Parent->RemoveChild(shared_from_this());
+    }
+}
 

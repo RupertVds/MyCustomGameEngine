@@ -9,7 +9,7 @@ class Texture2D;
 class Transform;
 class Component;
 
-class GameObject final
+class GameObject final : public std::enable_shared_from_this<GameObject>
 {
 public:
 	GameObject() = default;
@@ -25,11 +25,11 @@ public:
 	void Render() const;
 
 	GameObject* GetParent() const;
-	void SetParent(GameObject* parent, bool keepWorldPosition = true);
-	bool IsChild(GameObject*& parent);
+	void SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition = true);
+	bool IsChild(const std::shared_ptr<GameObject>& parent);
 	size_t GetChildCount() const;
-	const std::vector<GameObject*>& GetChildren() const;
-	GameObject* GetChildAtIndex(int index) const;
+	const std::vector<std::shared_ptr<GameObject>>& GetChildren() const;
+	const std::shared_ptr<GameObject>& GetChildAtIndex(int index) const;
 
 	void UpdateWorldPosition();
 	void SetPositionDirty();
@@ -40,18 +40,17 @@ public:
 	bool IsMarkedForDeletion() const;
 	void DeleteSelf();
 private:
-	void AddChild(GameObject* child);
-	void RemoveChild(GameObject* child);
+	void AddChild(const std::shared_ptr<GameObject>& child);
+	void RemoveChild(const std::shared_ptr<GameObject>& child);
 private:
 	bool m_IsMarkedForDeletion{ false };
 	std::vector<std::unique_ptr<Component>> m_Components;
-
 	bool m_PositionIsDirty{};
 	Transform m_LocalTransform{};
 	Transform m_WorldTransform{};
 
 	GameObject* m_Parent{};
-	std::vector<GameObject*> m_Children{};
+	std::vector<std::shared_ptr<GameObject>> m_Children{};
 public:
 	template <typename T, typename... Args>
 	void AddComponent(Args&&... args)

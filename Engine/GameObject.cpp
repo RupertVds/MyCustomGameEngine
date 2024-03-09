@@ -67,13 +67,12 @@ void GameObject::SetParent(const std::shared_ptr<GameObject>& parent, bool keepW
 
         }
     }
-
-    if(m_Parent) m_Parent->RemoveChild(shared_from_this());
-
+    
+    if (m_Parent) m_Parent->RemoveChild(shared_from_this());
+     
     m_Parent = parent.get();
 
     if (m_Parent) m_Parent->AddChild(shared_from_this());
-
 }
 
 bool GameObject::IsChild(const std::shared_ptr<GameObject>& parent)
@@ -121,6 +120,10 @@ void GameObject::UpdateWorldPosition()
 void GameObject::SetPositionDirty()
 {
     m_PositionIsDirty = true;
+    for (auto& child : m_Children)
+    {
+        child->SetPositionDirty();
+    }
 }
 
 void GameObject::SetLocalPosition(const glm::vec3& pos)

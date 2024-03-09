@@ -44,8 +44,8 @@ private:
 	void RemoveChild(const std::shared_ptr<GameObject>& child);
 private:
 	bool m_IsMarkedForDeletion{ false };
-	std::vector<std::unique_ptr<Component>> m_Components;
 	bool m_PositionIsDirty{};
+	std::vector<std::unique_ptr<Component>> m_Components;
 	Transform m_LocalTransform{};
 	Transform m_WorldTransform{};
 

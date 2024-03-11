@@ -1,8 +1,10 @@
 #pragma once
 #include "SceneManager.h"
+#include "GameObject.h"
 
 
 class GameObject;
+
 class Scene final
 {
 	friend Scene& SceneManager::CreateScene(const std::string& name);
@@ -22,11 +24,8 @@ public:
 
 private: 
 	explicit Scene(const std::string& name);
-	void Remove(std::shared_ptr<GameObject> object);
-	void RemoveAll();
 
 	std::string m_Name;
-	std::shared_ptr<GameObject> m_RootObject;
 	std::vector <std::shared_ptr<GameObject>> m_Objects{};
 
 	static unsigned int m_IdCounter; 

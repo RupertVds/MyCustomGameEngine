@@ -4,14 +4,18 @@
 #include <string>
 #include <algorithm>
 #include "Exceptions.h"
-
-GameObject::~GameObject() = default;
+#include "SceneManager.h"
 
 void GameObject::Update()
 {
     for (std::unique_ptr<Component>& component : m_Components)
     {
         component->Update();
+    }
+
+    for (auto& child : m_Children)
+    {
+        child->Update();
     }
 }
 
@@ -21,6 +25,11 @@ void GameObject::FixedUpdate()
     {
         component->FixedUpdate();
     }
+
+    for (auto& child : m_Children)
+    {
+        child->FixedUpdate();
+    }
 }
 
 void GameObject::LateUpdate()
@@ -28,6 +37,11 @@ void GameObject::LateUpdate()
     for (std::unique_ptr<Component>& component : m_Components)
     {
         component->LateUpdate();
+    }
+
+    for (auto& child : m_Children)
+    {
+        child->LateUpdate();
     }
 }
 
@@ -37,6 +51,11 @@ void GameObject::Render() const
     {
         component->Render();
     }
+
+    for (auto& child : m_Children)
+    {
+        child->Render();
+    }
 }
 
 
@@ -45,18 +64,11 @@ GameObject* GameObject::GetParent() const
     return m_Parent;
 }
 
-void GameObject::SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition)
+void GameObject::SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPosition)
 {
-    if (parent.get() == m_Parent ||
-        parent.get() == this ||
-        IsChild(parent))
-    {
-        throw SetParentIsInvalidException();
-    }
-
     if (parent == nullptr)
     {
-        SetLocalPosition(GetWorldPosition());
+        SetParent(SceneManager::GetInstance().GetRootObject());
     }
     else
     {
@@ -64,20 +76,31 @@ void GameObject::SetParent(const std::shared_ptr<GameObject>& parent, bool keepW
         {
             SetLocalPosition(GetWorldPosition() - parent->GetWorldPosition());
             SetPositionDirty();
-
         }
     }
-    
+
+    if (parent.get() == m_Parent ||
+        parent.get() == this ||
+        IsChild(parent.get()))
+    {
+        throw SetParentIsInvalidException();
+    }
+
     if (m_Parent) m_Parent->RemoveChild(shared_from_this());
-     
+
     m_Parent = parent.get();
 
     if (m_Parent) m_Parent->AddChild(shared_from_this());
 }
 
-bool GameObject::IsChild(const std::shared_ptr<GameObject>& parent)
+bool GameObject::IsChild(GameObject* parent)
 {
-    return std::find(m_Children.begin(), m_Children.end(), parent) != m_Children.end();
+    auto it = std::find_if(m_Children.begin(), m_Children.end(),
+        [parent](auto& child) {
+            return child.get() == parent;
+        });
+
+    return it != m_Children.end();
 }
 
 size_t GameObject::GetChildCount() const
@@ -95,12 +118,12 @@ const std::shared_ptr<GameObject>& GameObject::GetChildAtIndex(int index) const
     return m_Children[index];
 }
 
-void GameObject::AddChild(const std::shared_ptr<GameObject>& child)
+void GameObject::AddChild(std::shared_ptr<GameObject> child)
 {
     m_Children.emplace_back(child);
 }
 
-void GameObject::RemoveChild(const std::shared_ptr<GameObject>& child)
+void GameObject::RemoveChild(std::shared_ptr<GameObject> child)
 {
     m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), child), m_Children.end());
 }

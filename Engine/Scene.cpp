@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "GameObject.h"
 
 #include <algorithm>
 
@@ -12,17 +11,11 @@ Scene::~Scene() = default;
 
 void Scene::Add(std::shared_ptr<GameObject> object)
 {
+	if (object->GetParent() == nullptr && object != SceneManager::GetInstance().GetRootObject())
+	{
+		object->SetParent(SceneManager::GetInstance().GetRootObject());
+	}
 	m_Objects.emplace_back(std::move(object));
-}
-
-void Scene::Remove(std::shared_ptr<GameObject> object)
-{	
-	m_Objects.erase(std::remove(m_Objects.begin(), m_Objects.end(), object), m_Objects.end());
-}
-
-void Scene::RemoveAll()
-{
-	m_Objects.clear();
 }
 
 void Scene::Update()
@@ -37,7 +30,7 @@ void Scene::Update()
 
 	// Erase-remove idiom to remove objects marked for deletion
 	m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(),
-		[](const std::shared_ptr<GameObject>& obj) {
+		[](auto& obj) {
 			return obj->IsMarkedForDeletion();
 		}), m_Objects.end());
 }
@@ -74,4 +67,3 @@ void Scene::Render() const
 		}
 	}
 }
-

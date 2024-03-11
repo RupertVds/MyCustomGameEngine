@@ -13,7 +13,7 @@ class GameObject final : public std::enable_shared_from_this<GameObject>
 {
 public:
 	GameObject() = default;
-	~GameObject();
+	~GameObject() = default;
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) noexcept = delete;
 	GameObject& operator=(const GameObject& other) = delete;
@@ -25,14 +25,13 @@ public:
 	void Render() const;
 
 	GameObject* GetParent() const;
-	void SetParent(const std::shared_ptr<GameObject>& parent, bool keepWorldPosition = true);
-	bool IsChild(const std::shared_ptr<GameObject>& parent);
+	void SetParent(std::shared_ptr<GameObject>, bool keepWorldPosition = true);
+	bool IsChild(GameObject* parent);
 	size_t GetChildCount() const;
 	const std::vector<std::shared_ptr<GameObject>>& GetChildren() const;
 	const std::shared_ptr<GameObject>& GetChildAtIndex(int index) const;
 
 	void UpdateWorldPosition();
-	void SetPositionDirty();
 	void SetLocalPosition(const glm::vec3& pos);
 	const glm::vec3& GetLocalPosition() const;
 	const glm::vec3& GetWorldPosition();
@@ -40,8 +39,9 @@ public:
 	bool IsMarkedForDeletion() const;
 	void DeleteSelf();
 private:
-	void AddChild(const std::shared_ptr<GameObject>& child);
-	void RemoveChild(const std::shared_ptr<GameObject>& child);
+	void SetPositionDirty();
+	void AddChild(std::shared_ptr<GameObject> child);
+	void RemoveChild(std::shared_ptr<GameObject> child);
 private:
 	bool m_IsMarkedForDeletion{ false };
 	bool m_PositionIsDirty{};

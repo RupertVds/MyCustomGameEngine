@@ -15,6 +15,7 @@
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "CircularMovementComponent.h"
+#include "TrashTheCacheComponent.h"
 
 void load()
 {
@@ -34,38 +35,46 @@ void load()
 	fpsObject->SetLocalPosition(glm::vec3{ 0, 0, 0 });
 	fpsObject->SetParent(SceneManager::GetInstance().GetRootObject());
 
-	std::shared_ptr<GameObject> rotationPointObject = std::make_shared<GameObject>();
-	rotationPointObject->SetLocalPosition(glm::vec3{ 640 / 2, 480 / 2, 0 });
+	std::shared_ptr<GameObject> graphObject = std::make_shared<GameObject>();
+	graphObject->AddComponent<TrashTheCacheComponent>();
+	graphObject->SetLocalPosition(glm::vec3{ 100, 100, 0 });
+	graphObject->SetParent(SceneManager::GetInstance().GetRootObject());
+	//auto trashTheCacheComp = graphObject->GetComponent<TrashTheCacheComponent>();
+	scene.Add(graphObject);
+	//trashTheCacheComp->TrashTheCache(TrashTheCacheComponent::ContainerType::Integers);
 
-	std::shared_ptr<GameObject> spriteObject = std::make_shared<GameObject>();
-	spriteObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
-	spriteObject->SetLocalPosition(glm::vec3{ 640 / 2, 480 / 2, 0 });
-	spriteObject->AddComponent<CircularMovementComponent>(60.f, 1.f);
-	spriteObject->SetParent(rotationPointObject);
+	//std::shared_ptr<GameObject> rotationPointObject = std::make_shared<GameObject>();
+	//rotationPointObject->SetLocalPosition(glm::vec3{ 640 / 2, 480 / 2, 0 });
 
-	std::shared_ptr<GameObject> spriteObject2 = std::make_shared<GameObject>();
-	spriteObject2->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
-	spriteObject2->AddComponent<CircularMovementComponent>(100.f, 1.f);
-	spriteObject2->SetParent(spriteObject);
+	//std::shared_ptr<GameObject> spriteObject = std::make_shared<GameObject>();
+	//spriteObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
+	//spriteObject->SetLocalPosition(glm::vec3{ 640 / 2, 480 / 2, 0 });
+	//spriteObject->AddComponent<CircularMovementComponent>(60.f, 1.f);
+	//spriteObject->SetParent(rotationPointObject);
 
-	std::shared_ptr<GameObject> spriteObject3 = std::make_shared<GameObject>();
-	spriteObject3->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
-	spriteObject3->AddComponent<CircularMovementComponent>(75.f, 1.f);
-	spriteObject3->SetParent(spriteObject2);
+	//std::shared_ptr<GameObject> spriteObject2 = std::make_shared<GameObject>();
+	//spriteObject2->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
+	//spriteObject2->AddComponent<CircularMovementComponent>(100.f, 1.f);
+	//spriteObject2->SetParent(spriteObject);
 
-	std::shared_ptr<GameObject> spriteObject4 = std::make_shared<GameObject>();
-	spriteObject4->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
-	spriteObject4->AddComponent<CircularMovementComponent>(50.f, 1.f);
-	spriteObject4->SetParent(spriteObject2);
+	//std::shared_ptr<GameObject> spriteObject3 = std::make_shared<GameObject>();
+	//spriteObject3->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
+	//spriteObject3->AddComponent<CircularMovementComponent>(75.f, 1.f);
+	//spriteObject3->SetParent(spriteObject2);
 
-	std::shared_ptr<GameObject> spriteObject5 = std::make_shared<GameObject>();
-	spriteObject5->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
-	spriteObject5->AddComponent<CircularMovementComponent>(15.f, 3.f);
-	spriteObject5->SetParent(SceneManager::GetInstance().GetRootObject());
+	//std::shared_ptr<GameObject> spriteObject4 = std::make_shared<GameObject>();
+	//spriteObject4->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
+	//spriteObject4->AddComponent<CircularMovementComponent>(50.f, 1.f);
+	//spriteObject4->SetParent(spriteObject2);
+
+	//std::shared_ptr<GameObject> spriteObject5 = std::make_shared<GameObject>();
+	//spriteObject5->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_sprite.png"));
+	//spriteObject5->AddComponent<CircularMovementComponent>(15.f, 3.f);
+	//spriteObject5->SetParent(SceneManager::GetInstance().GetRootObject());
 
 	scene.Add(backgroundObject);
 	scene.Add(fpsObject);
-	scene.Add(rotationPointObject);
+	//scene.Add(rotationPointObject);
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 

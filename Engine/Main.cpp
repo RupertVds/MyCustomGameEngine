@@ -54,8 +54,9 @@ void load()
 
 	std::shared_ptr<GameObject> playerTwoObject = std::make_shared<GameObject>();
 	playerTwoObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_2.png"));
-	playerTwoObject->AddComponent <PlayerMovementComponent>(200.f);
+	playerTwoObject->AddComponent <PlayerMovementComponent>(400.f);
 	playerTwoObject->SetLocalPosition(glm::vec3{ 1280 / 2 + 50, 720 / 2, 0 });
+	//playerTwoObject->SetParent(playerOneObject);
 
 	moveUpCommand = playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 });
 	moveLeftCommand = playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 });

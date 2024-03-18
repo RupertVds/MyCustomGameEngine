@@ -58,6 +58,18 @@ void GameObject::Render() const
     }
 }
 
+void GameObject::RenderImGui()
+{
+    for (const std::unique_ptr<Component>& component : m_Components)
+    {
+        component->RenderImGui();
+    }
+
+    for (auto& child : m_Children)
+    {
+        child->RenderImGui();
+    }
+}
 
 GameObject* GameObject::GetParent() const
 {
@@ -189,4 +201,5 @@ void GameObject::DeleteSelf()
         m_Parent->RemoveChild(shared_from_this());
     }
 }
+
 

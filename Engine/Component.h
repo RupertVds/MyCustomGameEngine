@@ -17,6 +17,7 @@ public:
     virtual void FixedUpdate() {}
     virtual void LateUpdate() {}
     virtual void Render() const {}
+    virtual void RenderImGui() {}
 protected:
     virtual void OnInit() {}
     explicit Component(GameObject* pOwner) : m_pOwner{ pOwner } {}

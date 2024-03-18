@@ -41,11 +41,16 @@ void Renderer::Render() const
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_Renderer);
 
+	SceneManager::GetInstance().Render();
+
+	SDL_RenderFlush(m_Renderer);
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
-	//ImGui::NewFrame();
 
-	SceneManager::GetInstance().Render();
+	// ImGui render calls are handled inside the objects v
+	SceneManager::GetInstance().RenderImGui();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

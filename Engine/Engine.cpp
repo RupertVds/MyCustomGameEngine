@@ -100,6 +100,7 @@ void Engine::Run(const std::function<void()>& load)
 		lag += timer.GetDeltaTime();
 
 		doContinue = input.ProcessInput();
+
 		while (lag >= timer.GetFixedTimeStep())
 		{
 			sceneManager.FixedUpdate();

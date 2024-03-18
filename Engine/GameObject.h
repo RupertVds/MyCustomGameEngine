@@ -4,6 +4,7 @@
 #include <vector>
 #include "Component.h"
 #include "Exceptions.h"
+#include "Command.h"
 
 class Texture2D;
 class Transform;
@@ -23,6 +24,7 @@ public:
 	void FixedUpdate();
 	void LateUpdate();
 	void Render() const;
+	void RenderImGui();
 
 	GameObject* GetParent() const;
 	void SetParent(std::shared_ptr<GameObject>, bool keepWorldPosition = true);
@@ -48,6 +50,9 @@ private:
 	std::vector<std::unique_ptr<Component>> m_Components;
 	Transform m_LocalTransform{};
 	Transform m_WorldTransform{};
+
+	std::vector<std::unique_ptr<Command>> m_Commands;
+
 
 	GameObject* m_Parent{};
 	std::vector<std::shared_ptr<GameObject>> m_Children{};
@@ -83,5 +88,43 @@ public:
 	template <typename T>
 	bool HasComponent() const {
 		return GetComponent<T>() != nullptr;
+	}
+
+	// Add a command to the GameObject
+	template <typename T, typename... Args>
+	T* AddCommand(Args&&... args)
+	{
+		std::unique_ptr<T> command{ std::make_unique<T>(this, std::forward<Args>(args)...) };
+		T* commandPtr = command.get(); // Get raw pointer before moving
+		m_Commands.emplace_back(std::move(command));
+		return commandPtr;
+	}
+
+	// Remove a command from the GameObject
+	template <typename T>
+	void RemoveCommand() {
+		m_Commands.erase(std::remove_if(
+			m_Commands.begin(),
+			m_Commands.end(),
+			[](const auto& command) {
+				return dynamic_cast<T*>(command.get()) != nullptr;
+			}),
+			m_Commands.end());
+	}
+
+	// Get a command from the GameObject
+	template <typename T>
+	T* GetCommand() const {
+		for (const auto& command : m_Commands) {
+			if (auto result = dynamic_cast<T*>(command.get()))
+				return result;
+		}
+		return nullptr;
+	}
+
+	// Check if a command exists in the GameObject
+	template <typename T>
+	bool HasCommand() const {
+		return GetCommand<T>() != nullptr;
 	}
 };

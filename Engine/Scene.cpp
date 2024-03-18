@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 #include <algorithm>
+#include <imgui.h>
 
 
 unsigned int Scene::m_IdCounter = 0;
@@ -64,6 +65,20 @@ void Scene::Render() const
 		if (!object->IsMarkedForDeletion())
 		{
 			object->Render();
+		}
+	}
+}
+
+void Scene::RenderImGui()
+{
+	for (const auto& object : m_Objects)
+	{
+		if (!object->IsMarkedForDeletion())
+		{
+			ImGui::NewFrame();
+			object->RenderImGui();
+			ImGui::EndFrame();
+
 		}
 	}
 }

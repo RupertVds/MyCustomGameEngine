@@ -15,6 +15,7 @@ public:
 	void FixedUpdate();
 	void LateUpdate();
 	void Render() const;
+	void RenderImGui();
 
 	~Scene();
 	Scene(const Scene& other) = delete;

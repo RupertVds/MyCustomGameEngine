@@ -33,11 +33,19 @@ std::shared_ptr<GameObject> const SceneManager::GetRootObject() const
 	return m_RootObject;
 }
 
-void SceneManager::Render()
+void SceneManager::Render() const
 {
 	for (const auto& scene : m_Scenes)
 	{
 		scene->Render();
+	}
+}
+
+void SceneManager::RenderImGui()
+{
+	for (const auto& scene : m_Scenes)
+	{
+		scene->RenderImGui();
 	}
 }
 

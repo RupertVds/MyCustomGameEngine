@@ -16,7 +16,8 @@ public:
 	void LateUpdate();
 	std::shared_ptr<GameObject> const GetRootObject() const;
 
-	void Render();
+	void Render() const;
+	void RenderImGui();
 private:
 	friend class Singleton<SceneManager>;
 	SceneManager() = default;

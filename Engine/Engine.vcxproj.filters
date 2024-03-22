@@ -108,6 +108,12 @@
     <ClInclude Include="PlayerMovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="XInputController.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHelperStructs.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -185,7 +191,7 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerMovementComponent.cpp">
+    <ClCompile Include="XInputController.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>

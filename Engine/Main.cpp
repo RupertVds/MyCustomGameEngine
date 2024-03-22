@@ -17,6 +17,7 @@
 #include "CircularMovementComponent.h"
 #include "GameObjectCommand.h"
 #include "InputManager.h"
+#include "XInputController.h"
 
 
 void load()
@@ -42,31 +43,28 @@ void load()
 	playerOneObject->AddComponent<PlayerMovementComponent>(200.f);
 	playerOneObject->SetLocalPosition(glm::vec3{ 1280 / 2 - 50, 720 / 2, 0 });
 
-	MoveCommand* moveUpCommand = playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 });
-	MoveCommand* moveLeftCommand = playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 });
-	MoveCommand* moveDownCommand = playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 });
-	MoveCommand* moveRightCommand = playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 });
-
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_W, [moveUpCommand]() { moveUpCommand->Execute(); }, InputManager::InputMode::Hold);
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_A, [moveLeftCommand]() { moveLeftCommand->Execute(); }, InputManager::InputMode::Hold);
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_S, [moveDownCommand]() { moveDownCommand->Execute(); }, InputManager::InputMode::Hold);
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_D, [moveRightCommand]() { moveRightCommand->Execute(); }, InputManager::InputMode::Hold);
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_S, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
 
 	std::shared_ptr<GameObject> playerTwoObject = std::make_shared<GameObject>();
 	playerTwoObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_2.png"));
 	playerTwoObject->AddComponent <PlayerMovementComponent>(400.f);
 	playerTwoObject->SetLocalPosition(glm::vec3{ 1280 / 2 + 50, 720 / 2, 0 });
-	//playerTwoObject->SetParent(playerOneObject);
+	////playerTwoObject->SetParent(playerOneObject);
 
-	moveUpCommand = playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 });
-	moveLeftCommand = playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 });
-	moveDownCommand = playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 });
-	moveRightCommand = playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 });
+	InputManager::GetInstance().AddController();
+	InputManager::GetInstance().BindInput(0, XINPUT_GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(0, XINPUT_GAMEPAD_DPAD_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(0, XINPUT_GAMEPAD_DPAD_DOWN, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(0, XINPUT_GAMEPAD_DPAD_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
 
-	InputManager::GetInstance().BindInput(XINPUT_GAMEPAD_DPAD_UP, [moveUpCommand]() { moveUpCommand->Execute(); }, InputManager::InputMode::Hold);
-	InputManager::GetInstance().BindInput(XINPUT_GAMEPAD_DPAD_LEFT, [moveLeftCommand]() { moveLeftCommand->Execute(); }, InputManager::InputMode::Hold);
-	InputManager::GetInstance().BindInput(XINPUT_GAMEPAD_DPAD_DOWN, [moveDownCommand]() { moveDownCommand->Execute(); }, InputManager::InputMode::Hold);
-	InputManager::GetInstance().BindInput(XINPUT_GAMEPAD_DPAD_RIGHT, [moveRightCommand]() { moveRightCommand->Execute(); }, InputManager::InputMode::Hold);
+	InputManager::GetInstance().AddController();
+	InputManager::GetInstance().BindInput(1, XINPUT_GAMEPAD_DPAD_UP, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(1, XINPUT_GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(1, XINPUT_GAMEPAD_DPAD_DOWN, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(1, XINPUT_GAMEPAD_DPAD_RIGHT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
 
 	scene.Add(playerOneObject);
 	scene.Add(playerTwoObject);

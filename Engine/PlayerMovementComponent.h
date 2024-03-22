@@ -22,7 +22,7 @@ public:
             m_Direction.y = m_Direction.y / length;
         }
         newPosition.x += m_Direction.x * m_MaxSpeed * Timer::GetInstance().GetDeltaTime();
-        newPosition.y -= m_Direction.y * m_MaxSpeed * Timer::GetInstance().GetDeltaTime();
+        newPosition.y += m_Direction.y * m_MaxSpeed * Timer::GetInstance().GetDeltaTime();
         GetOwner()->SetLocalPosition(newPosition);
         m_Direction = glm::vec2{};
     }

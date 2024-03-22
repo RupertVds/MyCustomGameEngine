@@ -53,7 +53,6 @@ private:
 
 	std::vector<std::unique_ptr<Command>> m_Commands;
 
-
 	GameObject* m_Parent{};
 	std::vector<std::shared_ptr<GameObject>> m_Children{};
 public:

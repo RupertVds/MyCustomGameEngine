@@ -16,7 +16,7 @@ public:
 	void AddScore(int amount)
 	{
 		m_Score += amount;
-		GetOwner()->NotifyObservers(Event::IncreasedScore);
+		GetOwner()->NotifyObservers(Event::IncreasedScore);		
 	}
 
 	unsigned int GetScore() const { return m_Score; }

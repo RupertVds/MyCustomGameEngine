@@ -141,6 +141,9 @@
     <ClInclude Include="PlayerPointsComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="SteamAchievements.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -232,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="Achievements.cpp">
       <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="SteamAchievements.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -105,9 +105,6 @@
     <ClInclude Include="Texture2D.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectCommand.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerMovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -127,12 +124,21 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Achievements.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Core</Filter>
+      <Filter>Observers</Filter>
     </ClInclude>
     <ClInclude Include="PlayerLivesObserver.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPointsObserver.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPointsComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,11 +224,14 @@
     <ClCompile Include="PlayerComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Achievements.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerLivesObserver.cpp">
-      <Filter>Managers</Filter>
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPointsObserver.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="Achievements.cpp">
+      <Filter>Observers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

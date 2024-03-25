@@ -5,6 +5,7 @@
 #include <iostream>
 #include "PlayerMovementComponent.h"
 #include "HealthComponent.h"
+#include "PlayerPointsComponent.h"
 
 class GameObject;
 
@@ -64,4 +65,24 @@ public:
 
 private:
 	int m_Amount{};
+};
+
+class AddScore final : public GameObjectCommand
+{
+public:
+	AddScore(GameObject* object, unsigned int amount) : GameObjectCommand(object),
+		m_Amount{ amount }
+	{}
+
+	virtual void Execute() override
+	{
+		PlayerPointsComponent* playerPointsComponent = GetGameObject()->GetComponent<PlayerPointsComponent>();
+		if (playerPointsComponent)
+		{
+			playerPointsComponent->AddScore(m_Amount);
+		}
+	}
+
+private:
+	unsigned int m_Amount{};
 };

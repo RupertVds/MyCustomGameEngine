@@ -21,6 +21,7 @@
 #include "HealthComponent.h"
 #include "Achievements.h"
 #include "PlayerLivesObserver.h"
+#include "PlayerPointsObserver.h"
 
 void load()
 {
@@ -37,11 +38,14 @@ void load()
 	//std::shared_ptr<Achievements> achievements = std::make_shared<Achievements>();
 
 
+
 	const int playerHealth{ 3 };
+	// Player one
 	std::shared_ptr<GameObject> playerOneObject = std::make_shared<GameObject>();
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
 	playerOneObject->AddComponent<PlayerMovementComponent>(200.f);
 	playerOneObject->AddComponent<HealthComponent>(playerHealth);
+	playerOneObject->AddComponent<PlayerPointsComponent>();
 	playerOneObject->SetLocalPosition(glm::vec3{ 1280 / 2 - 50, 720 / 2, 0 });
 
 	std::shared_ptr<GameObject> playerOneLivesText = std::make_shared<GameObject>();
@@ -49,17 +53,26 @@ void load()
 	playerOneLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
 	playerOneLivesText->SetLocalPosition(glm::vec3{ 20, 100, 0 });
 
+	std::shared_ptr<GameObject> playerOnePointsText = std::make_shared<GameObject>();
+	playerOnePointsText->AddComponent<RenderComponent>();
+	playerOnePointsText->AddComponent<TextComponent>("Score: 0", font);
+	playerOnePointsText->SetLocalPosition(glm::vec3{ 20, 120, 0 });
+
 	std::shared_ptr<PlayerLivesObserver> playerLivesObserver = std::make_shared<PlayerLivesObserver>(playerOneLivesText->GetComponent<TextComponent>());
+	std::shared_ptr<PlayerPointsObserver> playerPointsObserver = std::make_shared<PlayerPointsObserver>(playerOnePointsText->GetComponent<TextComponent>());
 
 	playerOneObject->AddObserver(playerLivesObserver);
-
-
+	playerOneObject->AddObserver(playerPointsObserver);
 
 	InputManager::GetInstance().BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(SDL_SCANCODE_S, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_SPACE, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_C, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_Z, InputBinding{ playerOneObject->AddCommand<AddScore>(10), InputMode::Press });
+	InputManager::GetInstance().BindInput(SDL_SCANCODE_X, InputBinding{ playerOneObject->AddCommand<AddScore>(100), InputMode::Press });
+
+	// Player two
 
 	std::shared_ptr<GameObject> playerTwoObject = std::make_shared<GameObject>();
 	playerTwoObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_2.png"));
@@ -80,10 +93,13 @@ void load()
 	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_DOWN, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_RIGHT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
 
-	scene.Add(playerOneObject);
-	scene.Add(playerTwoObject);
 	scene.Add(fpsObject);
+
+	scene.Add(playerOneObject);
 	scene.Add(playerOneLivesText);
+	scene.Add(playerOnePointsText);
+
+	scene.Add(playerTwoObject);
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 

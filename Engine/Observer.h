@@ -8,6 +8,7 @@ enum class Event
 	ActorDied,
 	ActorDamaged,
 	ActorFell,
+	IncreasedScore,
 };
 
 class Observer

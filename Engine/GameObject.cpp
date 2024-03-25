@@ -12,7 +12,7 @@ void GameObject::Update()
     {
         component->Update();
     }
-
+    
     for (auto& child : m_Children)
     {
         child->Update();
@@ -130,6 +130,26 @@ const std::shared_ptr<GameObject>& GameObject::GetChildAtIndex(int index) const
     return m_Children[index];
 }
 
+void GameObject::AddObserver(std::shared_ptr<Observer> observer)
+{
+    m_Observers.emplace_back(observer);
+    
+}
+
+void GameObject::RemoveObserver(std::shared_ptr<Observer> observer)
+{
+    m_Observers.erase(std::remove(m_Observers.begin(), m_Observers.end(), observer), m_Observers.end());
+}
+
+void GameObject::NotifyObservers(Event event)
+{
+    if (m_Observers.empty()) throw std::runtime_error("No observers!");
+    for (auto& observer : m_Observers)
+    {
+        observer->Notify(event, this);
+    }
+}
+
 void GameObject::AddChild(std::shared_ptr<GameObject> child)
 {
     m_Children.emplace_back(child);
@@ -188,6 +208,7 @@ void GameObject::SetLocalPosition(const glm::vec3& pos)
 
 void GameObject::DeleteSelf()
 {
+    if (m_IsMarkedForDeletion) return;
     m_IsMarkedForDeletion = true;
 
     for (auto& child : m_Children)

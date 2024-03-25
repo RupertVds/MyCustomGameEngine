@@ -86,7 +86,7 @@ void Engine::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = Timer::GetInstance();
 	
-	constexpr bool useVsync{ false };
+	constexpr bool useVsync{ true };
 	constexpr float targetFps{ 144.f };
 	constexpr double targetFrameDuration = 1.0 / (targetFps / 2);
 	float lag = 0.0f;

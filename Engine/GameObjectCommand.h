@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include <iostream>
 #include "PlayerMovementComponent.h"
+#include "HealthComponent.h"
 
 class GameObject;
 
@@ -43,4 +44,24 @@ public:
 
 private:
 	glm::vec2 m_Direction;
+};
+
+class TakeDamageCommand final : public GameObjectCommand
+{
+public:
+	TakeDamageCommand(GameObject* object, int amount = 1) : GameObjectCommand(object),
+		m_Amount{ amount }
+	{}
+
+	virtual void Execute() override
+	{
+		HealthComponent* healthComponent = GetGameObject()->GetComponent<HealthComponent>();
+		if (healthComponent)
+		{
+			healthComponent->TakeDamage(m_Amount);
+		}
+	}
+
+private:
+	int m_Amount{};
 };

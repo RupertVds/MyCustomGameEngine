@@ -5,10 +5,13 @@
 #include "Component.h"
 #include "Exceptions.h"
 #include "Command.h"
+#include "Observer.h"
 
 class Texture2D;
 class Transform;
 class Component;
+class Observer;
+enum class Event;
 
 class GameObject final : public std::enable_shared_from_this<GameObject>
 {
@@ -33,6 +36,10 @@ public:
 	const std::vector<std::shared_ptr<GameObject>>& GetChildren() const;
 	const std::shared_ptr<GameObject>& GetChildAtIndex(int index) const;
 
+	void AddObserver(std::shared_ptr<Observer> observer);
+	void RemoveObserver(std::shared_ptr<Observer> observer);
+	void NotifyObservers(Event event);
+
 	void UpdateWorldPosition();
 	void SetLocalPosition(const glm::vec3& pos);
 	const glm::vec3& GetLocalPosition() const;
@@ -55,6 +62,8 @@ private:
 
 	GameObject* m_Parent{};
 	std::vector<std::shared_ptr<GameObject>> m_Children{};
+
+	std::vector<std::shared_ptr<Observer>> m_Observers;
 public:
 	template <typename T, typename... Args>
 	void AddComponent(Args&&... args)

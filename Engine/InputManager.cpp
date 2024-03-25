@@ -60,53 +60,7 @@ bool InputManager::ProcessInput()
     // Update previous key state
     memcpy(m_PreviousKeyState, m_CurrentKeyState, SDL_NUM_SCANCODES);
 
-
-    // Process command based gamepad input
-
-    //CopyMemory(&m_PreviousControllerState, &m_CurrentControllerState, sizeof(XINPUT_STATE));
-    //ZeroMemory(&m_CurrentControllerState, sizeof(XINPUT_STATE));
-    //DWORD dwResult = XInputGetState(0, &m_CurrentControllerState);
-    //if (dwResult != ERROR_SUCCESS)
-    //{
-    //    // Handle controller disconnected or other error
-    //    // I may want to implement error handling here
-    //    //return true;
-    //}
-
-    //auto buttonChanges = m_CurrentControllerState.Gamepad.wButtons ^ m_PreviousControllerState.Gamepad.wButtons;
-    //auto buttonsPressedThisFrame = buttonChanges & m_CurrentControllerState.Gamepad.wButtons;
-    //auto buttonsReleasedThisFrame = buttonChanges & (~m_CurrentControllerState.Gamepad.wButtons);
-
-    //for (auto const& [button, binding] : m_ControllerBindings)
-    //{
-    //    switch (binding.mode)
-    //    {
-    //    case InputMode::Release:
-    //        if (buttonsReleasedThisFrame & button)
-    //        {
-    //            binding.command->Execute();
-    //        }
-    //        break;
-    //    case InputMode::Hold:
-    //        if (m_CurrentControllerState.Gamepad.wButtons & button)
-    //        {
-    //            binding.command->Execute();
-    //        }
-    //        break;
-    //    case InputMode::Press:
-    //        if (buttonsPressedThisFrame & button)
-    //        {
-    //            binding.command->Execute();
-    //        }
-    //        break;
-    //    }
-    //}
-    
-
-    for (int index{}; index < m_Controllers.size(); ++index)
-    {
-        m_Controllers[index]->ProcessInput();
-    }
+    std::for_each(m_Controllers.begin(), m_Controllers.end(), [](const std::unique_ptr<XInputController>& controller) { controller->ProcessInput(); });
 
     // process event for IMGUI
     ImGui_ImplSDL2_ProcessEvent(&e);
@@ -127,7 +81,7 @@ void InputManager::BindInput(SDL_Scancode key, InputBinding inputBinding)
     m_KeyboardBindings[key] = std::move(inputBinding);
 }
 
-void InputManager::BindInput(int controllerIndex, WORD button, InputBinding inputBinding)
+void InputManager::BindInput(int controllerIndex, unsigned short button, InputBinding inputBinding)
 {
     //m_ControllerBindings[button] = std::move(inputBinding);
     for (auto& controller : m_Controllers)

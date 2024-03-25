@@ -36,7 +36,10 @@ void load()
 	fpsObject->SetParent(SceneManager::GetInstance().GetRootObject());
 
 	//std::shared_ptr<Achievements> achievements = std::make_shared<Achievements>();
-
+	std::shared_ptr<GameObject> controlsText = std::make_shared<GameObject>();
+	controlsText->AddComponent<RenderComponent>();
+	controlsText->AddComponent<TextComponent>("Use WASD to move green player, C to inflict damage, Z and X to pickup points\nUse the D-Pad to move blue player, X to inflict damage, A and B to pick up points", font);
+	controlsText->SetLocalPosition(glm::vec3{ 20, 30, 0 });
 
 
 	const int playerHealth{ 3 };
@@ -51,12 +54,12 @@ void load()
 	std::shared_ptr<GameObject> playerOneLivesText = std::make_shared<GameObject>();
 	playerOneLivesText->AddComponent<RenderComponent>();
 	playerOneLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
-	playerOneLivesText->SetLocalPosition(glm::vec3{ 20, 100, 0 });
+	playerOneLivesText->SetLocalPosition(glm::vec3{ 20, 200, 0 });
 
 	std::shared_ptr<GameObject> playerOnePointsText = std::make_shared<GameObject>();
 	playerOnePointsText->AddComponent<RenderComponent>();
 	playerOnePointsText->AddComponent<TextComponent>("Score: 0", font);
-	playerOnePointsText->SetLocalPosition(glm::vec3{ 20, 120, 0 });
+	playerOnePointsText->SetLocalPosition(glm::vec3{ 20, 230, 0 });
 
 	std::shared_ptr<PlayerLivesObserver> playerLivesObserver = std::make_shared<PlayerLivesObserver>(playerOneLivesText->GetComponent<TextComponent>());
 	std::shared_ptr<PlayerPointsObserver> playerPointsObserver = std::make_shared<PlayerPointsObserver>(playerOnePointsText->GetComponent<TextComponent>());
@@ -77,29 +80,54 @@ void load()
 	std::shared_ptr<GameObject> playerTwoObject = std::make_shared<GameObject>();
 	playerTwoObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_2.png"));
 	playerTwoObject->AddComponent <PlayerMovementComponent>(400.f);
-	playerTwoObject->AddComponent<HealthComponent>(3);
+	playerTwoObject->AddComponent<HealthComponent>(playerHealth);
+	playerTwoObject->AddComponent<PlayerPointsComponent>();
 	playerTwoObject->SetLocalPosition(glm::vec3{ 1280 / 2 + 50, 720 / 2, 0 });
-	////playerTwoObject->SetParent(playerOneObject);
+
+	std::shared_ptr<GameObject> playerTwoLivesText = std::make_shared<GameObject>();
+	playerTwoLivesText->AddComponent<RenderComponent>();
+	playerTwoLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
+	playerTwoLivesText->SetLocalPosition(glm::vec3{ 20, 260, 0 });
+
+	std::shared_ptr<GameObject> playerTwoPointsText = std::make_shared<GameObject>();
+	playerTwoPointsText->AddComponent<RenderComponent>();
+	playerTwoPointsText->AddComponent<TextComponent>("Score: 0", font);
+	playerTwoPointsText->SetLocalPosition(glm::vec3{ 20, 290, 0 });
+
+	std::shared_ptr<PlayerLivesObserver> playerLivesObserverTwo = std::make_shared<PlayerLivesObserver>(playerTwoLivesText->GetComponent<TextComponent>());
+	std::shared_ptr<PlayerPointsObserver> playerPointsObserverTwo = std::make_shared<PlayerPointsObserver>(playerTwoPointsText->GetComponent<TextComponent>());
+
+	playerTwoObject->AddObserver(playerLivesObserverTwo);
+	playerTwoObject->AddObserver(playerPointsObserverTwo);
 
 	InputManager::GetInstance().AddController();
 	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_DOWN, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(0, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	InputManager::GetInstance().BindInput(0, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<AddScore>(10), InputMode::Press });
+	InputManager::GetInstance().BindInput(0, GAMEPAD_B, InputBinding{ playerTwoObject->AddCommand<AddScore>(100), InputMode::Press });
 
 	InputManager::GetInstance().AddController();
 	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_UP, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_DOWN, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
 	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_RIGHT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
+	InputManager::GetInstance().BindInput(1, GAMEPAD_X, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	InputManager::GetInstance().BindInput(1, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<AddScore>(10), InputMode::Press });
+	InputManager::GetInstance().BindInput(1, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<AddScore>(100), InputMode::Press });
 
 	scene.Add(fpsObject);
+	scene.Add(controlsText);
 
 	scene.Add(playerOneObject);
 	scene.Add(playerOneLivesText);
 	scene.Add(playerOnePointsText);
 
 	scene.Add(playerTwoObject);
+	scene.Add(playerTwoLivesText);
+	scene.Add(playerTwoPointsText);
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 

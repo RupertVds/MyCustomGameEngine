@@ -27,6 +27,7 @@ void load()
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
+	auto& inputManager = InputManager::GetInstance();
 
 	std::shared_ptr<GameObject> fpsObject = std::make_shared<GameObject>();
 	fpsObject->AddComponent<RenderComponent>();
@@ -67,13 +68,13 @@ void load()
 	playerOneObject->AddObserver(playerLivesObserver);
 	playerOneObject->AddObserver(playerPointsObserver);
 
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_S, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_C, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_Z, InputBinding{ playerOneObject->AddCommand<AddScore>(10), InputMode::Press });
-	InputManager::GetInstance().BindInput(SDL_SCANCODE_X, InputBinding{ playerOneObject->AddCommand<AddScore>(100), InputMode::Press });
+	inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
+	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
+	inputManager.BindInput(SDL_SCANCODE_S, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
+	inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
+	inputManager.BindInput(SDL_SCANCODE_C, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	inputManager.BindInput(SDL_SCANCODE_Z, InputBinding{ playerOneObject->AddCommand<AddScore>(10), InputMode::Press });
+	inputManager.BindInput(SDL_SCANCODE_X, InputBinding{ playerOneObject->AddCommand<AddScore>(100), InputMode::Press });
 
 	// Player two
 
@@ -100,23 +101,23 @@ void load()
 	playerTwoObject->AddObserver(playerLivesObserverTwo);
 	playerTwoObject->AddObserver(playerPointsObserverTwo);
 
-	InputManager::GetInstance().AddController();
-	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_DOWN, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(0, GAMEPAD_DPAD_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(0, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
-	InputManager::GetInstance().BindInput(0, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<AddScore>(10), InputMode::Press });
-	InputManager::GetInstance().BindInput(0, GAMEPAD_B, InputBinding{ playerTwoObject->AddCommand<AddScore>(100), InputMode::Press });
-
-	InputManager::GetInstance().AddController();
-	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_UP, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_DOWN, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(1, GAMEPAD_DPAD_RIGHT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
-	InputManager::GetInstance().BindInput(1, GAMEPAD_X, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
-	InputManager::GetInstance().BindInput(1, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<AddScore>(10), InputMode::Press });
-	InputManager::GetInstance().BindInput(1, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<AddScore>(100), InputMode::Press });
+	inputManager.AddController();
+	inputManager.BindInput(0, GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
+	inputManager.BindInput(0, GAMEPAD_DPAD_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
+	inputManager.BindInput(0, GAMEPAD_DPAD_DOWN, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
+	inputManager.BindInput(0, GAMEPAD_DPAD_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
+	inputManager.BindInput(0, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	inputManager.BindInput(0, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<AddScore>(10), InputMode::Press });
+	inputManager.BindInput(0, GAMEPAD_B, InputBinding{ playerTwoObject->AddCommand<AddScore>(100), InputMode::Press });
+	
+	inputManager.AddController();
+	inputManager.BindInput(1, GAMEPAD_DPAD_UP, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
+	inputManager.BindInput(1, GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
+	inputManager.BindInput(1, GAMEPAD_DPAD_DOWN, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
+	inputManager.BindInput(1, GAMEPAD_DPAD_RIGHT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
+	inputManager.BindInput(1, GAMEPAD_X, InputBinding{ playerOneObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
+	inputManager.BindInput(1, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<AddScore>(10), InputMode::Press });
+	inputManager.BindInput(1, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<AddScore>(100), InputMode::Press });
 
 	scene.Add(fpsObject);
 	scene.Add(controlsText);

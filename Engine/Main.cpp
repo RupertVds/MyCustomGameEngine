@@ -102,6 +102,7 @@ void load()
 
 	playerTwoObject->AddObserver(playerLivesObserverTwo);
 	playerTwoObject->AddObserver(playerPointsObserverTwo);
+	playerTwoObject->AddObserver(achievements);
 
 	inputManager.AddController();
 	inputManager.BindInput(0, GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });

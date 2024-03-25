@@ -8,6 +8,7 @@ void Achievements::Notify(Event event, [[maybe_unused]] GameObject* object)
 	{
 	case Event::IncreasedScore:
 		auto playerPointsComponent = object->GetComponent<PlayerPointsComponent>();
+
 		if (playerPointsComponent->GetScore() >= 500 && !m_Completed_ACH_WIN_ONE_GAME)
 		{
 			std::cout << "UNLOCKED ACH_WIN_ONE_GAMES ACHIEVEMENT\n";

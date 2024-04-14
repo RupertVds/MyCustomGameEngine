@@ -123,9 +123,6 @@
     <ClInclude Include="Observer.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Achievements.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerLivesObserver.h">
       <Filter>Observers</Filter>
     </ClInclude>
@@ -139,9 +136,6 @@
       <Filter>Commands</Filter>
     </ClInclude>
     <ClInclude Include="PlayerPointsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SteamAchievements.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -232,12 +226,6 @@
     </ClCompile>
     <ClCompile Include="PlayerPointsObserver.cpp">
       <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="Achievements.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="SteamAchievements.cpp">
-      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,7 +19,6 @@
 #include "InputManager.h"
 #include "XInputController.h"
 #include "HealthComponent.h"
-#include "Achievements.h"
 #include "PlayerLivesObserver.h"
 #include "PlayerPointsObserver.h"
 
@@ -64,11 +63,9 @@ void load()
 
 	std::shared_ptr<PlayerLivesObserver> playerLivesObserver = std::make_shared<PlayerLivesObserver>(playerOneLivesText->GetComponent<TextComponent>());
 	std::shared_ptr<PlayerPointsObserver> playerPointsObserver = std::make_shared<PlayerPointsObserver>(playerOnePointsText->GetComponent<TextComponent>());
-	std::shared_ptr<Achievements> achievements = std::make_shared<Achievements>();
 
 	playerOneObject->AddObserver(playerLivesObserver);
 	playerOneObject->AddObserver(playerPointsObserver);
-	playerOneObject->AddObserver(achievements);
 
 	inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
@@ -102,7 +99,6 @@ void load()
 
 	playerTwoObject->AddObserver(playerLivesObserverTwo);
 	playerTwoObject->AddObserver(playerPointsObserverTwo);
-	playerTwoObject->AddObserver(achievements);
 
 	inputManager.AddController();
 	inputManager.BindInput(0, GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
@@ -137,24 +133,8 @@ void load()
 
 int main(int, char*[]) 
 {
-	if (!SteamAPI_Init())
-	{
-		std::cerr << "Fatal Error - Steam must be running to play this game (SteamAPI_Init() failed)." << std::endl;
-		return 1;
-	}
-	else
-	{
-		std::cout << "Successfully initialized steam." << std::endl;
-		g_SteamAchievements = new CSteamAchievements(g_Achievements, 4);
-	}
-
 	Engine engine("../Data/");
 	engine.Run(load);
 
-	// Shutdown Steam
-	SteamAPI_Shutdown();
-	// Delete the SteamAchievements object
-	if (g_SteamAchievements)
-		delete g_SteamAchievements;
     return 0;
 }

@@ -14,7 +14,6 @@
 #include <algorithm>
 #pragma warning (push)
 #pragma warning (disable: 4996)
-#include "steam_api.h"
 //#include <steamtypes.h>
 #pragma warning (pop)
 
@@ -113,7 +112,6 @@ void Engine::Run(const std::function<void()>& load)
 		}
 
 		sceneManager.Update();
-		SteamAPI_RunCallbacks();
 
 		sceneManager.LateUpdate();
 

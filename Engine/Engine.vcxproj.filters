@@ -149,9 +149,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Managers</Filter>
     </ClCompile>

@@ -1,12 +1,10 @@
-﻿#include <SDL.h>
-
 #if _DEBUG
-// ReSharper disable once CppUnusedIncludeDirective
 #if __has_include(<vld.h>)
 #include <vld.h>
 #endif
 #endif
 
+#include <SDL.h>
 #include "Engine.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
@@ -22,8 +20,7 @@
 #include "PlayerLivesObserver.h"
 #include "PlayerPointsObserver.h"
 
-void load()
-{
+void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
 	auto& inputManager = InputManager::GetInstance();
@@ -108,7 +105,7 @@ void load()
 	inputManager.BindInput(0, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<TakeDamageCommand>(), InputMode::Press });
 	inputManager.BindInput(0, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<AddScore>(10), InputMode::Press });
 	inputManager.BindInput(0, GAMEPAD_B, InputBinding{ playerTwoObject->AddCommand<AddScore>(100), InputMode::Press });
-	
+
 	inputManager.AddController();
 	inputManager.BindInput(1, GAMEPAD_DPAD_UP, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	inputManager.BindInput(1, GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
@@ -131,10 +128,8 @@ void load()
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 
-int main(int, char*[]) 
-{
-	Engine engine("../Data/");
+int main(int, char* []) {
+	Engine engine{"../Data/"};
 	engine.Run(load);
-
-    return 0;
+	return 0;
 }

@@ -6,6 +6,7 @@
 #include "PlayerMovementComponent.h"
 #include "HealthComponent.h"
 #include "PlayerPointsComponent.h"
+#include "ServiceLocator.h"
 
 class GameObject;
 
@@ -85,4 +86,21 @@ public:
 
 private:
 	unsigned int m_Amount{};
+};
+
+class PlaySFX final : public GameObjectCommand
+{
+public:
+	PlaySFX(GameObject* object, const std::string& id, float volume) : GameObjectCommand(object),
+		m_Id{ id }, m_Volume{volume}
+	{}
+
+	virtual void Execute() override
+	{
+		ServiceLocator::get_sound_system().Play(m_Id, m_Volume);
+	}
+
+private:
+	const std::string m_Id{};
+	const float m_Volume{};
 };

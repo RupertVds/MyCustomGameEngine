@@ -10,7 +10,7 @@ public:
     PlayerMovementComponent(GameObject* pOwner, float maxSpeed) : Component(pOwner),
         m_MaxSpeed{ maxSpeed }
     {
-        EventQueue::GetInstance().AttachEvent(Event::PLAYER_DAMAGE, std::bind(&PlayerMovementComponent::TestEventQueue, this));
+        //EventQueue::GetInstance().AttachEvent(Event::PLAYER_DAMAGE, std::bind(&PlayerMovementComponent::TestEventQueue, this));
     }
 
     virtual void Update() override
@@ -41,15 +41,15 @@ public:
         m_Direction += direction;
     }
 
-    void TestEventQueue()
-    {
-        std::cout << "TEST EVENT QUEUE FIRED IN PLAYER MOVEMENT COMP!\n";
-        if (GetOwner()->GetComponent<HealthComponent>()->GetHealth() <= 0)
-        {
-            GetOwner()->DeleteSelf();
+    //void TestEventQueue()
+    //{
+    //    std::cout << "TEST EVENT QUEUE FIRED IN PLAYER MOVEMENT COMP!\n";
+    //    if (GetOwner()->GetComponent<HealthComponent>()->GetHealth() <= 0)
+    //    {
+    //        GetOwner()->DeleteSelf();
 
-        }
-    }
+    //    }
+    //}
 
 private:
     glm::vec2 m_Direction{};

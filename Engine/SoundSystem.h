@@ -55,13 +55,13 @@ public:
 
 class NullSoundSystem final : public SoundSystem
 {
-	void Play([[maybe_unused]] const std::string& id, const float) override {}
+	void Play(const std::string&, const float) override {}
 };
 
 class SDLSoundSystem final : public SoundSystem 
 {
 public:
-	SDLSoundSystem() : running_(true)
+	SDLSoundSystem() : m_IsRunning(true)
 	{
 		// Initialize SDL_mixer and other necessary resources
 		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -69,10 +69,11 @@ public:
 			return;
 		}
 
-		// Increase the number of channels to 32
+		// Increase the number of channels to 64 so
+		// we can play a lot at the same time
 		Mix_AllocateChannels(64);
 
-		eventThread_ = std::thread([this]() { EventLoop(); });
+		m_EventThread = std::thread([this]() { EventLoop(); });
 	}
 	virtual ~SDLSoundSystem();
 
@@ -82,8 +83,8 @@ public:
 			std::string dataPath{ "../Data/BubbleBobbleSFX/" + id };
 
 			// Check if the sound chunk is already loaded
-			auto it = loadedChunks_.find(id);
-			if (it != loadedChunks_.end()) {
+			auto it = m_LoadedChunks.find(id);
+			if (it != m_LoadedChunks.end()) {
 				// If the sound chunk is cached, use it directly
 				PlayChunk(it->second, volume);
 				return;
@@ -98,13 +99,13 @@ public:
 			}
 
 			// Cache the loaded sound chunk
-			loadedChunks_[id] = sound;
+			m_LoadedChunks[id] = sound;
 
 			// Play the sound chunk
 			PlayChunk(sound, volume);
 			};
 
-		eventQueue_.AddPlaySoundRequest(playEvent);
+		m_EventQueue.AddPlaySoundRequest(playEvent);
 	}
 
 private:
@@ -123,10 +124,10 @@ private:
 	}
 
 	void EventLoop() {
-		while (running_) 
+		while (m_IsRunning) 
 		{
-			if (!eventQueue_.IsEmpty()) {
-				auto request = eventQueue_.GetNextRequest();
+			if (!m_EventQueue.IsEmpty()) {
+				auto request = m_EventQueue.GetNextRequest();
 				request();
 			}
 			// Sleep or wait for new events if queue is empty
@@ -134,10 +135,10 @@ private:
 		}
 	}
 
-	SoundEventQueue eventQueue_;
-	std::thread eventThread_;
-	bool running_;
-	std::unordered_map<std::string, Mix_Chunk*> loadedChunks_;
+	SoundEventQueue m_EventQueue;
+	std::thread m_EventThread;
+	bool m_IsRunning;
+	std::unordered_map<std::string, Mix_Chunk*> m_LoadedChunks;
 };
 
 class LoggingSoundSystem final : public SoundSystem

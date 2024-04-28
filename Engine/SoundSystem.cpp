@@ -6,18 +6,18 @@ SoundSystem::~SoundSystem()
 
 SDLSoundSystem::~SDLSoundSystem()
 {
-	running_ = false;
-	if (eventThread_.joinable()) {
-		eventThread_.join();
+	m_IsRunning = false;
+	if (m_EventThread.joinable()) {
+        m_EventThread.join();
 	}
 
     // Free all loaded sound chunks
-    for (auto& pair : loadedChunks_) {
+    for (auto& pair : m_LoadedChunks) {
         Mix_FreeChunk(pair.second);
     }
 
     // Clear the map
-    loadedChunks_.clear();
+    m_LoadedChunks.clear();
 
     // Shutdown SDL_mixer
     Mix_CloseAudio();

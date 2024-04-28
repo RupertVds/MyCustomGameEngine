@@ -26,8 +26,8 @@ void load() {
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
 	auto& inputManager = InputManager::GetInstance();
 
-	//ServiceLocator::RegisterSoundSystem(nullptr);
-
+	ServiceLocator::RegisterSoundSystem(nullptr);
+	
 #if _DEBUG
 	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLSoundSystem>()));
 #else

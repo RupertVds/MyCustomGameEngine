@@ -97,7 +97,7 @@ public:
 
 	virtual void Execute() override
 	{
-		ServiceLocator::get_sound_system().Play(m_Id, m_Volume);
+		ServiceLocator::GetSoundSystem().Play(m_Id, m_Volume);
 	}
 
 private:

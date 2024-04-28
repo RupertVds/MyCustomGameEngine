@@ -135,6 +135,9 @@ private:
 		}
 	}
 
+	//class SDLSoundSystemImpl;
+	//std::unique_ptr<SDLSoundSystemImpl> m_pImpl;
+
 	SoundEventQueue m_EventQueue;
 	std::thread m_EventThread;
 	bool m_IsRunning;

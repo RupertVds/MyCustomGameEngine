@@ -7,7 +7,7 @@ void ServiceLocator::RegisterSoundSystem(std::unique_ptr<SoundSystem>&& ss)
 	_ss_instance = ss == nullptr ? std::make_unique<NullSoundSystem>() : std::move(ss);
 };
 
-SoundSystem& ServiceLocator::get_sound_system()
+SoundSystem& ServiceLocator::GetSoundSystem()
 { 
 	return *_ss_instance;
 }

@@ -1,4 +1,5 @@
 #include "SoundSystem.h"
+#include "SDL_mixer.h"
 
 SoundSystem::~SoundSystem()
 {

@@ -20,15 +20,19 @@
 #include "PlayerLivesObserver.h"
 #include "PlayerPointsObserver.h"
 #include "ServiceLocator.h"
-#include "SDL_mixer.h"
 
 void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
 	auto& inputManager = InputManager::GetInstance();
 
-	ServiceLocator::RegisterSoundSystem(nullptr);
+	//ServiceLocator::RegisterSoundSystem(nullptr);
+
+#if _DEBUG
 	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLSoundSystem>()));
+#else
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
+#endif
 
 	std::shared_ptr<GameObject> fpsObject = std::make_shared<GameObject>();
 	fpsObject->AddComponent<RenderComponent>();
@@ -88,7 +92,7 @@ void load() {
 	inputManager.BindInput(1, GAMEPAD_Y, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_2.wav", 0.2f), InputMode::Press });
 	inputManager.BindInput(1, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_3.wav", 0.2f), InputMode::Press });
 	inputManager.BindInput(1, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_4.wav", 0.2f), InputMode::Press });
-
+	
 	scene.Add(fpsObject);
 	scene.Add(controlsText);
 	scene.Add(playerOneObject);

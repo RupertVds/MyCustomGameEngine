@@ -11,5 +11,5 @@ public:
 	static void RegisterSoundSystem(std::unique_ptr<SoundSystem>&& ss);
 
 private:
-	static std::unique_ptr<SoundSystem> _ss_instance;
+	static std::unique_ptr<SoundSystem> m_SoundSystemInstance;
 };

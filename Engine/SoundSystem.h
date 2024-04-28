@@ -35,15 +35,15 @@ private:
 
 class LoggingSoundSystem final : public SoundSystem
 {
-	std::unique_ptr<SoundSystem> _real_ss;
+	std::unique_ptr<SoundSystem> Real_SS;
 public:
-	LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss) : _real_ss(std::move(ss)) {}
+	LoggingSoundSystem(std::unique_ptr<SoundSystem>&& ss) : Real_SS(std::move(ss)) {}
 
 	virtual ~LoggingSoundSystem() = default;
 
 	void Play(const std::string& id, const float volume) override
 	{
-		_real_ss->Play(id, volume);
-		std::cout << "playing " << id << " at volume " << volume << std::endl;
+		Real_SS->Play(id, volume);
+		std::cout << "Playing: " << id << " at volume: " << volume << std::endl;
 	}
 };

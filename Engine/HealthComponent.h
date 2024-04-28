@@ -20,10 +20,11 @@ public:
 	void TakeDamage(int amount)
 	{
 		m_Health -= amount;
-		GetOwner()->NotifyObservers(Event::ActorDamaged);
+		GetOwner()->NotifyObservers(Event::PLAYER_DAMAGE);
+		EventQueue::GetInstance().NotifyEvent(Event::PLAYER_DAMAGE);
 		if (m_Health == 0)
 		{
-			GetOwner()->NotifyObservers(Event::ActorDied);
+			GetOwner()->NotifyObservers(Event::PLAYER_DIED);
 		}
 	}
 

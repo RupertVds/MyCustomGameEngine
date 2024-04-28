@@ -19,11 +19,19 @@
 #include "HealthComponent.h"
 #include "PlayerLivesObserver.h"
 #include "PlayerPointsObserver.h"
+#include "ServiceLocator.h"
 
 void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
 	auto& inputManager = InputManager::GetInstance();
+
+	//ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
+
+	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLSoundSystem>()));
+	ServiceLocator::RegisterSoundSystem(nullptr);
+
+	ServiceLocator::get_sound_system().Play(0, 10);
 
 	std::shared_ptr<GameObject> fpsObject = std::make_shared<GameObject>();
 	fpsObject->AddComponent<RenderComponent>();
@@ -48,21 +56,21 @@ void load() {
 	playerOneObject->AddComponent<PlayerPointsComponent>();
 	playerOneObject->SetLocalPosition(glm::vec3{ 1280 / 2 - 50, 720 / 2, 0 });
 
-	std::shared_ptr<GameObject> playerOneLivesText = std::make_shared<GameObject>();
-	playerOneLivesText->AddComponent<RenderComponent>();
-	playerOneLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
-	playerOneLivesText->SetLocalPosition(glm::vec3{ 20, 200, 0 });
+	//std::shared_ptr<GameObject> playerOneLivesText = std::make_shared<GameObject>();
+	//playerOneLivesText->AddComponent<RenderComponent>();
+	//playerOneLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
+	//playerOneLivesText->SetLocalPosition(glm::vec3{ 20, 200, 0 });
 
-	std::shared_ptr<GameObject> playerOnePointsText = std::make_shared<GameObject>();
-	playerOnePointsText->AddComponent<RenderComponent>();
-	playerOnePointsText->AddComponent<TextComponent>("Score: 0", font);
-	playerOnePointsText->SetLocalPosition(glm::vec3{ 20, 230, 0 });
+	//std::shared_ptr<GameObject> playerOnePointsText = std::make_shared<GameObject>();
+	//playerOnePointsText->AddComponent<RenderComponent>();
+	//playerOnePointsText->AddComponent<TextComponent>("Score: 0", font);
+	//playerOnePointsText->SetLocalPosition(glm::vec3{ 20, 230, 0 });
 
-	std::shared_ptr<PlayerLivesObserver> playerLivesObserver = std::make_shared<PlayerLivesObserver>(playerOneLivesText->GetComponent<TextComponent>());
-	std::shared_ptr<PlayerPointsObserver> playerPointsObserver = std::make_shared<PlayerPointsObserver>(playerOnePointsText->GetComponent<TextComponent>());
+	//std::shared_ptr<PlayerLivesObserver> playerLivesObserver = std::make_shared<PlayerLivesObserver>(playerOneLivesText->GetComponent<TextComponent>());
+	//std::shared_ptr<PlayerPointsObserver> playerPointsObserver = std::make_shared<PlayerPointsObserver>(playerOnePointsText->GetComponent<TextComponent>());
 
-	playerOneObject->AddObserver(playerLivesObserver);
-	playerOneObject->AddObserver(playerPointsObserver);
+	//playerOneObject->AddObserver(playerLivesObserver);
+	//playerOneObject->AddObserver(playerPointsObserver);
 
 	inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
@@ -81,21 +89,21 @@ void load() {
 	playerTwoObject->AddComponent<PlayerPointsComponent>();
 	playerTwoObject->SetLocalPosition(glm::vec3{ 1280 / 2 + 50, 720 / 2, 0 });
 
-	std::shared_ptr<GameObject> playerTwoLivesText = std::make_shared<GameObject>();
-	playerTwoLivesText->AddComponent<RenderComponent>();
-	playerTwoLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
-	playerTwoLivesText->SetLocalPosition(glm::vec3{ 20, 260, 0 });
+	//std::shared_ptr<GameObject> playerTwoLivesText = std::make_shared<GameObject>();
+	//playerTwoLivesText->AddComponent<RenderComponent>();
+	//playerTwoLivesText->AddComponent<TextComponent>("# lives: " + std::to_string(playerHealth), font);
+	//playerTwoLivesText->SetLocalPosition(glm::vec3{ 20, 260, 0 });
 
-	std::shared_ptr<GameObject> playerTwoPointsText = std::make_shared<GameObject>();
-	playerTwoPointsText->AddComponent<RenderComponent>();
-	playerTwoPointsText->AddComponent<TextComponent>("Score: 0", font);
-	playerTwoPointsText->SetLocalPosition(glm::vec3{ 20, 290, 0 });
+	//std::shared_ptr<GameObject> playerTwoPointsText = std::make_shared<GameObject>();
+	//playerTwoPointsText->AddComponent<RenderComponent>();
+	//playerTwoPointsText->AddComponent<TextComponent>("Score: 0", font);
+	//playerTwoPointsText->SetLocalPosition(glm::vec3{ 20, 290, 0 });
 
-	std::shared_ptr<PlayerLivesObserver> playerLivesObserverTwo = std::make_shared<PlayerLivesObserver>(playerTwoLivesText->GetComponent<TextComponent>());
-	std::shared_ptr<PlayerPointsObserver> playerPointsObserverTwo = std::make_shared<PlayerPointsObserver>(playerTwoPointsText->GetComponent<TextComponent>());
+	//std::shared_ptr<PlayerLivesObserver> playerLivesObserverTwo = std::make_shared<PlayerLivesObserver>(playerTwoLivesText->GetComponent<TextComponent>());
+	//std::shared_ptr<PlayerPointsObserver> playerPointsObserverTwo = std::make_shared<PlayerPointsObserver>(playerTwoPointsText->GetComponent<TextComponent>());
 
-	playerTwoObject->AddObserver(playerLivesObserverTwo);
-	playerTwoObject->AddObserver(playerPointsObserverTwo);
+	//playerTwoObject->AddObserver(playerLivesObserverTwo);
+	//playerTwoObject->AddObserver(playerPointsObserverTwo);
 
 	inputManager.AddController();
 	inputManager.BindInput(0, GAMEPAD_DPAD_UP, InputBinding{ playerTwoObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
@@ -119,12 +127,12 @@ void load() {
 	scene.Add(controlsText);
 
 	scene.Add(playerOneObject);
-	scene.Add(playerOneLivesText);
-	scene.Add(playerOnePointsText);
+	//scene.Add(playerOneLivesText);
+	//scene.Add(playerOnePointsText);
 
 	scene.Add(playerTwoObject);
-	scene.Add(playerTwoLivesText);
-	scene.Add(playerTwoPointsText);
+	//scene.Add(playerTwoLivesText);
+	//scene.Add(playerTwoPointsText);
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 

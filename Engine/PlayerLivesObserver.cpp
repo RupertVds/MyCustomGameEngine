@@ -6,10 +6,10 @@ void PlayerLivesObserver::Notify(Event event, [[maybe_unused]] GameObject* objec
 {
 	switch (event)
 	{
-	case Event::ActorDied:
+	case Event::PLAYER_DIED:
 		std::cout << "PlayerDied!\n";
 		break;
-	case Event::ActorDamaged:
+	case Event::PLAYER_DAMAGE:
 		auto healthComponent = object->GetComponent<HealthComponent>();
 		if (healthComponent) m_Text->SetText("# lives: " + std::to_string(healthComponent->GetHealth()));
 		break;

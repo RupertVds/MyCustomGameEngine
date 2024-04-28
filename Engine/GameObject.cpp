@@ -143,7 +143,8 @@ void GameObject::RemoveObserver(std::shared_ptr<Observer> observer)
 
 void GameObject::NotifyObservers(Event event)
 {
-    if (m_Observers.empty()) throw std::runtime_error("No observers!");
+    //if (m_Observers.empty()) throw std::runtime_error("No observers!");
+    if (m_Observers.empty()) return;
     for (auto& observer : m_Observers)
     {
         observer->Notify(event, this);

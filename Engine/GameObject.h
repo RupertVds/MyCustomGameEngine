@@ -45,6 +45,9 @@ public:
 	const glm::vec3& GetLocalPosition() const;
 	const glm::vec3& GetWorldPosition();
 
+	const Transform& GetLocalTransform() const;
+	void SetScale(const glm::vec3& scale);
+
 	bool IsMarkedForDeletion() const;
 	void DeleteSelf();
 private:

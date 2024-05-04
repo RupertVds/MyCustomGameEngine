@@ -26,6 +26,10 @@ public:
 		m_Condition.wait(lock, [this] { return !m_Requests.empty(); });
 		PlaySoundRequest request = std::move(m_Requests.front());
 		m_Requests.pop();
+
+		// UNLOCK here mistake.. ??
+		//m_Mutex.unlock();
+
 		return request;
 	}
 
@@ -130,6 +134,7 @@ private:
 			if (!m_EventQueue.IsEmpty()) {
 				auto request = m_EventQueue.GetNextRequest();
 				request();
+				
 			}
 			// Sleep or wait for new events if queue is empty
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));

@@ -16,9 +16,6 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{e4f879cd-e877-47e9-8202-bababd8d364c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Observers">
-      <UniqueIdentifier>{e9cce4a7-c4b5-4806-a7c3-c3feb3d77de4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Commands">
       <UniqueIdentifier>{0f2aeafb-8ea4-4dc6-88eb-ae93a5daa3c3}</UniqueIdentifier>
     </Filter>
@@ -60,13 +57,7 @@
     <ClInclude Include="..\3rdParty\imgui-1.90.4\imgui_plot.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="CircularMovementComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
@@ -105,38 +96,20 @@
     <ClInclude Include="Texture2D.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerMovementComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="InputHelperStructs.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="XInputController.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerLivesObserver.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerPointsObserver.h">
-      <Filter>Observers</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectCommand.h">
       <Filter>Commands</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerPointsComponent.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="EventQueue.h">
       <Filter>Managers</Filter>
@@ -188,12 +161,6 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CircularMovementComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -223,15 +190,6 @@
     </ClCompile>
     <ClCompile Include="XInputController.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerLivesObserver.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerPointsObserver.cpp">
-      <Filter>Observers</Filter>
     </ClCompile>
     <ClCompile Include="EventQueue.cpp">
       <Filter>Managers</Filter>

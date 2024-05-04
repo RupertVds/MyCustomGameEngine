@@ -13,7 +13,7 @@
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "CircularMovementComponent.h"
-#include "GameObjectCommand.h"
+#include "GameCommands.h"
 #include "InputManager.h"
 #include "XInputController.h"
 #include "HealthComponent.h"
@@ -38,7 +38,7 @@ void load() {
 	fpsObject->AddComponent<RenderComponent>();
 	fpsObject->AddComponent<TextComponent>(" ", font);
 	fpsObject->AddComponent<FPSComponent>();
-	fpsObject->SetLocalPosition(glm::vec3{ 20, 0, 0 });
+	fpsObject->SetLocalPosition(glm::vec3{ 20, 0, 0 });	
 	fpsObject->SetParent(SceneManager::GetInstance().GetRootObject());
 
 	std::shared_ptr<GameObject> controlsText = std::make_shared<GameObject>();
@@ -51,6 +51,7 @@ void load() {
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
 	playerOneObject->AddComponent<PlayerMovementComponent>(200.f);
 	playerOneObject->SetLocalPosition(glm::vec3{ 1280 / 2 - 50, 720 / 2, 0 });
+	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
 	inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });

@@ -202,6 +202,17 @@ void GameObject::SetLocalPosition(const glm::vec3& pos)
      return m_WorldTransform.GetPosition();
  }
 
+ const Transform& GameObject::GetLocalTransform() const
+ {
+     return m_LocalTransform;
+ }
+
+ void GameObject::SetScale(const glm::vec3& scale)
+ {
+     m_LocalTransform.SetScale(scale.x, scale.y, scale.z);
+     m_WorldTransform.SetScale(scale.x, scale.y, scale.z);
+ }
+
  bool GameObject::IsMarkedForDeletion() const
 {
     return m_IsMarkedForDeletion;

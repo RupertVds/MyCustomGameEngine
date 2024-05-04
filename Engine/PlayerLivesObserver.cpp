@@ -2,7 +2,7 @@
 #include <iostream>
 #include "HealthComponent.h"
 
-void PlayerLivesObserver::Notify(Event event, [[maybe_unused]] GameObject* object)
+void PlayerLivesObserver::Notify(Event event, GameObject* object)
 {
 	switch (event)
 	{

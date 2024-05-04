@@ -24,6 +24,7 @@ std::shared_ptr<Texture2D> ResourceManager::LoadTexture(const std::string& file)
 	{
 		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
 	}
+	
 	return std::make_shared<Texture2D>(texture);
 }
 

@@ -74,6 +74,12 @@
     <Import Project="..\sdl.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Win32\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Win32\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -175,7 +181,23 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Engine\CircularMovementComponent.cpp" />
+    <ClCompile Include="..\Engine\FPSComponent.cpp" />
+    <ClCompile Include="..\Engine\PlayerComponent.cpp" />
+    <ClCompile Include="..\Engine\PlayerLivesObserver.cpp" />
+    <ClCompile Include="..\Engine\PlayerPointsObserver.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Engine\CircularMovementComponent.h" />
+    <ClInclude Include="..\Engine\FPSComponent.h" />
+    <ClInclude Include="..\Engine\HealthComponent.h" />
+    <ClInclude Include="..\Engine\PlayerComponent.h" />
+    <ClInclude Include="..\Engine\PlayerLivesObserver.h" />
+    <ClInclude Include="..\Engine\PlayerMovementComponent.h" />
+    <ClInclude Include="..\Engine\PlayerPointsComponent.h" />
+    <ClInclude Include="..\Engine\PlayerPointsObserver.h" />
+    <ClInclude Include="GameCommands.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

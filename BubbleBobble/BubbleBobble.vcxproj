@@ -86,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\Box2D\include;C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -111,7 +111,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\Box2D\include;C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -136,7 +136,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\Box2D\include;C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -161,7 +161,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\Box2D\include;C:\DAE\2023-2024\SEM2\Prog4\EXAM\MyCustomGameEngine\3rdParty\SDL2_mixer-2.8.0\include;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -186,6 +186,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="..\Engine\PlayerComponent.cpp" />
     <ClCompile Include="..\Engine\PlayerLivesObserver.cpp" />
     <ClCompile Include="..\Engine\PlayerPointsObserver.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="..\Engine\PlayerPointsComponent.h" />
     <ClInclude Include="..\Engine\PlayerPointsObserver.h" />
     <ClInclude Include="GameCommands.h" />
+    <ClInclude Include="Level.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{3b1e1298-6374-4764-b5d5-c4d1c515a9e1}</UniqueIdentifier>
     </Filter>
@@ -14,10 +10,14 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{a499fd54-c763-432f-ad44-5dda8781e75c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Engine\CircularMovementComponent.cpp">
       <Filter>Components</Filter>
@@ -33,6 +33,9 @@
     </ClCompile>
     <ClCompile Include="..\Engine\PlayerPointsObserver.cpp">
       <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="GameCommands.h">
       <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

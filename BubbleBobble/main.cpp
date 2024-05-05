@@ -21,6 +21,10 @@
 #include "PlayerPointsObserver.h"
 #include "ServiceLocator.h"
 
+#pragma warning(push, 0)  // Disable warnings
+#include "Box2D/Box2D.h"  // Include Box2D headers
+#pragma warning(pop)      // Restore previous warning level
+
 void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
@@ -34,6 +38,7 @@ void load() {
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 #endif
 
+	
 	std::shared_ptr<GameObject> fpsObject = std::make_shared<GameObject>();
 	fpsObject->AddComponent<RenderComponent>();
 	fpsObject->AddComponent<TextComponent>(" ", font);

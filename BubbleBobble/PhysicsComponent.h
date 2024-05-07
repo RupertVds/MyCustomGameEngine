@@ -45,6 +45,7 @@ public:
 
     void Render() const override
     {
+#if _DEBUG
         // Debug render the collider of the physics component
         b2Fixture* fixture = m_pBody->GetFixtureList();
         SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set outline color to red
@@ -67,6 +68,7 @@ public:
             }
             fixture = fixture->GetNext();
         }
+#endif
     }
 
     b2Body* GetBody() const { return m_pBody; }

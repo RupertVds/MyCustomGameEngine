@@ -29,7 +29,7 @@ public:
 private:
     friend class Singleton<PhysicsSystem>;
     PhysicsSystem() = default;
-    b2World* m_pWorld;
+    b2World* m_pWorld{};
     const int VELOCITY_ITERATIONS{ 8 };
     const int POSITION_ITERATIONS{ 3 };
 };

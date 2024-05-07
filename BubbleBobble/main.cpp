@@ -22,6 +22,7 @@
 
 #include "PhysicsComponent.h"
 #include "TilemapComponent.h"
+#include "PlayerComponent.h"
 
 void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
@@ -60,7 +61,7 @@ void load() {
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
 	playerOneObject->SetLocalPosition(glm::vec3{ 1280 / 2 - 50, 720 / 2 - 100, 0 });
 	playerOneObject->AddComponent<PhysicsComponent>(50.f, 50.f, 10.f);
-	playerOneObject->AddComponent<PlayerMovementComponent>(10000000.f, 10000000.f);
+	playerOneObject->AddComponent<PlayerComponent>();
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
 	//inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });

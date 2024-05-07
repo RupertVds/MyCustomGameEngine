@@ -20,18 +20,21 @@
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayerComponent.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerLivesObserver.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerPointsObserver.cpp">
-      <Filter>Game Files</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>Game Files</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="TilemapComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPointsObserver.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLivesObserver.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStates.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,9 +60,21 @@
     <ClInclude Include="PlayerMovementComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsSystem.h" />
-    <ClInclude Include="PhysicsComponent.h" />
-    <ClInclude Include="TilemapComponent.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TilemapComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorState.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BehaviorStateMachine.h" />
+    <ClInclude Include="PlayerStates.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -39,6 +39,7 @@ public:
 
     void Render() const
     {
+#if _DEBUG
         // Debug render the collider of the physics component
         b2Fixture* fixture = m_pBody->GetFixtureList();
         SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Set outline color to red
@@ -61,6 +62,7 @@ public:
             }
             fixture = fixture->GetNext();
         }
+#endif
     }
 
 

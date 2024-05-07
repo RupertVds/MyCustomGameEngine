@@ -186,18 +186,21 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerLivesObserver.cpp" />
     <ClCompile Include="PlayerPointsObserver.cpp" />
+    <ClCompile Include="PlayerStates.cpp" />
     <ClCompile Include="TilemapComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BehaviorState.h" />
+    <ClInclude Include="BehaviorStateMachine.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="PhysicsComponent.h" />
-    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerLivesObserver.h" />
     <ClInclude Include="PlayerMovementComponent.h" />
     <ClInclude Include="PlayerPointsComponent.h" />
     <ClInclude Include="PlayerPointsObserver.h" />
+    <ClInclude Include="PlayerStates.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TilemapComponent.h" />
   </ItemGroup>

@@ -162,6 +162,12 @@
     <ClInclude Include="..\3rdParty\Box2D\dynamics\b2_polygon_contact.h">
       <Filter>Box2D\Dynamics</Filter>
     </ClInclude>
+    <ClInclude Include="FPSComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -376,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="..\3rdParty\Box2D\rope\b2_rope.cpp">
       <Filter>Box2D\Rope</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSComponent.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

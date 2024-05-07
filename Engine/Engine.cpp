@@ -9,9 +9,11 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "PhysicsSystem.h"
 #include "Timer.h"
 #include <thread>
 #include <algorithm>
+#include "ServiceLocator.h"
 #pragma warning (push)
 #pragma warning (disable: 4996)
 //#include <steamtypes.h>
@@ -83,6 +85,10 @@ Engine::~Engine()
 
 void Engine::Run(const std::function<void()>& load)
 {
+	ServiceLocator::RegisterSoundSystem(nullptr);
+	auto& physicsSystem = PhysicsSystem::GetInstance();
+	physicsSystem.Initialize();
+
 	load();
 
 	auto& renderer = Renderer::GetInstance();
@@ -111,6 +117,7 @@ void Engine::Run(const std::function<void()>& load)
 			lag -= timer.GetFixedTimeStep();
 		}
 
+		physicsSystem.Update();
 		sceneManager.Update();
 
 		sceneManager.LateUpdate();

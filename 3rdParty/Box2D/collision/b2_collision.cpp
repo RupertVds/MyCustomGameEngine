@@ -20,6 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+
+#pragma warning(push, 0)  // Disable warnings
+
 #include "box2d/b2_collision.h"
 #include "box2d/b2_distance.h"
 
@@ -578,3 +581,5 @@ bool b2ValidateHull(const b2Hull& hull)
 
 	return true;
 }
+
+#pragma warning(pop)  

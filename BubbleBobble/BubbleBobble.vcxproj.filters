@@ -19,55 +19,29 @@
     <ClCompile Include="main.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Engine\CircularMovementComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="CircularMovementComponent.cpp">
+      <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Engine\PlayerComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Engine\FPSComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="PlayerLivesObserver.cpp">
+      <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Engine\PlayerLivesObserver.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Engine\PlayerPointsObserver.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
+    <ClCompile Include="PlayerPointsObserver.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Engine\CircularMovementComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\PlayerPointsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\PlayerMovementComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\PlayerComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\HealthComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\FPSComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\PlayerLivesObserver.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Engine\PlayerPointsObserver.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
     <ClInclude Include="GameCommands.h">
       <Filter>Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
+    <ClInclude Include="CircularMovementComponent.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="PlayerComponent.h" />
+    <ClInclude Include="PlayerLivesObserver.h" />
+    <ClInclude Include="PlayerMovementComponent.h" />
+    <ClInclude Include="PlayerPointsComponent.h" />
+    <ClInclude Include="PlayerPointsObserver.h" />
   </ItemGroup>
 </Project>

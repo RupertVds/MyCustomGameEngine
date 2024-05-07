@@ -7,7 +7,7 @@
 class PlayerMovementComponent final : public Component
 {
 public:
-    PlayerMovementComponent(GameObject* pOwner, float maxSpeed) : Component(pOwner),
+    PlayerMovementComponent(GameObject* pOwner, float maxSpeed, float) : Component(pOwner),
         m_MaxSpeed{ maxSpeed }
     {
         //EventQueue::GetInstance().AttachEvent(Event::PLAYER_DAMAGE, std::bind(&PlayerMovementComponent::TestEventQueue, this));
@@ -39,6 +39,22 @@ public:
     {
         // Add the given direction to the total direction vector
         m_Direction += direction;
+    }
+
+    void MoveLeft()
+    {
+
+    }
+
+
+    void MoveRight()
+    {
+
+    }
+
+    void Jump()
+    {
+
     }
 
     //void TestEventQueue()

@@ -181,21 +181,25 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CircularMovementComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerLivesObserver.cpp" />
     <ClCompile Include="PlayerPointsObserver.cpp" />
+    <ClCompile Include="TilemapComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircularMovementComponent.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerLivesObserver.h" />
     <ClInclude Include="PlayerMovementComponent.h" />
     <ClInclude Include="PlayerPointsComponent.h" />
     <ClInclude Include="PlayerPointsObserver.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="TilemapComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

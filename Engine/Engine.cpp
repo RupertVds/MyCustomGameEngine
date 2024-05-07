@@ -96,7 +96,8 @@ void Engine::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = Timer::GetInstance();
 	
-	constexpr bool useVsync{ true };
+	constexpr bool useVsync{ false };
+	constexpr bool capFps{ true };
 	constexpr float targetFps{ 144.f };
 	constexpr double targetFrameDuration = 1.0 / (targetFps / 2);
 	float lag = 0.0f;
@@ -124,18 +125,20 @@ void Engine::Run(const std::function<void()>& load)
 
 		renderer.Render();
 
-		// Use vsync or manual fps limiting with target fps
-		if (!useVsync)
+		if (capFps)
 		{
-			// Calculate the sleep duration to achieve the target frame rate
-			const double sleepDuration = targetFrameDuration - timer.GetDeltaTime();;
-
-			// If the actual frame duration is less than the target, sleep for the remaining time
-			if (sleepDuration > 0.0) 
+			// Use vsync or manual fps limiting with target fps
+			if (!useVsync)
 			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(sleepDuration * 1000)));
+				// Calculate the sleep duration to achieve the target frame rate
+				const double sleepDuration = targetFrameDuration - timer.GetDeltaTime();;
+
+				// If the actual frame duration is less than the target, sleep for the remaining time
+				if (sleepDuration > 0.0)
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(sleepDuration * 1000)));
+				}
 			}
 		}
-
 	}
 }

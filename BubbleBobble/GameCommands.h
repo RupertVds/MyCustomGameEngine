@@ -1,28 +1,72 @@
 #pragma once
 #include "GameObjectCommand.h"
 
-class MoveCommand final : public GameObjectCommand
+//class MoveHorizontalCommand : public GameObjectCommand
+//{
+//public:
+//	MoveHorizontalCommand(GameObject* object, const glm::vec2& direction) : MoveHorizontalCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
+//
+//	virtual void Execute() override
+//	{
+//		if (m_MovementComponent)
+//		{
+//			m_MovementComponent->MoveLeft();
+//		}
+//	}
+//
+//private:
+//	PlayerMovementComponent* m_MovementComponent;
+//};
+
+class MoveLeftCommand : public GameObjectCommand
 {
 public:
-	MoveCommand(GameObject* object, const glm::vec2 direction) : GameObjectCommand(object),
-		m_Direction{ direction }
-	{
-
-	}
+	MoveLeftCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
 
 	virtual void Execute() override
 	{
-		// Get the PlayerMovementComponent of the object
-		PlayerMovementComponent* movementComponent = GetGameObject()->GetComponent<PlayerMovementComponent>();
-		if (movementComponent)
+		if (m_MovementComponent)
 		{
-			// Add the movement vector to the total direction
-			movementComponent->AddDirection(m_Direction);
+			m_MovementComponent->MoveLeft();
 		}
 	}
 
 private:
-	glm::vec2 m_Direction;
+	PlayerMovementComponent* m_MovementComponent;
+};
+
+class MoveRightCommand : public GameObjectCommand
+{
+public:
+	MoveRightCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
+
+	virtual void Execute() override
+	{
+		if (m_MovementComponent)
+		{
+			m_MovementComponent->MoveRight();
+		}
+	}
+
+private:
+	PlayerMovementComponent* m_MovementComponent;
+};
+
+class JumpCommand : public GameObjectCommand
+{
+public:
+	JumpCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
+
+	virtual void Execute() override
+	{
+		if (m_MovementComponent)
+		{
+			m_MovementComponent->Jump();
+		}
+	}
+
+private:
+	PlayerMovementComponent* m_MovementComponent;
 };
 
 class TakeDamageCommand final : public GameObjectCommand

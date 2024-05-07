@@ -146,7 +146,7 @@ bool b2AABB::RayCast(b2RayCastOutput* output, const b2RayCastInput& input) const
 	b2Vec2 d = input.p2 - input.p1;
 	b2Vec2 absD = b2Abs(d);
 
-	b2Vec2 normal;
+	b2Vec2 normal{};
 
 	for (int32 i = 0; i < 2; ++i)
 	{

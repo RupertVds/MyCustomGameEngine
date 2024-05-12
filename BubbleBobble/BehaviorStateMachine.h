@@ -30,6 +30,25 @@ public:
         }
     }
 
+
+    // Fixed Update the current state
+    void FixedUpdate()
+    {
+        if (m_pCurrentState)
+        {
+            m_pCurrentState->FixedUpdate(*this);
+        }
+    }
+
+    // Late Update the current state
+    void LateUpdate()
+    {
+        if (m_pCurrentState)
+        {
+            m_pCurrentState->LateUpdate(*this);
+        }
+    }
+
     // Change state
     void SetState(BehaviorState<T>* newState) 
     {

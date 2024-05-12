@@ -58,12 +58,14 @@ Engine::Engine(const std::string &dataPath)
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
+	auto& renderer = Renderer::GetInstance();
+
 	g_window = SDL_CreateWindow(
 		"2GD18 Rupert Vanderstappen",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		1280,
-		720,
+		renderer.WIDTH,
+		renderer.HEIGHT,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
@@ -71,7 +73,7 @@ Engine::Engine(const std::string &dataPath)
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	Renderer::GetInstance().Init(g_window);
+	renderer.Init(g_window);
 	ResourceManager::GetInstance().Init(dataPath);
 }
 

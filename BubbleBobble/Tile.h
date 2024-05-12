@@ -24,7 +24,7 @@ public:
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &shape;
         fixtureDef.density = 1.0f;
-        fixtureDef.friction = 20.f;
+        fixtureDef.friction = 0.f;
         fixtureDef.restitution = 0.0f; // No bounciness
 
         m_pBody->CreateFixture(&fixtureDef);

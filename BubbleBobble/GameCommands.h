@@ -1,10 +1,51 @@
 #pragma once
 #include "GameObjectCommand.h"
+#include "PlayerComponent.h"
+#include "PlayerMovementComponent.h"
+#include "HealthComponent.h"
+#include "PlayerPointsComponent.h"
 
-//class MoveHorizontalCommand : public GameObjectCommand
+class MoveHorizontalCommand : public GameObjectCommand
+{
+public:
+	MoveHorizontalCommand(GameObject* object, const glm::vec2& direction) 
+		: GameObjectCommand(object), 
+		m_PlayerComponent(object->GetComponent<PlayerComponent>()),
+		m_Direction{direction}
+	{}
+
+	virtual void Execute() override
+	{
+		if (m_PlayerComponent)
+		{
+			// If the movement direction was already set by a different command
+			// that means we are trying to move left and right
+			// this means that we should have no horizontal move dir
+			// -> the player component resets this direction every late update
+			if (m_PlayerComponent->GetMovingDirection().x > 0)
+			{
+				m_PlayerComponent->SetMovingDirection({ 0.f, 0.f });
+			}
+			else if (m_PlayerComponent->GetMovingDirection().x < 0)
+			{
+				m_PlayerComponent->SetMovingDirection({ 0.f, 0.f });
+			}
+			else
+			{
+				m_PlayerComponent->SetMovingDirection({ m_Direction.x, m_Direction.y });
+			}
+		}
+	}
+
+private:
+	PlayerComponent* m_PlayerComponent;
+	glm::vec2 m_Direction{};
+};
+
+//class MoveLeftCommand : public GameObjectCommand
 //{
 //public:
-//	MoveHorizontalCommand(GameObject* object, const glm::vec2& direction) : MoveHorizontalCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
+//	MoveLeftCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
 //
 //	virtual void Execute() override
 //	{
@@ -17,57 +58,40 @@
 //private:
 //	PlayerMovementComponent* m_MovementComponent;
 //};
-
-class MoveLeftCommand : public GameObjectCommand
-{
-public:
-	MoveLeftCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
-
-	virtual void Execute() override
-	{
-		if (m_MovementComponent)
-		{
-			m_MovementComponent->MoveLeft();
-		}
-	}
-
-private:
-	PlayerMovementComponent* m_MovementComponent;
-};
-
-class MoveRightCommand : public GameObjectCommand
-{
-public:
-	MoveRightCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
-
-	virtual void Execute() override
-	{
-		if (m_MovementComponent)
-		{
-			m_MovementComponent->MoveRight();
-		}
-	}
-
-private:
-	PlayerMovementComponent* m_MovementComponent;
-};
-
-class JumpCommand : public GameObjectCommand
-{
-public:
-	JumpCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
-
-	virtual void Execute() override
-	{
-		if (m_MovementComponent)
-		{
-			m_MovementComponent->Jump();
-		}
-	}
-
-private:
-	PlayerMovementComponent* m_MovementComponent;
-};
+//
+//class MoveRightCommand : public GameObjectCommand
+//{
+//public:
+//	MoveRightCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
+//
+//	virtual void Execute() override
+//	{
+//		if (m_MovementComponent)
+//		{
+//			m_MovementComponent->MoveRight();
+//		}
+//	}
+//
+//private:
+//	PlayerMovementComponent* m_MovementComponent;
+//};
+//
+//class JumpCommand : public GameObjectCommand
+//{
+//public:
+//	JumpCommand(GameObject* object) : GameObjectCommand(object), m_MovementComponent(object->GetComponent<PlayerMovementComponent>()) {}
+//
+//	virtual void Execute() override
+//	{
+//		if (m_MovementComponent)
+//		{
+//			m_MovementComponent->Jump();
+//		}
+//	}
+//
+//private:
+//	PlayerMovementComponent* m_MovementComponent;
+//};
 
 class TakeDamageCommand final : public GameObjectCommand
 {

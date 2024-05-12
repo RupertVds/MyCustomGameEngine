@@ -24,7 +24,8 @@ public:
         m_pWorld->Step(Timer::GetInstance().GetFixedTimeStep(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
-    b2World* GetWorld() const { return m_pWorld; }
+    inline b2World* GetWorld() const { return m_pWorld; }
+    inline static float GetScale() { return SCALE; }
 
 private:
     friend class Singleton<PhysicsSystem>;
@@ -32,4 +33,6 @@ private:
     b2World* m_pWorld{};
     const int VELOCITY_ITERATIONS{ 8 };
     const int POSITION_ITERATIONS{ 3 };
+    // 1 pixel is 1 cm in box2d
+    static const float SCALE;
 };

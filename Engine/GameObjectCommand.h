@@ -3,9 +3,7 @@
 #include "GameObject.h"
 #include "Timer.h"
 #include <iostream>
-#include "PlayerMovementComponent.h"
-#include "HealthComponent.h"
-#include "PlayerPointsComponent.h"
+
 #include "ServiceLocator.h"
 
 class GameObject;

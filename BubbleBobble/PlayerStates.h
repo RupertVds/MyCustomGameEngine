@@ -13,6 +13,10 @@ public:
     void Entry(BehaviorStateMachine<PlayerComponent>&);
     void Update(BehaviorStateMachine<PlayerComponent>& stateMachine);
     void Exit(BehaviorStateMachine<PlayerComponent>&);
+private:
+    const float m_MovingDownSpeed = 20.f;
+    const float m_MovingDownTime = 3.f;
+    float m_MovingDownElapsedTime = 0.f;
 };
 
 // PlayerAliveState
@@ -20,7 +24,13 @@ class PlayerAliveState final : public BehaviorState<PlayerComponent> {
 public:
     void Entry(BehaviorStateMachine<PlayerComponent>&);
     void Update(BehaviorStateMachine<PlayerComponent>& stateMachine);
+    void FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine);
+    void LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine);
     void Exit(BehaviorStateMachine<PlayerComponent>&);
+private:
+    float m_MovementForce{};
+    float m_AccelerationForce{};
+    float m_CounterMovementForce{};
 };
 
 // PlayerDeadState

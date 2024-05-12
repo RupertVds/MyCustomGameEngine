@@ -386,5 +386,8 @@
     <ClCompile Include="FPSComponent.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

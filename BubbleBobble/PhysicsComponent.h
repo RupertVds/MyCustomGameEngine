@@ -27,8 +27,11 @@ public:
         // Create other fixtures, shapes, joints, etc., as needed
         // Example: Create a fixture for a rectangular shape
         b2PolygonShape shape;
-        shape.SetAsBox(m_Width / 2, m_Height / 2); // Assuming m_Width and m_Height are member variables
-        m_pBody->CreateFixture(&shape, m_Density); // Assuming m_Density is a member variable
+
+        shape.SetAsBox(m_Width / 2, m_Height / 2); 
+
+        
+        m_pBody->CreateFixture(&shape, m_Density);
 
         // Apply initial velocity if provided
         m_pBody->SetLinearVelocity(m_InitialVelocity);
@@ -67,6 +70,7 @@ public:
                 delete[] points;
             }
             fixture = fixture->GetNext();
+            
         }
 #endif
     }

@@ -54,18 +54,22 @@ void load() {
 	fpsObject->AddComponent<FPSComponent>();
 	fpsObject->SetLocalPosition(glm::vec3{ 20, 0, 0 });	
 	fpsObject->SetParent(SceneManager::GetInstance().GetRootObject());
-
+	
 	// Player one
 	std::shared_ptr<GameObject> playerOneObject = std::make_shared<GameObject>();
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
-	playerOneObject->SetLocalPosition(glm::vec3{ 512 / 2 - 50, 400 / 2 - 100, 0 });
+	playerOneObject->SetLocalPosition(glm::vec3{ Renderer::WIDTH / 2 - 50, 0, 0 });
 	playerOneObject->AddComponent<PlayerComponent>();
 	playerOneObject->AddComponent<BoxColliderComponent>(50.f, 50.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
 	std::shared_ptr<GameObject> groundCollision = std::make_shared<GameObject>();
-	groundCollision->SetLocalPosition(glm::vec3{ 0, Renderer::HEIGHT - 100, 0 });
+	groundCollision->SetLocalPosition(glm::vec3{ 200, Renderer::HEIGHT - 200, 0 });
 	groundCollision->AddComponent<BoxColliderComponent>(3000.f, 50.f, CollisionComponent::ColliderType::STATIC);
+
+	std::shared_ptr<GameObject> groundCollision2 = std::make_shared<GameObject>();
+	groundCollision2->SetLocalPosition(glm::vec3{ 50, Renderer::HEIGHT - 100, 0 });
+	groundCollision2->AddComponent<BoxColliderComponent>(3000.f, 50.f, CollisionComponent::ColliderType::STATIC);
 
 	//inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	//inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
@@ -73,6 +77,7 @@ void load() {
 	//inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), InputMode::Hold });
+	inputManager.BindInput(SDL_SCANCODE_SPACE, InputBinding{ playerOneObject->AddCommand<JumpCommand>(), InputMode::Press });
 	inputManager.BindInput(SDL_SCANCODE_0, InputBinding{ playerOneObject->AddCommand<PlaySFX>("Mega_Man_3_The_Passing_of_the_Blue_Crown_OC_ReMix.mp3", 0.1f), InputMode::Press});
 	inputManager.BindInput(SDL_SCANCODE_1, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_1.wav", 0.2f), InputMode::Press});
 	inputManager.BindInput(SDL_SCANCODE_2, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_2.wav", 0.2f), InputMode::Press});
@@ -91,6 +96,7 @@ void load() {
 	scene.Add(playerOneObject);
 	scene.Add(levelObject);
 	scene.Add(groundCollision);
+	scene.Add(groundCollision2);
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 

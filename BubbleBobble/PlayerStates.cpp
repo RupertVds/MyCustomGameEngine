@@ -54,6 +54,12 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
     {
         playerComp->SetHorizontalVelocity(0);
     }
+
+    if (playerComp->IsGrounded() && playerComp->IsJumping())
+    {
+        playerComp->SetVerticalVelocity(-30.f);
+        playerComp->SetIsJumping(false);
+    }
 }
 
 void PlayerAliveState::LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)

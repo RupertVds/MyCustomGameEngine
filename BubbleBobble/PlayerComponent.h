@@ -20,6 +20,10 @@ public:
 	void SetIsGrounded(bool isGrounded) { m_IsGrounded = isGrounded; }
 	bool IsGrounded() { return m_IsGrounded; }
 
+	void SetIsJumping(bool state) { m_IsJumping = state; }
+	void Jump() { if (m_IsGrounded) m_IsJumping = true; }
+	bool IsJumping() { return m_IsJumping; }
+
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
 
@@ -35,6 +39,7 @@ public:
 private:
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
 	bool m_IsGrounded{};
+	bool m_IsJumping{};
 	glm::vec2 m_Velocity{};
 	glm::vec2 m_Acceleration{0.f, 9.81f};
 	glm::vec2 m_MovementDirection{};

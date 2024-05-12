@@ -15,7 +15,7 @@ public:
     void Exit(BehaviorStateMachine<PlayerComponent>&);
 private:
     const float m_MovingDownSpeed = 20.f;
-    const float m_MovingDownTime = 10.f;
+    const float m_MovingDownTime = 5.f;
     float m_MovingDownElapsedTime = 0.f;
 };
 

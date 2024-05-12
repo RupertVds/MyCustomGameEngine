@@ -73,4 +73,5 @@ void RenderRaycast(const glm::vec2& origin, const glm::vec2& direction, float di
     SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 255, 255, 255); // White color
     glm::ivec2 endPoint = origin + direction * distance;
     SDL_RenderDrawLine(Renderer::GetInstance().GetSDLRenderer(), static_cast<int>(origin.x), static_cast<int>(origin.y), endPoint.x, endPoint.y);
+    
 }

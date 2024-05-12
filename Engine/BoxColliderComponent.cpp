@@ -19,7 +19,7 @@ void BoxColliderComponent::Render() const
         return;
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red color
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100); // White color
     SDL_Rect rect;
     glm::vec2 position = GetOwner()->GetLocalPosition();
     rect.x = static_cast<int>(position.x);

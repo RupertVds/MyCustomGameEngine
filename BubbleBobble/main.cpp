@@ -35,16 +35,16 @@ void load() {
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 #endif
 
-	std::shared_ptr<GameObject> levelObject = std::make_shared<GameObject>();
-	levelObject->AddComponent<RenderComponent>();
-	levelObject->AddComponent<TilemapComponent>(16.f);
+	//std::shared_ptr<GameObject> levelObject = std::make_shared<GameObject>();
+	//levelObject->AddComponent<RenderComponent>();
+	//levelObject->AddComponent<TilemapComponent>(16.f);
 
-	auto levelTilemap = levelObject->GetComponent<TilemapComponent>();
+	//auto levelTilemap = levelObject->GetComponent<TilemapComponent>();
 
-	for (int col = 0; col < 32; ++col)
-	{
-		levelTilemap->CreateTile(24, col);
-	}
+	//for (int col = 0; col < 32; ++col)
+	//{
+	//	levelTilemap->CreateTile(24, col);
+	//}
 	//levelTilemap->CreateTile(5, 6);
 	//levelTilemap->CreateTile(5, 7);
 	
@@ -94,7 +94,7 @@ void load() {
 	
 	scene.Add(fpsObject);
 	scene.Add(playerOneObject);
-	scene.Add(levelObject);
+	//scene.Add(levelObject);
 	scene.Add(groundCollision);
 	scene.Add(groundCollision2);
 	scene.Add(SceneManager::GetInstance().GetRootObject());

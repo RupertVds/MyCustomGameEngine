@@ -56,6 +56,12 @@ void GameObject::Render() const
     {
         child->Render();
     }
+
+#if _DEBUG
+    // Render position as a dot
+    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255); // Purple color
+    SDL_RenderDrawPoint(Renderer::GetInstance().GetSDLRenderer(), static_cast<int>(this->GetLocalPosition().x), static_cast<int>(this->GetLocalPosition().y)); // Draw point at position
+#endif
 }
 
 void GameObject::RenderImGui()

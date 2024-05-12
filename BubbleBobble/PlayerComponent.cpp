@@ -45,6 +45,7 @@ void PlayerComponent::FixedUpdate()
     RenderRaycast(rayOrigin, rayDirection, 60);
     if (result.hit) 
     {
+        std::cout << "raycast hit x: " << result.point.x << '\n';
         if (!m_IsJumping)
         {
             m_Acceleration = { 0.f, 9.81f };
@@ -52,14 +53,15 @@ void PlayerComponent::FixedUpdate()
 
         }
         SetIsGrounded(true);
+        std::cout << "is player grounded: " << m_IsGrounded << '\n';
     }
     else 
     {
         // Player is not grounded
         SetIsGrounded(false);
+        std::cout << "is player grounded: " << m_IsGrounded << '\n';
     }
 
-    std::cout << "is player grounded: " << m_IsGrounded << '\n';
 }
 
 void PlayerComponent::LateUpdate()

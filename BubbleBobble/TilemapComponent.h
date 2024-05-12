@@ -6,11 +6,10 @@
 class TilemapComponent : public Component
 {
 public:
-    TilemapComponent(GameObject* pOwner, float tileSize, b2World* world)
+    TilemapComponent(GameObject* pOwner, float tileSize)
         : 
         Component(pOwner),
-        m_TileSize{ tileSize },
-        m_pWorld{ world }
+        m_TileSize{ tileSize }
     {
 
     }
@@ -22,7 +21,7 @@ public:
     {
         float x = col * m_TileSize;
         float y = row * m_TileSize;
-        m_Tiles.emplace_back(std::make_unique<Tile>(x, y, m_TileSize, m_TileSize, m_pWorld));
+        m_Tiles.emplace_back(std::make_unique<Tile>(x, y, m_TileSize, m_TileSize));
     }
 
     // Render method to draw all tiles
@@ -38,5 +37,4 @@ public:
 private:
     std::vector<std::unique_ptr<Tile>> m_Tiles; // 2D array of tiles
     float m_TileSize; // Size of each tile
-    b2World* m_pWorld; // Pointer to the Box2D world
 };

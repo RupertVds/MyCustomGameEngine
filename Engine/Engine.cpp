@@ -9,7 +9,6 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "PhysicsSystem.h"
 #include "Timer.h"
 #include <thread>
 #include <algorithm>
@@ -88,8 +87,6 @@ Engine::~Engine()
 void Engine::Run(const std::function<void()>& load)
 {
 	ServiceLocator::RegisterSoundSystem(nullptr);
-	auto& physicsSystem = PhysicsSystem::GetInstance();
-	physicsSystem.Initialize();
 
 	load();
 
@@ -98,7 +95,7 @@ void Engine::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = Timer::GetInstance();
 	
-	constexpr bool useVsync{ false };
+	constexpr bool useVsync{ true };
 	constexpr bool capFps{ true };
 	constexpr float targetFps{ 144.f };
 	constexpr double targetFrameDuration = 1.0 / (targetFps / 2);
@@ -120,7 +117,6 @@ void Engine::Run(const std::function<void()>& load)
 			lag -= timer.GetFixedTimeStep();
 		}
 
-		physicsSystem.Update();
 		sceneManager.Update();
 
 		sceneManager.LateUpdate();

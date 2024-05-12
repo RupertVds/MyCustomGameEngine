@@ -20,9 +20,9 @@
 #include "PlayerPointsObserver.h"
 #include "ServiceLocator.h"
 
-#include "PhysicsComponent.h"
 #include "TilemapComponent.h"
 #include "PlayerComponent.h"
+#include <BoxColliderComponent.h>
 
 void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
@@ -37,7 +37,7 @@ void load() {
 
 	std::shared_ptr<GameObject> levelObject = std::make_shared<GameObject>();
 	levelObject->AddComponent<RenderComponent>();
-	levelObject->AddComponent<TilemapComponent>(16.f, PhysicsSystem::GetInstance().GetWorld());
+	levelObject->AddComponent<TilemapComponent>(16.f);
 
 	auto levelTilemap = levelObject->GetComponent<TilemapComponent>();
 
@@ -59,9 +59,13 @@ void load() {
 	std::shared_ptr<GameObject> playerOneObject = std::make_shared<GameObject>();
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
 	playerOneObject->SetLocalPosition(glm::vec3{ 512 / 2 - 50, 400 / 2 - 100, 0 });
-	playerOneObject->AddComponent<PhysicsComponent>(50.f, 50.f, 10.f);
 	playerOneObject->AddComponent<PlayerComponent>();
+	playerOneObject->AddComponent<BoxColliderComponent>(50.f, 50.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
+
+	std::shared_ptr<GameObject> groundCollision = std::make_shared<GameObject>();
+	groundCollision->SetLocalPosition(glm::vec3{ 0, Renderer::HEIGHT - 100, 0 });
+	groundCollision->AddComponent<BoxColliderComponent>(3000.f, 50.f, CollisionComponent::ColliderType::STATIC);
 
 	//inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
 	//inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
@@ -86,6 +90,7 @@ void load() {
 	scene.Add(fpsObject);
 	scene.Add(playerOneObject);
 	scene.Add(levelObject);
+	scene.Add(groundCollision);
 	scene.Add(SceneManager::GetInstance().GetRootObject());
 }
 

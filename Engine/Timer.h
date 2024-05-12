@@ -10,7 +10,7 @@ public:
 
 	void Update();
 private:
-	const float m_FixedTimeStep{ 0.02f };
+	const float m_FixedTimeStep{ 0.01f };
 	float m_DeltaTime{};
     std::chrono::high_resolution_clock::time_point m_LastTime{ std::chrono::high_resolution_clock::now() };
 };

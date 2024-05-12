@@ -5,7 +5,6 @@ class GameObject;
 
 class Component 
 {
-    //friend class GameObject;
 public:
     virtual ~Component() = default;
     Component(const Component& other) = delete;
@@ -19,7 +18,6 @@ public:
     virtual void Render() const {}
     virtual void RenderImGui() {}
 protected:
-    virtual void OnInit() {}
     explicit Component(GameObject* pOwner) : m_pOwner{ pOwner } {}
     inline GameObject* const GetOwner() const { if (m_pOwner) return m_pOwner; return nullptr; }
 private:

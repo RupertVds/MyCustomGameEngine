@@ -1,13 +1,16 @@
 #include "PlayerStates.h"
+#include "Timer.h"
 
 // Definition of methods for PlayerEntryState
 void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine) 
 {
     std::cout << "PlayerEntryState: Entered" << '\n';
-    stateMachine.GetComponent()->GetBody()->SetType(b2_kinematicBody);
-    std::cout << "PlayerEntryState: Set to kinematic body" << '\n';
-    stateMachine.GetComponent()->GetBody()->SetLinearVelocity({ 0, m_MovingDownSpeed });
-    std::cout << "PlayerEntryState: Set moving down speed" << '\n';
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+
+    // set no acceleration
+    playerComp->SetAcceleration({});
+    // set to constant velocity
+    playerComp->SetVelocity({ 0, 10.f });
 }
 
 void PlayerEntryState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -29,23 +32,28 @@ void PlayerEntryState::Exit(BehaviorStateMachine<PlayerComponent>&)
 void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
-    stateMachine.GetComponent()->GetBody()->SetType(b2_dynamicBody);
-    std::cout << "PlayerEntryState: Set to dynamic body" << '\n';
-    m_MovementForce = 50000000;
-    m_CounterMovementForce = 300000;
+    m_MoveSpeed = 70.f;
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+    playerComp->SetAcceleration({0, 9.81f});
+
 }
 
-void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>&)
+void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
-}
-
-void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)
-{
-    b2Body* body = stateMachine.GetComponent()->GetBody();
-    b2Vec2 counterMovement = { -body->GetLinearVelocity().x * m_CounterMovementForce, 0 };
-    b2Vec2 movement = stateMachine.GetComponent()->GetMovingDirection();
-    movement *= m_MovementForce;
-    body->ApplyForceToCenter({ movement.x + counterMovement.x, 0.f}, false);
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+    glm::vec2 moveDir = stateMachine.GetComponent()->GetMovingDirection();
+    if (moveDir.x > 0)
+    {
+        playerComp->SetHorizontalVelocity(m_MoveSpeed);
+    }
+    else if (moveDir.x < 0)
+    {
+        playerComp->SetHorizontalVelocity(-m_MoveSpeed);
+    }
+    else if (moveDir.x == 0)
+    {
+        playerComp->SetHorizontalVelocity(0);
+    }
 }
 
 void PlayerAliveState::LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)

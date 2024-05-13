@@ -24,17 +24,14 @@ public:
 	bool IsGrounded() { return m_IsGrounded; }
 
 	void SetIsJumping(bool state) { m_IsJumping = state; }
-	void SetAllowJumping(bool state) { m_AllowJumping = state; }
 	void Jump() 
 	{ 
 		if (m_IsGrounded)
 		{
-			m_AllowJumping = true;
 			m_IsJumping = true;
 		}
 	}
 	bool IsJumping() { return m_IsJumping; }
-	bool AllowJumping() { return m_AllowJumping; }
 
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
@@ -50,7 +47,6 @@ private:
 	BoxColliderComponent* m_pCollider{};
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
-	bool m_AllowJumping{};
 	glm::vec2 m_Velocity{};
 	glm::vec2 m_MovementDirection{};
 };

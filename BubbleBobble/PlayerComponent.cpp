@@ -17,15 +17,11 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
 void PlayerComponent::Update()
 {
     m_StateMachine.Update();
-    
 }
 
 void PlayerComponent::FixedUpdate()
 {
     m_StateMachine.FixedUpdate();
-
-    // Apply acceleration
-    m_Velocity += m_Acceleration * Timer::GetInstance().GetFixedTimeStep(); // Assuming m_TimeStep is the fixed time step
 
     // Apply velocity
     glm::vec2 displacement = m_Velocity * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
@@ -46,25 +42,23 @@ void PlayerComponent::HandleGroundCheck(const glm::vec2& newPosition)
     glm::vec2 rayOrigin = newPosition;
     rayOrigin.x += m_pCollider->GetWidth() * 0.5f;
     glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
-    float rayDistance = m_pCollider->GetHeight() + 0.01f;
+    float rayDistance = m_pCollider->GetHeight() + 0.05f;
     RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
     if (result.hit)
     {
-        std::cout << "raycast hit x: " << result.point.x << '\n';
+        //std::cout << "raycast hit x: " << result.point.x << '\n';
         if (!m_IsJumping)
         {
-            m_Acceleration = { 0.f, 9.81f };
-            SetVerticalVelocity(0);
-
+            SetVerticalVelocity(5);
         }
         SetIsGrounded(true);
-        std::cout << "is player grounded: " << m_IsGrounded << '\n';
+        std::cout << "PLAYER IS GROUNDED: " << m_IsGrounded << '\n';
     }
     else
     {
+        //std::cout << "PLAYER IS NOT GROUNDED: " << m_IsGrounded << '\n';
         // Player is not grounded
         SetIsGrounded(false);
-        std::cout << "is player grounded: " << m_IsGrounded << '\n';
     }
 }
 

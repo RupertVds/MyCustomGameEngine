@@ -29,6 +29,12 @@ public:
     void Exit(BehaviorStateMachine<PlayerComponent>&);
 private:
     float m_MoveSpeed{};
+    float m_JumpTimer{};
+    float m_JumpTime{};
+    float m_JumpSpeed{};
+    float m_JumpTimeThreshold{};
+    bool m_ReachedTopOfJump{};
+    float m_FallingSpeed{};
 };
 
 // PlayerDeadState

@@ -24,8 +24,17 @@ public:
 	bool IsGrounded() { return m_IsGrounded; }
 
 	void SetIsJumping(bool state) { m_IsJumping = state; }
-	void Jump() { if (m_IsGrounded) m_IsJumping = true; }
+	void SetAllowJumping(bool state) { m_AllowJumping = state; }
+	void Jump() 
+	{ 
+		if (m_IsGrounded)
+		{
+			m_AllowJumping = true;
+			m_IsJumping = true;
+		}
+	}
 	bool IsJumping() { return m_IsJumping; }
+	bool AllowJumping() { return m_AllowJumping; }
 
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
@@ -34,17 +43,14 @@ public:
 	void SetHorizontalVelocity(float norm) { m_Velocity.x = norm; }
 	void SetVerticalVelocity(float norm) { m_Velocity.y = norm; }
 	const glm::vec2& GetVelocity() const { return m_Velocity; }
-
-	void SetAcceleration(const glm::vec2& acceleration) { m_Acceleration = acceleration; }
-	void SetHorizontalAcceleration(float norm) { m_Acceleration.x = norm; }
-	void SetVerticalAcceleration(float norm) { m_Acceleration.y = norm; }
-	const glm::vec2& GetAcceleration() const { return m_Acceleration; }
+	glm::vec2 GetPosition() const { return GetOwner()->GetLocalPosition(); }
+	BoxColliderComponent* GetCollider() const { return m_pCollider; }
 private:
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
 	BoxColliderComponent* m_pCollider{};
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
+	bool m_AllowJumping{};
 	glm::vec2 m_Velocity{};
-	glm::vec2 m_Acceleration{0.f, 9.81f};
 	glm::vec2 m_MovementDirection{};
 };

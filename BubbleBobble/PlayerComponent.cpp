@@ -11,6 +11,7 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
 {
     // Set the initial state of the player component
     m_StateMachine.SetState(new PlayerEntryState());
+    m_pCollider = GetOwner()->GetComponent<BoxColliderComponent>();
 }
 
 void PlayerComponent::Update()
@@ -34,16 +35,20 @@ void PlayerComponent::FixedUpdate()
     glm::vec2 newPosition = glm::vec2(GetOwner()->GetLocalPosition()) + displacement;
 
     // Set the new position
-    
     GetOwner()->SetLocalPosition({ newPosition, 0 });
 
+    HandleGroundCheck(newPosition);
+}
+
+void PlayerComponent::HandleGroundCheck(const glm::vec2& newPosition)
+{
     // Perform raycast downwards to check if the player is grounded
     glm::vec2 rayOrigin = newPosition;
+    rayOrigin.x += m_pCollider->GetWidth() * 0.5f;
     glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
-    float rayDistance = 50.1f;
+    float rayDistance = m_pCollider->GetHeight() + 0.01f;
     RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
-    RenderRaycast(rayOrigin, rayDirection, 60);
-    if (result.hit) 
+    if (result.hit)
     {
         std::cout << "raycast hit x: " << result.point.x << '\n';
         if (!m_IsJumping)
@@ -55,13 +60,12 @@ void PlayerComponent::FixedUpdate()
         SetIsGrounded(true);
         std::cout << "is player grounded: " << m_IsGrounded << '\n';
     }
-    else 
+    else
     {
         // Player is not grounded
         SetIsGrounded(false);
         std::cout << "is player grounded: " << m_IsGrounded << '\n';
     }
-
 }
 
 void PlayerComponent::LateUpdate()

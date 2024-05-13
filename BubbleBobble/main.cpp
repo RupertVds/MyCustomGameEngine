@@ -59,8 +59,8 @@ void load() {
 	std::shared_ptr<GameObject> playerOneObject = std::make_shared<GameObject>();
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
 	playerOneObject->SetLocalPosition(glm::vec3{ Renderer::WIDTH / 2 - 50, 0, 0 });
+	playerOneObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->AddComponent<PlayerComponent>();
-	playerOneObject->AddComponent<BoxColliderComponent>(50.f, 50.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
 	std::shared_ptr<GameObject> groundCollision = std::make_shared<GameObject>();

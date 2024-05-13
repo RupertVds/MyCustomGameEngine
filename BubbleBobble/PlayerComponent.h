@@ -3,6 +3,8 @@
 #include "BehaviorStateMachine.h"
 #include "BehaviorState.h"
 
+class BoxColliderComponent;
+
 class PlayerComponent final : public Component
 {
 public:
@@ -16,6 +18,7 @@ public:
 public:
 	virtual void Update() override;
 	virtual void FixedUpdate() override;
+	void HandleGroundCheck(const glm::vec2& newPosition);
 	virtual void LateUpdate() override;
 	void SetIsGrounded(bool isGrounded) { m_IsGrounded = isGrounded; }
 	bool IsGrounded() { return m_IsGrounded; }
@@ -38,6 +41,7 @@ public:
 	const glm::vec2& GetAcceleration() const { return m_Acceleration; }
 private:
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
+	BoxColliderComponent* m_pCollider{};
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
 	glm::vec2 m_Velocity{};

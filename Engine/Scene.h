@@ -9,7 +9,8 @@ class Scene final
 {
 	friend Scene& SceneManager::CreateScene(const std::string& name);
 public:
-	void Add(std::shared_ptr<GameObject> object);
+	void Add(std::unique_ptr<GameObject>&& object);
+	GameObject* GetRoot() const { return m_RootObject.get(); }
 
 	void Update();
 	void FixedUpdate();
@@ -27,7 +28,7 @@ private:
 	explicit Scene(const std::string& name);
 
 	std::string m_Name;
-	std::vector <std::shared_ptr<GameObject>> m_Objects{};
+	std::unique_ptr<GameObject> m_RootObject{};
 
 	static unsigned int m_IdCounter; 
 };

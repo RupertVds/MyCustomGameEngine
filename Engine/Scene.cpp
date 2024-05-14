@@ -1,84 +1,62 @@
 #include "Scene.h"
-
 #include <algorithm>
 #include <imgui.h>
 
 
 unsigned int Scene::m_IdCounter = 0;
 
-Scene::Scene(const std::string& name) : m_Name(name) {}
+Scene::Scene(const std::string& name) 
+	: 
+	m_Name(name),
+	m_RootObject{std::make_unique<GameObject>()}
+{
+	//m_RootObject->SetParent(nullptr); // Root object has no parent
+}
 
 Scene::~Scene() = default;
 
-void Scene::Add(std::shared_ptr<GameObject> object)
+
+void Scene::Add(std::unique_ptr<GameObject>&& object)
 {
-	if (object->GetParent() == nullptr && object != SceneManager::GetInstance().GetRootObject())
-	{
-		object->SetParent(SceneManager::GetInstance().GetRootObject());
-	}
-	m_Objects.emplace_back(std::move(object));
+	// Set root object as parent (set parent takes ownership)
+	//object->SetParent(m_RootObject.get());
+	m_RootObject->AddChild(std::move(object));
+
+	// Make it so that the object that is now a child of the rootobject doesn't get managed by this passed unique ptr anymore
+	// so that the child object stays valid
 }
 
 void Scene::Update()
 {
-	for(auto& object : m_Objects)
-	{
-		if (!object->IsMarkedForDeletion())
-		{
-			object->Update();
-		}
-	}
+	// Update all objects in the scene
+	m_RootObject->Update();
 
 	// Erase-remove idiom to remove objects marked for deletion
-	m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(),
-		[](auto& obj) {
-			return obj->IsMarkedForDeletion();
-		}), m_Objects.end());
+	//m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(),
+	//	[](auto& obj) {
+	//		return obj->IsMarkedForDeletion();
+	//	}), m_Objects.end());
 }
 
 void Scene::FixedUpdate()
 {
-	for (auto& object : m_Objects)
-	{
-		if (!object->IsMarkedForDeletion())
-		{
-			object->FixedUpdate();
-		}
-	}
+	m_RootObject->FixedUpdate();
 }
 
 void Scene::LateUpdate()
 {
-	for (auto& object : m_Objects)
-	{
-		if (!object->IsMarkedForDeletion())
-		{
-			object->LateUpdate();
-		}
-	}
+	m_RootObject->LateUpdate();
 }
 
 void Scene::Render() const
 {
-	for (const auto& object : m_Objects)
-	{
-		if (!object->IsMarkedForDeletion())
-		{
-			object->Render();
-		}
-	}
+	// Render all objects in the scene
+	m_RootObject->Render();
 }
 
 void Scene::RenderImGui()
 {
-	for (const auto& object : m_Objects)
-	{
-		if (!object->IsMarkedForDeletion())
-		{
-			ImGui::NewFrame();
-			object->RenderImGui();
-			ImGui::EndFrame();
-
-		}
-	}
+	ImGui::NewFrame();
+	m_RootObject->RenderImGui();
+	ImGui::EndFrame();
 }

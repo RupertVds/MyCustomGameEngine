@@ -63,7 +63,7 @@ bool InputManager::ProcessInput()
     std::for_each(m_Controllers.begin(), m_Controllers.end(), [](const std::unique_ptr<XInputController>& controller) { controller->ProcessInput(); });
 
     // process event for IMGUI
-    ImGui_ImplSDL2_ProcessEvent(&e);
+    //ImGui_ImplSDL2_ProcessEvent(&e);
 
     return true;
 }

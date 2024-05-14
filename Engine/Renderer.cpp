@@ -29,10 +29,10 @@ void Renderer::Init(SDL_Window* window)
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplSDL2_InitForOpenGL(m_Window, SDL_GL_GetCurrentContext());
-	ImGui_ImplOpenGL3_Init();
+	//IMGUI_CHECKVERSION();
+	//ImGui::CreateContext();
+	//ImGui_ImplSDL2_InitForOpenGL(m_Window, SDL_GL_GetCurrentContext());
+	//ImGui_ImplOpenGL3_Init();
 }
 
 void Renderer::Render() const
@@ -45,23 +45,23 @@ void Renderer::Render() const
 
 	SDL_RenderFlush(m_Renderer);
 
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplSDL2_NewFrame();
 
 	// ImGui render calls are handled inside the objects v
-	SceneManager::GetInstance().RenderImGui();
+	//SceneManager::GetInstance().RenderImGui();
 
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	//ImGui::Render();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_RenderPresent(m_Renderer);
 }
 
 void Renderer::Destroy()
 {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui_ImplOpenGL3_Shutdown();
+	//ImGui_ImplSDL2_Shutdown();
+	//ImGui::DestroyContext();
 
 	if (m_Renderer != nullptr)
 	{

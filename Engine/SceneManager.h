@@ -14,7 +14,6 @@ public:
 	void Update();
 	void FixedUpdate();
 	void LateUpdate();
-	std::shared_ptr<GameObject> const GetRootObject() const;
 
 	void Render() const;
 	void RenderImGui();
@@ -22,5 +21,4 @@ private:
 	friend class Singleton<SceneManager>;
 	SceneManager() = default;
 	std::vector<std::shared_ptr<Scene>> m_Scenes;
-	static std::shared_ptr<GameObject> m_RootObject;
 };

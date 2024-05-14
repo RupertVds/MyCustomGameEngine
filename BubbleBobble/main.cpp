@@ -28,7 +28,6 @@ void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
 	auto& inputManager = InputManager::GetInstance();
-	
 #if _DEBUG
 	ServiceLocator::RegisterSoundSystem(std::make_unique<LoggingSoundSystem>(std::make_unique<SDLSoundSystem>()));
 #else
@@ -41,40 +40,52 @@ void load() {
 
 	//auto levelTilemap = levelObject->GetComponent<TilemapComponent>();
 
-	//for (int col = 0; col < 32; ++col)
-	//{
-	//	levelTilemap->CreateTile(24, col);
-	//}
-	//levelTilemap->CreateTile(5, 6);
-	//levelTilemap->CreateTile(5, 7);
+	std::vector<std::unique_ptr<GameObject>> tiles;
+	for (int index{}; index < 32; ++index)
+	{
+		tiles.emplace_back(std::make_unique<GameObject>());
+		tiles[index]->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("test_tile.jpg"));
+		tiles[index]->AddComponent<BoxColliderComponent>(16.f, 16.f, CollisionComponent::ColliderType::STATIC);
+		tiles[index]->SetLocalPosition({ index * Renderer::WIDTH / 32, Renderer::HEIGHT - 16, 0 });
+	}
+
 	
-	std::shared_ptr<GameObject> fpsObject = std::make_shared<GameObject>();
+	std::unique_ptr<GameObject> fpsObject = std::make_unique<GameObject>();
 	fpsObject->AddComponent<RenderComponent>();
 	fpsObject->AddComponent<TextComponent>(" ", font);
 	fpsObject->AddComponent<FPSComponent>();
-	fpsObject->SetLocalPosition(glm::vec3{ 20, 0, 0 });	
-	fpsObject->SetParent(SceneManager::GetInstance().GetRootObject());
+	fpsObject->SetLocalPosition(glm::vec3{ 20, 0, 0 });
 	
 	// Player one
-	std::shared_ptr<GameObject> playerOneObject = std::make_shared<GameObject>();
+	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>();
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
 	playerOneObject->SetLocalPosition(glm::vec3{ Renderer::WIDTH / 2 - 50, 0, 0 });
 	playerOneObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->AddComponent<PlayerComponent>();
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
-	std::shared_ptr<GameObject> groundCollision = std::make_shared<GameObject>();
+	std::unique_ptr<GameObject> player2 = std::make_unique<GameObject>();
+	player2->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
+	player2->SetLocalPosition(glm::vec3{ 50, 0, 0 });
+
+	std::unique_ptr<GameObject> player3 = std::make_unique<GameObject>();
+	player3->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
+	player3->SetLocalPosition(glm::vec3{ 50, 0, 0 });
+	player2->AddChild(std::move(player3));
+	//player2->DeleteSelf();
+
+	playerOneObject->AddChild(std::move(player2));
+	std::unique_ptr<GameObject> groundCollision = std::make_unique<GameObject>();
+	//groundCollision->SetParent(playerOneObject.get());
+
 	groundCollision->SetLocalPosition(glm::vec3{ 200, Renderer::HEIGHT - 200, 0 });
 	groundCollision->AddComponent<BoxColliderComponent>(3000.f, 50.f, CollisionComponent::ColliderType::STATIC);
+	playerOneObject->AddChild(std::move(groundCollision));
 
-	std::shared_ptr<GameObject> groundCollision2 = std::make_shared<GameObject>();
-	groundCollision2->SetLocalPosition(glm::vec3{ 50, Renderer::HEIGHT - 100, 0 });
-	groundCollision2->AddComponent<BoxColliderComponent>(3000.f, 50.f, CollisionComponent::ColliderType::STATIC);
+	//std::unique_ptr<GameObject> groundCollision2 = std::make_unique<GameObject>();
+	//groundCollision2->SetLocalPosition(glm::vec3{ 50, Renderer::HEIGHT - 100, 0 });
+	//groundCollision2->AddComponent<BoxColliderComponent>(3000.f, 50.f, CollisionComponent::ColliderType::STATIC);
 
-	//inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, -1 }), InputMode::Hold });
-	//inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ -1, 0 }), InputMode::Hold });
-	//inputManager.BindInput(SDL_SCANCODE_S, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 0, 1 }), InputMode::Hold });
-	//inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveCommand>(glm::vec2{ 1, 0 }), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_SPACE, InputBinding{ playerOneObject->AddCommand<JumpCommand>(), InputMode::Press });
@@ -92,12 +103,16 @@ void load() {
 	inputManager.BindInput(0, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_3.wav", 0.2f), InputMode::Press });
 	inputManager.BindInput(0, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_4.wav", 0.2f), InputMode::Press });
 	
-	scene.Add(fpsObject);
-	scene.Add(playerOneObject);
+	scene.Add(std::move(fpsObject));
+	scene.Add(std::move(playerOneObject));
 	//scene.Add(levelObject);
-	scene.Add(groundCollision);
-	scene.Add(groundCollision2);
-	scene.Add(SceneManager::GetInstance().GetRootObject());
+	//scene.Add(groundCollision);
+	//scene.Add(std::move(groundCollision2));
+	//scene.Add(SceneManager::GetInstance().GetRootObject());
+	for (auto& tile : tiles)
+	{
+		scene.Add(std::move(tile));
+	}
 }
 
 int main(int, char* []) 

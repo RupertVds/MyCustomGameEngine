@@ -13,11 +13,11 @@ class Component;
 class Observer;
 enum class Event;
 
-class GameObject final : public std::enable_shared_from_this<GameObject>
+class GameObject final
 {
 public:
 	GameObject() = default;
-	~GameObject() = default;
+	~GameObject();
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) noexcept = delete;
 	GameObject& operator=(const GameObject& other) = delete;
@@ -30,14 +30,15 @@ public:
 	void RenderImGui();
 
 	GameObject* GetParent() const;
-	void SetParent(std::shared_ptr<GameObject>, bool keepWorldPosition = true);
+	//void SetParent(GameObject* pParent, bool keepWorldPosition = true);
+	void AddChild(std::unique_ptr<GameObject>&& pChild);
+	void RemoveChild(GameObject* child);
 	bool IsChild(GameObject* parent);
 	size_t GetChildCount() const;
-	const std::vector<std::shared_ptr<GameObject>>& GetChildren() const;
-	const std::shared_ptr<GameObject>& GetChildAtIndex(int index) const;
+	GameObject* GetChildAtIndex(int index) const;
 
-	void AddObserver(std::shared_ptr<Observer> observer);
-	void RemoveObserver(std::shared_ptr<Observer> observer);
+	void AddObserver(Observer* observer);
+	void RemoveObserver(Observer* observer);
 	void NotifyObservers(Event event);
 
 	void UpdateWorldPosition();
@@ -52,21 +53,19 @@ public:
 	void DeleteSelf();
 private:
 	void SetPositionDirty();
-	void AddChild(std::shared_ptr<GameObject> child);
-	void RemoveChild(std::shared_ptr<GameObject> child);
 private:
 	bool m_IsMarkedForDeletion{ false };
 	bool m_PositionIsDirty{};
-	std::vector<std::unique_ptr<Component>> m_Components;
+	std::vector<std::unique_ptr<Component>> m_Components{};
 	Transform m_LocalTransform{};
 	Transform m_WorldTransform{};
 
-	std::vector<std::unique_ptr<Command>> m_Commands;
+	std::vector<std::unique_ptr<Command>> m_Commands{};
 
 	GameObject* m_Parent{};
-	std::vector<std::shared_ptr<GameObject>> m_Children{};
+	std::vector<std::unique_ptr<GameObject>> m_Children{};
 
-	std::vector<std::shared_ptr<Observer>> m_Observers;
+	std::vector<Observer*> m_Observers{};
 public:
 	template <typename T, typename... Args>
 	void AddComponent(Args&&... args)

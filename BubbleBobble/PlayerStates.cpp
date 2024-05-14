@@ -11,7 +11,7 @@ void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
     PlayerComponent* playerComp = stateMachine.GetComponent();
 
     // set to constant velocity
-    playerComp->SetVelocity({ 0, 10.f });
+    playerComp->SetVelocity({ 0, m_MovingDownSpeed });
 }
 
 void PlayerEntryState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -33,11 +33,11 @@ void PlayerEntryState::Exit(BehaviorStateMachine<PlayerComponent>&)
 void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>&)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
-    m_MoveSpeed = 70.f;
-    m_JumpSpeed = 60.f;
-    m_JumpTime = 2.f;
-    m_JumpTimeThreshold = m_JumpTime * 0.8f;
-    m_FallingSpeed = 30.f;
+    m_MoveSpeed = 100.f;
+    m_JumpSpeed = 180.f;
+    m_JumpTime = 0.6f;
+    m_JumpTimeThreshold = m_JumpTime * 0.9f;
+    m_FallingSpeed = 50.f;
 }
 
 void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -94,6 +94,10 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
             m_ReachedTopOfJump = false;
         }
     }
+    else
+    {
+        m_ReachedTopOfJump = false;
+    }
 
     if (!playerComp->IsJumping() && !playerComp->IsGrounded())
     {
@@ -109,10 +113,7 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
     if (result.hit)
     {
         std::cout << "CEILING HIT\n";
-        playerComp->SetVerticalVelocity(10);
-        m_JumpTimer = 0;
-        m_ReachedTopOfJump = false;
-        playerComp->SetIsJumping(false);
+        m_ReachedTopOfJump = true;
     }
 }
 

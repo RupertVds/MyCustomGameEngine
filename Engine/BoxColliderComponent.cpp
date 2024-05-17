@@ -73,13 +73,15 @@ void BoxColliderComponent::ResolveCollision(BoxColliderComponent* colliderA, Box
 
     // Calculate correction vector
     glm::vec2 correction(0.0f);
-    if (overlapX < overlapY) {
+    if (overlapX < overlapY) 
+    {
         if (posA.x < posB.x)
             correction.x = overlapX;
         else
             correction.x = -overlapX;
     }
-    else {
+    else 
+    {
         if (posA.y < posB.y)
             correction.y = overlapY;
         else

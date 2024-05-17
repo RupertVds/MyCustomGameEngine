@@ -68,11 +68,12 @@ private:
 	std::vector<Observer*> m_Observers{};
 public:
 	template <typename T, typename... Args>
-	void AddComponent(Args&&... args)
+	T* AddComponent(Args&&... args)
 	{
 		if (HasComponent<T>()) throw TooManyComponentsException();
 		std::unique_ptr<T> component{ std::make_unique<T>(this, std::forward<Args>(args)...) };
 		m_Components.emplace_back(std::move(component));
+		return reinterpret_cast<T*>(m_Components.back().get());
 	}
 
 	template <typename T>

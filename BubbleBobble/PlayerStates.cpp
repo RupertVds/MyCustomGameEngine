@@ -16,7 +16,7 @@ void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
 
 void PlayerEntryState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
-    std::cout << "PlayerEntryState: Updated" << std::endl;
+    //std::cout << "PlayerEntryState: Updated" << std::endl;
     m_MovingDownElapsedTime += Timer::GetInstance().GetDeltaTime();
     if (m_MovingDownElapsedTime >= m_MovingDownTime)
     {
@@ -33,11 +33,11 @@ void PlayerEntryState::Exit(BehaviorStateMachine<PlayerComponent>&)
 void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>&)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
-    m_MoveSpeed = 100.f;
-    m_JumpSpeed = 180.f;
-    m_JumpTime = 0.6f;
+    m_MoveSpeed = 120.f;
+    m_JumpSpeed = 140.f;
+    m_JumpTime = 0.5f;
     m_JumpTimeThreshold = m_JumpTime * 0.9f;
-    m_FallingSpeed = 50.f;
+    m_FallingSpeed = 110.f;
 }
 
 void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -96,25 +96,27 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
     }
     else
     {
+        //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
         m_ReachedTopOfJump = false;
     }
 
     if (!playerComp->IsJumping() && !playerComp->IsGrounded())
     {
-        playerComp->SetVerticalVelocity(20.f);
+        //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
+        playerComp->SetVerticalVelocity(m_FallingSpeed);
     }
 
-    // Perform raycast upwards to check if the player is hitting a ceiling
-    glm::vec2 rayOrigin = playerComp->GetPosition();
-    rayOrigin.x += playerComp->GetCollider()->GetWidth() *0.5f;
-    glm::vec2 rayDirection(0.0f, -1.0f); // Upwards direction
-    float rayDistance = 0.05f;
-    RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
-    if (result.hit)
-    {
-        std::cout << "CEILING HIT\n";
-        m_ReachedTopOfJump = true;
-    }
+    //// Perform raycast upwards to check if the player is hitting a ceiling
+    //glm::vec2 rayOrigin = playerComp->GetPosition();
+    //rayOrigin.x += playerComp->GetCollider()->GetWidth() * 0.5f;
+    //glm::vec2 rayDirection(0.0f, -1.0f); // Upwards direction
+    //float rayDistance = 2.f;
+    //RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
+    //if (result.hit)
+    //{
+    //    std::cout << "CEILING HIT\n";
+    //    m_ReachedTopOfJump = true;
+    //}
 }
 
 void PlayerAliveState::LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)

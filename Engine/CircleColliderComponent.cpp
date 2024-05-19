@@ -4,8 +4,8 @@
 #include <cmath>
 #include <algorithm>
 
-CircleColliderComponent::CircleColliderComponent(GameObject* pOwner, float radius, ColliderType type, bool isTrigger)
-    : CollisionComponent(pOwner, type, isTrigger), m_Radius(radius)
+CircleColliderComponent::CircleColliderComponent(GameObject* pOwner, float radius, ColliderType type, bool isTrigger, ColliderType triggerTargetType)
+    : CollisionComponent(pOwner, type, isTrigger, triggerTargetType), m_Radius(radius)
 {
     ColliderManager::GetInstance().RegisterCircleCollider(this);
 }
@@ -20,11 +20,15 @@ void CircleColliderComponent::FixedUpdate()
     if (m_Type == ColliderType::STATIC && !m_IsTrigger)
         return; // No need to handle collision for static colliders
 
+    bool isTriggered{};
+
     // Check for collisions with other circle colliders
     for (auto& collider : ColliderManager::GetInstance().GetCircleColliders()) 
     {
         if (collider == this)
             continue; // Skip self and static colliders
+
+        if (m_IgnoreStatic && collider->GetType() == ColliderType::STATIC) continue;
 
         if (CheckCircleCollision(this, collider))
         {
@@ -34,7 +38,10 @@ void CircleColliderComponent::FixedUpdate()
             }
             else
             {
-                IsTriggered(collider);
+                if (collider->GetType() == m_TriggerTargetType)
+                {
+                    isTriggered = true;
+                }
             }
         }
     }
@@ -42,6 +49,8 @@ void CircleColliderComponent::FixedUpdate()
     // Check for collisions with box colliders
     for (auto& collider : ColliderManager::GetInstance().GetBoxColliders()) 
     {
+        if (m_IgnoreStatic && collider->GetType() == ColliderType::STATIC) continue;
+
         if (CheckCircleBoxCollision(this, collider)) 
         {
             if (!m_IsTrigger && !collider->IsTrigger())
@@ -50,10 +59,15 @@ void CircleColliderComponent::FixedUpdate()
             }
             else
             {
-                IsTriggered(collider);
+                if (collider->GetType() == m_TriggerTargetType)
+                {
+                    isTriggered = true;
+                }
             }
         }
     }
+
+    m_IsTriggered = isTriggered;
 }
 
 void CircleColliderComponent::Render() const
@@ -105,8 +119,8 @@ void CircleColliderComponent::Render() const
 
 bool CircleColliderComponent::CheckCircleCollision(CircleColliderComponent* colliderA, CircleColliderComponent* colliderB)
 {
-    glm::vec2 posA = colliderA->GetOwner()->GetLocalPosition() + glm::vec2(m_Radius, m_Radius);
-    glm::vec2 posB = colliderB->GetOwner()->GetLocalPosition() + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition() + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition() + glm::vec2(m_Radius, m_Radius);
     float radiusA = colliderA->GetRadius();
     float radiusB = colliderB->GetRadius();
 
@@ -116,8 +130,8 @@ bool CircleColliderComponent::CheckCircleCollision(CircleColliderComponent* coll
 
 void CircleColliderComponent::ResolveCircleCollision(CircleColliderComponent* colliderA, CircleColliderComponent* colliderB)
 {
-    glm::vec2 posA = glm::vec2(colliderA->GetOwner()->GetLocalPosition()) + glm::vec2(m_Radius, m_Radius);
-    glm::vec2 posB = glm::vec2(colliderB->GetOwner()->GetLocalPosition()) + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posA = glm::vec2(colliderA->GetOwner()->GetWorldPosition()) + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posB = glm::vec2(colliderB->GetOwner()->GetWorldPosition()) + glm::vec2(m_Radius, m_Radius);
     float radiusA = colliderA->GetRadius();
     float radiusB = colliderB->GetRadius();
 

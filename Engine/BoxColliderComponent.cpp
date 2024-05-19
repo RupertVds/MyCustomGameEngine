@@ -2,8 +2,8 @@
 #include "Renderer.h"
 #include "CircleColliderComponent.h"
 
-BoxColliderComponent::BoxColliderComponent(GameObject* pOwner, float width, float height, ColliderType type, bool isTrigger)
-    : CollisionComponent(pOwner, type, isTrigger), m_Width(width), m_Height(height)
+BoxColliderComponent::BoxColliderComponent(GameObject* pOwner, float width, float height, ColliderType type, bool isTrigger, ColliderType triggerTargetType)
+    : CollisionComponent(pOwner, type, isTrigger, triggerTargetType), m_Width(width), m_Height(height)
 {
     ColliderManager::GetInstance().RegisterBoxCollider(this);
 }
@@ -22,7 +22,15 @@ void BoxColliderComponent::Render() const
         return;
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100); // White color
+    if (m_IsTriggered)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+    }
+
     SDL_Rect rect;
     glm::vec2 position = GetOwner()->GetWorldPosition();
     rect.x = static_cast<int>(position.x);
@@ -38,10 +46,19 @@ void BoxColliderComponent::FixedUpdate()
     if (m_Type == ColliderType::STATIC && !m_IsTrigger)
         return; // No need to handle collision for static colliders
 
+    bool isTriggered{};
     // Iterate over all box colliders to check for collisions
     for (auto& collider : ColliderManager::GetInstance().GetBoxColliders()) {
         if (collider == this)
+        {
             continue; // Skip self
+        }
+
+        if (collider->GetType() == ColliderType::DYNAMIC) continue;
+
+        if (m_IsTrigger && collider->IsTrigger()) continue;
+
+        if ((m_IgnoreStatic || collider->IsIgnoringStatic()) && collider->GetType() == ColliderType::STATIC) continue;
 
         if (CheckCollision(this, collider))
         {
@@ -51,13 +68,19 @@ void BoxColliderComponent::FixedUpdate()
             }
             else
             {
-                IsTriggered(collider);
+                if (collider->GetType() == m_TriggerTargetType)
+                {
+                    isTriggered = true;
+                }
             }
         }
     }
 
     // Iterate over all circle colliders to check for collisions
-    for (auto& collider : ColliderManager::GetInstance().GetCircleColliders()) {
+    for (auto& collider : ColliderManager::GetInstance().GetCircleColliders())
+    {
+        if (m_IgnoreStatic && collider->GetType() == ColliderType::STATIC) continue;
+
         if (CheckCircleBoxCollision(collider, this))
         {
             if (!m_IsTrigger && !collider->IsTrigger())
@@ -66,17 +89,22 @@ void BoxColliderComponent::FixedUpdate()
             }
             else
             {
-                IsTriggered(collider);
+                if (collider->GetType() == m_TriggerTargetType)
+                {
+                    isTriggered = true;
+                }
             }
         }
     }
+
+    m_IsTriggered = isTriggered;
 }
 
 bool BoxColliderComponent::CheckCollision(BoxColliderComponent* colliderA, BoxColliderComponent* colliderB)
 {
     // AABB collision detection
-    glm::vec2 posA = colliderA->GetOwner()->GetLocalPosition();
-    glm::vec2 posB = colliderB->GetOwner()->GetLocalPosition();
+    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition();
+    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition();
 
     return (posA.x < posB.x + colliderB->m_Width &&
         posA.x + colliderA->m_Width > posB.x &&
@@ -87,8 +115,8 @@ bool BoxColliderComponent::CheckCollision(BoxColliderComponent* colliderA, BoxCo
 void BoxColliderComponent::ResolveCollision(BoxColliderComponent* colliderA, BoxColliderComponent* colliderB)
 {
     // Get positions and dimensions of the colliders
-    glm::vec2 posA = colliderA->GetOwner()->GetLocalPosition();
-    glm::vec2 posB = colliderB->GetOwner()->GetLocalPosition();
+    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition();
+    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition();
     float widthA = colliderA->m_Width;
     float heightA = colliderA->m_Height;
     float widthB = colliderB->m_Width;

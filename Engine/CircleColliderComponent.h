@@ -8,7 +8,7 @@ class BoxColliderComponent;
 class CircleColliderComponent final : public CollisionComponent
 {
 public:
-    CircleColliderComponent(GameObject* pOwner, float radius, ColliderType type, bool isTrigger = false);
+    CircleColliderComponent(GameObject* pOwner, float radius, ColliderType type, bool isTrigger = false, ColliderType triggerTargetType = ColliderType::STATIC);
 
     virtual ~CircleColliderComponent();
 

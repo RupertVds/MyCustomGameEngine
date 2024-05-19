@@ -7,7 +7,7 @@ class CircleColliderComponent;
 class BoxColliderComponent final : public CollisionComponent
 {
 public:
-    BoxColliderComponent(GameObject* pOwner, float width, float height, ColliderType type, bool isTrigger = false);
+    BoxColliderComponent(GameObject* pOwner, float width, float height, ColliderType type, bool isTrigger = false, ColliderType triggerTargetType = ColliderType::STATIC);
     ~BoxColliderComponent();
 
     virtual void FixedUpdate() override;

@@ -1,6 +1,7 @@
 #include "PlayerStates.h"
 #include "Timer.h"
 #include <Utils.h>
+#include <Renderer.h>
 
 class BoxColliderComponent;
 
@@ -34,16 +35,57 @@ void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>&)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
     m_MoveSpeed = 120.f;
-    m_JumpSpeed = 160.f;
-    m_JumpTime = 0.5f;
+    m_JumpSpeed = 245.f;
+    m_JumpTime = 0.35f;
     m_JumpTimeThreshold = m_JumpTime * 0.9f;
-    m_FallingSpeed = 110.f;
+    m_FallingSpeed = 140.f;
 }
 
 void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     PlayerComponent* playerComp = stateMachine.GetComponent();
-    glm::vec2 moveDir = stateMachine.GetComponent()->GetMovingDirection();
+    HandleHorizontalMovement(playerComp);
+    HandleJumping(playerComp);
+
+    if (!playerComp->IsJumping() && !playerComp->IsGrounded())
+    {
+        //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
+        playerComp->SetVerticalVelocity(m_FallingSpeed);
+    }
+}
+
+void PlayerAliveState::HandleJumping(PlayerComponent* playerComp)
+{
+    // Check if the player is jumping
+    if (playerComp->IsJumping())
+    {
+        // Handle jumping logic
+        if (m_JumpTimer < m_JumpTimeThreshold) // Below the threshold
+        {
+            playerComp->SetVerticalVelocity(-m_JumpSpeed);
+        }
+        else if (m_JumpTimer < m_JumpTime) // Between threshold and full jump time
+        {
+            // Set velocity to half of the inverse of the original jump speed
+            playerComp->SetVerticalVelocity(-m_JumpSpeed * 0.5f);
+        }
+        
+        // Increment jump timer
+        m_JumpTimer += Timer::GetInstance().GetDeltaTime();
+
+        // Check if jump time has elapsed
+        if (m_JumpTimer >= m_JumpTime && !playerComp->GetJumpCorrectionTrigger()->IsTriggered())
+        {
+            // Reset jump state
+            playerComp->SetIsJumping(false);
+            m_JumpTimer = 0;
+        }
+    }
+}
+
+void PlayerAliveState::HandleHorizontalMovement(PlayerComponent* playerComp)
+{
+    glm::vec2 moveDir = playerComp->GetMovingDirection();
     if (moveDir.x > 0)
     {
         playerComp->SetHorizontalVelocity(m_MoveSpeed);
@@ -56,67 +98,55 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
     {
         playerComp->SetHorizontalVelocity(0);
     }
+}
 
-    // Check if the player is jumping
-    if (playerComp->IsJumping())
+void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)
+{
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+
+    HandleGround(playerComp);
+
+    if (playerComp->GetCeilingTrigger()->IsTriggered() && playerComp->IsJumping() && playerComp->GetJumpCorrectionTrigger()->IsTriggered())
     {
-        float velocity{};
-        (m_ReachedTopOfJump) ? velocity = m_JumpSpeed : velocity = -m_JumpSpeed;
+        std::cout << "COLLIDER IS OFF\n";
 
-        // Handle jumping logic
-        if (m_JumpTimer < m_JumpTimeThreshold) // Below the threshold
+        playerComp->GetCollider()->SetIgnoreStatic(true);
+    }
+    else if (!playerComp->IsJumping() && !playerComp->GetJumpCorrectionTrigger()->IsTriggered())
+    {
+        std::cout << "COLLIDER IS ON\n";
+        playerComp->GetCollider()->SetIgnoreStatic(false);
+    }
+
+    // Clamp player horizontally when needed
+    glm::vec2 clampedPos{ playerComp->GetPosition() };
+    clampedPos.x = std::min(std::max(clampedPos.x, 34.f), static_cast<float>(Renderer::WIDTH) - playerComp->GetCollider()->GetWidth() - 32.f);
+    playerComp->GetOwner()->SetLocalPosition(clampedPos);
+}
+
+void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
+{
+    // Perform raycast downwards to check if the player is grounded
+    glm::vec2 rayOrigin = playerComp->GetPosition();
+    rayOrigin.x += playerComp->GetCollider()->GetWidth() * 0.5f;
+    glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
+    float rayDistance = 3.f;
+    rayOrigin.y += playerComp->GetCollider()->GetHeight() - rayDistance;
+    RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
+    if (result.hit)
+    {
+        if (!playerComp->IsJumping())
         {
-            playerComp->SetVerticalVelocity(velocity);
-        }
-        else if (m_JumpTimer < m_JumpTime) // Between threshold and full jump time
-        {
-            // Set velocity to half of the inverse of the original jump speed
-            playerComp->SetVerticalVelocity(velocity * 0.5f);
-        }
-        else // Reached the top of the jump
-        {
-            if (!m_ReachedTopOfJump)
-            {
-                m_ReachedTopOfJump = true;
-                m_JumpTimer -= m_JumpTime;
-            }
+            playerComp->SetVerticalVelocity(5);
         }
 
-        // Increment jump timer
-        m_JumpTimer += Timer::GetInstance().GetDeltaTime();
-
-        // Check if jump time has elapsed
-        if (m_JumpTimer >= m_JumpTime && m_ReachedTopOfJump)
-        {
-            // Reset jump state
-            playerComp->SetIsJumping(false);
-            m_JumpTimer -= m_JumpTime;
-            m_ReachedTopOfJump = false;
-        }
+        playerComp->SetIsGrounded(true);
     }
     else
     {
-        //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
-        m_ReachedTopOfJump = false;
+        // Player is not grounded
+        playerComp->SetIsGrounded(false);
     }
-
-    if (!playerComp->IsJumping() && !playerComp->IsGrounded())
-    {
-        //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
-        playerComp->SetVerticalVelocity(m_FallingSpeed);
-    }
-
-    //// Perform raycast upwards to check if the player is hitting a ceiling
-    //glm::vec2 rayOrigin = playerComp->GetPosition();
-    //rayOrigin.x += playerComp->GetCollider()->GetWidth() * 0.5f;
-    //glm::vec2 rayDirection(0.0f, -1.0f); // Upwards direction
-    //float rayDistance = 2.f;
-    //RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
-    //if (result.hit)
-    //{
-    //    std::cout << "CEILING HIT\n";
-    //    m_ReachedTopOfJump = true;
-    //}
 }
 
 void PlayerAliveState::LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)

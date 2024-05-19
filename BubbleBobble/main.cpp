@@ -49,23 +49,24 @@ void load() {
 	fpsObject->AddComponent<FPSComponent>();
 	fpsObject->SetLocalPosition({ 40, 20 });
 
-	auto testCollider = std::make_unique<GameObject>();
-	testCollider->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::STATIC, true);
-	testCollider->SetLocalPosition({ 300, 200 });
+	//auto testCollider = std::make_unique<GameObject>();
+	//testCollider->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::STATIC, true);
+	//testCollider->SetLocalPosition({ 300, 200 });
 
 	// Player one
 	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>();
 	playerOneObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_1.png"));
-	playerOneObject->SetLocalPosition({ Renderer::WIDTH / 2 - 50, 50 });
-	//playerOneObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
-	playerOneObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
+	playerOneObject->SetLocalPosition({ Renderer::WIDTH / 2 - 50, 25 });
+	playerOneObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+	//playerOneObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->AddComponent<PlayerComponent>();
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 	// Player two
 	std::unique_ptr<GameObject> playerTwoObject = std::make_unique<GameObject>();
 	playerTwoObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("player_2.png"));
-	playerTwoObject->SetLocalPosition({ Renderer::WIDTH / 2 + 50, 50 });
-	playerTwoObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
+	playerTwoObject->SetLocalPosition({ Renderer::WIDTH / 2 + 50, 25 });
+	//playerTwoObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
+	playerTwoObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerTwoObject->AddComponent<PlayerComponent>();
 	playerTwoObject->SetScale({ 2.f, 2.f, 2.f });
 

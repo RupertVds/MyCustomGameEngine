@@ -19,7 +19,6 @@ public:
 public:
 	virtual void Update() override;
 	virtual void FixedUpdate() override;
-	void HandleGroundCheck(const glm::vec2& newPosition);
 	virtual void LateUpdate() override;
 	void SetIsGrounded(bool isGrounded) { m_IsGrounded = isGrounded; }
 	bool IsGrounded() { return m_IsGrounded; }
@@ -42,12 +41,16 @@ public:
 	void SetVerticalVelocity(float norm) { m_Velocity.y = norm; }
 	const glm::vec2& GetVelocity() const { return m_Velocity; }
 	glm::vec2 GetPosition() const { return GetOwner()->GetLocalPosition(); }
-	CircleColliderComponent* GetCollider() const { return m_pMainCollider; }
+	BoxColliderComponent* GetCollider() const { return m_pMainCollider; }
+	BoxColliderComponent* GetCeilingTrigger() const { return m_pCeilingTrigger; }
+	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }
 private:
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
-	CircleColliderComponent* m_pMainCollider{};
+	BoxColliderComponent* m_pMainCollider{};
 
 	BoxColliderComponent* m_pCeilingTrigger{};
+	BoxColliderComponent* m_pGroundTrigger{};
+	BoxColliderComponent* m_pJumpCorrectionTrigger{};
 
 	bool m_IsGrounded{};
 	bool m_IsJumping{};

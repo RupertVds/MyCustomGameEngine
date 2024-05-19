@@ -11,7 +11,12 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
 {
     // Set the initial state of the player component
     m_StateMachine.SetState(new PlayerEntryState());
-    m_pCollider = GetOwner()->GetComponent<BoxColliderComponent>();
+    m_pMainCollider = GetOwner()->GetComponent<CircleColliderComponent>();
+
+    auto ceilingTriggerObject = std::make_unique<GameObject>();
+    ceilingTriggerObject->AddComponent<BoxColliderComponent>(24.f, 12.f, CollisionComponent::ColliderType::STATIC, true);
+    ceilingTriggerObject->SetLocalPosition({ 16.f - 12.f, 0.f});
+    this->GetOwner()->AddChild(std::move(ceilingTriggerObject));
 }
 
 void PlayerComponent::Update()
@@ -27,11 +32,10 @@ void PlayerComponent::FixedUpdate()
     glm::vec2 displacement = m_Velocity * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
 
     // Update position
-    // Assuming m_Owner->GetPosition() returns the current position of the GameObject
     glm::vec2 newPosition = glm::vec2(GetOwner()->GetLocalPosition()) + displacement;
 
     // Set the new position
-    GetOwner()->SetLocalPosition({ newPosition, 0 });
+    GetOwner()->SetLocalPosition(newPosition);
 
     HandleGroundCheck(newPosition);
 }
@@ -40,9 +44,11 @@ void PlayerComponent::HandleGroundCheck(const glm::vec2& newPosition)
 {
     // Perform raycast downwards to check if the player is grounded
     glm::vec2 rayOrigin = newPosition;
-    rayOrigin.x += m_pCollider->GetWidth() * 0.5f;
+    //rayOrigin.x += m_pCollider->GetWidth() * 0.5f;
+    rayOrigin.x += m_pMainCollider->GetRadius() * 2.f * 0.5f;
     glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
-    float rayDistance = m_pCollider->GetHeight() + 0.05f;
+    //float rayDistance = m_pCollider->GetHeight() + 0.05f;
+    float rayDistance = m_pMainCollider->GetRadius() * 2.f + 0.05f;
     RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
     if (result.hit)
     {
@@ -52,7 +58,7 @@ void PlayerComponent::HandleGroundCheck(const glm::vec2& newPosition)
             SetVerticalVelocity(5);
         }
         SetIsGrounded(true);
-        std::cout << "PLAYER IS GROUNDED: " << m_IsGrounded << '\n';
+        //std::cout << "PLAYER IS GROUNDED: " << m_IsGrounded << '\n';
     }
     else
     {

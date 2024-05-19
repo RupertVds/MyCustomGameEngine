@@ -4,6 +4,7 @@
 #include "BehaviorState.h"
 
 class BoxColliderComponent;
+class CircleColliderComponent;
 
 class PlayerComponent final : public Component
 {
@@ -41,10 +42,13 @@ public:
 	void SetVerticalVelocity(float norm) { m_Velocity.y = norm; }
 	const glm::vec2& GetVelocity() const { return m_Velocity; }
 	glm::vec2 GetPosition() const { return GetOwner()->GetLocalPosition(); }
-	BoxColliderComponent* GetCollider() const { return m_pCollider; }
+	CircleColliderComponent* GetCollider() const { return m_pMainCollider; }
 private:
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
-	BoxColliderComponent* m_pCollider{};
+	CircleColliderComponent* m_pMainCollider{};
+
+	BoxColliderComponent* m_pCeilingTrigger{};
+
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
 	glm::vec2 m_Velocity{};

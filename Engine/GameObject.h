@@ -42,9 +42,9 @@ public:
 	void NotifyObservers(Event event);
 
 	void UpdateWorldPosition();
-	void SetLocalPosition(const glm::vec3& pos);
-	const glm::vec3& GetLocalPosition() const;
-	const glm::vec3& GetWorldPosition();
+	void SetLocalPosition(const glm::vec2& pos);
+	const glm::vec2& GetLocalPosition() const;
+	const glm::vec2& GetWorldPosition();
 
 	const Transform& GetLocalTransform() const;
 	void SetScale(const glm::vec3& scale);

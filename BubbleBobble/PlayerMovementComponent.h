@@ -15,7 +15,7 @@ public:
 
     virtual void Update() override
     {
-        glm::vec3 newPosition = GetOwner()->GetLocalPosition();
+        glm::vec2 newPosition = GetOwner()->GetLocalPosition();
 
         // Normalize the direction vector
         float length = sqrt(m_Direction.x * m_Direction.x + m_Direction.y * m_Direction.y);

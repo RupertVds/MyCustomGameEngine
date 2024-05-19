@@ -227,5 +227,11 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="CircleColliderComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

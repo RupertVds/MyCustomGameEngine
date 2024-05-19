@@ -238,18 +238,18 @@ void GameObject::SetPositionDirty()
     }
 }
 
-void GameObject::SetLocalPosition(const glm::vec3& pos)
+void GameObject::SetLocalPosition(const glm::vec2& pos)
 {
-    m_LocalTransform.SetPosition(pos.x, pos.y, pos.z);
+    m_LocalTransform.SetPosition(pos.x, pos.y);
     SetPositionDirty();
 }
 
- const glm::vec3& GameObject::GetLocalPosition() const
+ const glm::vec2& GameObject::GetLocalPosition() const
 {
     return m_LocalTransform.GetPosition();
 }
 
- const glm::vec3& GameObject::GetWorldPosition()
+ const glm::vec2& GameObject::GetWorldPosition()
  {
      if (m_PositionIsDirty)
      {

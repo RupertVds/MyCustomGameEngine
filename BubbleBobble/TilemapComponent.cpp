@@ -86,7 +86,7 @@ void TilemapComponent::SetupCollisions() {
             //}
             if (collisionType > 0) {
                 auto collisionTile = std::make_unique<GameObject>();
-                collisionTile->SetLocalPosition({ col * m_TileWidth, row * m_TileHeight, 0 });
+                collisionTile->SetLocalPosition({ col * m_TileWidth, row * m_TileHeight });
                 collisionTile->AddComponent<BoxColliderComponent>(static_cast<float>(m_TileWidth), static_cast<float>(m_TileHeight), CollisionComponent::ColliderType::STATIC);
                 GetOwner()->AddChild(std::move(collisionTile));
             }

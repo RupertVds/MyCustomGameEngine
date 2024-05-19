@@ -34,7 +34,7 @@ void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>&)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
     m_MoveSpeed = 120.f;
-    m_JumpSpeed = 140.f;
+    m_JumpSpeed = 160.f;
     m_JumpTime = 0.5f;
     m_JumpTimeThreshold = m_JumpTime * 0.9f;
     m_FallingSpeed = 110.f;

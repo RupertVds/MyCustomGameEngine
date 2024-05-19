@@ -17,9 +17,9 @@ public:
     virtual void LateUpdate() {}
     virtual void Render() const {}
     virtual void RenderImGui() {}
+    inline GameObject* const GetOwner() const { if (m_pOwner) return m_pOwner; return nullptr; }
 protected:
     explicit Component(GameObject* pOwner) : m_pOwner{ pOwner } {}
-    inline GameObject* const GetOwner() const { if (m_pOwner) return m_pOwner; return nullptr; }
 private:
     GameObject* const m_pOwner{};
 };

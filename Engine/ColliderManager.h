@@ -1,10 +1,11 @@
 #pragma once
 #include "Singleton.h"
 #include <vector>
-#include "CircleColliderComponent.h"
 #include "BoxColliderComponent.h"
+#include "CircleColliderComponent.h"
 
 class BoxColliderComponent;
+class CircleColliderComponent;
 
 class ColliderManager final : public Singleton<ColliderManager>
 {

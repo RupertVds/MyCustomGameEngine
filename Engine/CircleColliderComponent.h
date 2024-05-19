@@ -1,28 +1,30 @@
 #pragma once
-#pragma once
 #include "CollisionComponent.h"
+#include "ColliderManager.h"
+#include <vector>
 
-class CircleColliderComponent : public CollisionComponent
+class BoxColliderComponent;
+
+class CircleColliderComponent final : public CollisionComponent
 {
 public:
-    CircleColliderComponent(GameObject* pOwner, float width, float height, ColliderType type)
-        : CollisionComponent(pOwner, type), m_Width(width), m_Height(height) {}
+    CircleColliderComponent(GameObject* pOwner, float radius, ColliderType type, bool isTrigger = false);
 
-    virtual void FixedUpdate() override {
-    }
+    virtual ~CircleColliderComponent();
 
-    virtual void OnCollision(CollisionComponent*) override {
-        // Handle collision response if needed
-    }
+    virtual void FixedUpdate() override;
+    virtual void Render() const override;
 
-    void AddCollider(CollisionComponent* collider) {
-        m_Colliders.push_back(collider);
-    }
+    bool CheckCircleCollision(CircleColliderComponent* colliderA, CircleColliderComponent* colliderB);
 
+    void ResolveCircleCollision(CircleColliderComponent* colliderA, CircleColliderComponent* colliderB);
+
+    bool CheckCircleBoxCollision(CircleColliderComponent* circle, BoxColliderComponent* box);
+
+    void ResolveCircleBoxCollision(CircleColliderComponent* circle, BoxColliderComponent* box);
+
+    float GetRadius() const { return m_Radius; }
 
 private:
-    float m_Width;
-    float m_Height;
-    std::vector<CollisionComponent*> m_Colliders; // Store references to other colliders
-    
+    float m_Radius;
 };

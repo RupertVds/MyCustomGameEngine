@@ -14,7 +14,7 @@ RaycastResult Raycast(const glm::vec2& origin, const glm::vec2& direction, float
         if (collider->GetType() != collisionType)
             continue; // Skip colliders of different type
 
-        glm::vec2 colliderPos = collider->GetPosition();
+        glm::vec2 colliderPos = collider->GetOwner()->GetLocalPosition();
         float colliderWidth = collider->GetWidth();
         float colliderHeight = collider->GetHeight();
 

@@ -1,17 +1,15 @@
 #include "Transform.h"
 
-void Transform::SetPosition(const float x, const float y, const float z)
+void Transform::SetPosition(const float x, const float y)
 {
 	m_Position.x = x;
 	m_Position.y = y;
-	m_Position.z = z;
 }
 
-void Transform::SetPosition(const glm::vec3& pos)
+void Transform::SetPosition(const glm::vec2& pos)
 {
 	m_Position.x = pos.x;
 	m_Position.y = pos.y;
-	m_Position.z = pos.z;
 }
 
 void Transform::SetRotation(float pitch, float yaw, float roll)

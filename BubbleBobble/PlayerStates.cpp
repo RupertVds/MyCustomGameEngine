@@ -126,20 +126,35 @@ void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateM
 
 void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
 {
-    // Perform raycast downwards to check if the player is grounded
-    glm::vec2 rayOrigin = playerComp->GetPosition();
-    rayOrigin.x += playerComp->GetCollider()->GetWidth() * 0.5f;
+    // Get the player's position and collider dimensions
+    glm::vec2 position = playerComp->GetPosition();
+    float colliderWidth = playerComp->GetCollider()->GetWidth();
+    float colliderHeight = playerComp->GetCollider()->GetHeight();
+
+    // Define the raycast parameters
     glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
-    float rayDistance = 3.f;
-    rayOrigin.y += playerComp->GetCollider()->GetHeight() - rayDistance;
-    RaycastResult result = Raycast(rayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
-    if (result.hit)
+    float rayDistance = 3.0f;
+
+    // Calculate ray origins for left and right raycasts
+    glm::vec2 leftRayOrigin = position;
+    leftRayOrigin.x += 1.f;
+    leftRayOrigin.y += colliderHeight - rayDistance;
+
+    glm::vec2 rightRayOrigin = position;
+    rightRayOrigin.x += colliderWidth - 1.f;
+    rightRayOrigin.y += colliderHeight - rayDistance;
+
+    // Perform raycasts
+    RaycastResult leftRayResult = Raycast(leftRayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
+    RaycastResult rightRayResult = Raycast(rightRayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
+
+    // Check if either ray hit the ground
+    if (leftRayResult.hit || rightRayResult.hit)
     {
         if (!playerComp->IsJumping())
         {
             playerComp->SetVerticalVelocity(5);
         }
-
         playerComp->SetIsGrounded(true);
     }
     else
@@ -148,6 +163,7 @@ void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
         playerComp->SetIsGrounded(false);
     }
 }
+
 
 void PlayerAliveState::LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {

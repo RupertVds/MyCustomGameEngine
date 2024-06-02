@@ -15,7 +15,7 @@ public:
     void SetAnimation(int startFrame, int endFrame, bool isLooping = true);
     void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture);
     void Play(const std::string& animationName, int framesPerSecond = 6, bool isLooping = true);
-
+    RenderComponent* GetRenderComponent() const { return m_RenderComponent; }
 private:
     RenderComponent* m_RenderComponent;
     int m_SpriteWidth{};

@@ -64,7 +64,7 @@ void AnimatorComponent::Play(const std::string& animationName, int framesPerSeco
     {
         std::cout << "WARNING: INVALID: " << animationName << " ANIMATION\n";
     }
-}
+} 
 
 void AnimatorComponent::SetSpriteSheet(const std::shared_ptr<Texture2D>& texture)
 {

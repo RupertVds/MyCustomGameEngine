@@ -109,10 +109,13 @@ void PlayerAliveState::HandleHorizontalMovement(PlayerComponent* playerComp)
     if (moveDir.x > 0)
     {
         playerComp->SetHorizontalVelocity(m_MoveSpeed);
+        playerComp->GetAnimator()->GetRenderComponent()->SetIsFlipped(true);
     }
     else if (moveDir.x < 0)
     {
         playerComp->SetHorizontalVelocity(-m_MoveSpeed);
+        playerComp->GetAnimator()->GetRenderComponent()->SetIsFlipped(false);
+
     }
     else if (moveDir.x == 0)
     {

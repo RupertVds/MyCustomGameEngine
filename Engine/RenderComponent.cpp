@@ -21,9 +21,11 @@ void RenderComponent::Render() const
     if (m_Texture != nullptr)
     {
         const auto& pos = GetOwner()->GetWorldPosition();
-        Renderer::GetInstance().RenderTexture(*m_Texture.get(), m_SrcRect, { static_cast<int>(pos.x), static_cast<int>(pos.y),
+        SDL_Rect destRect = { static_cast<int>(pos.x), static_cast<int>(pos.y),
             m_DestRect.w * static_cast<int>(GetOwner()->GetLocalTransform().GetScale().x),
-            m_DestRect.h * static_cast<int>(GetOwner()->GetLocalTransform().GetScale().y) });
+            m_DestRect.h * static_cast<int>(GetOwner()->GetLocalTransform().GetScale().y) };
+
+        Renderer::GetInstance().RenderTexture(*m_Texture.get(), m_SrcRect, destRect, m_IsFlipped);
     }
 }
 
@@ -55,4 +57,9 @@ const SDL_Rect& RenderComponent::GetSrcRect() const
 const SDL_Rect& RenderComponent::GetDestRect() const
 {
     return m_DestRect;
+}
+
+void RenderComponent::SetIsFlipped(bool isFlipped)
+{
+    m_IsFlipped = isFlipped;
 }

@@ -5,6 +5,7 @@
 
 class BoxColliderComponent;
 class CircleColliderComponent;
+class AnimatorComponent;
 
 class PlayerComponent final : public Component
 {
@@ -44,8 +45,10 @@ public:
 	BoxColliderComponent* GetCollider() const { return m_pMainCollider; }
 	BoxColliderComponent* GetCeilingTrigger() const { return m_pCeilingTrigger; }
 	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }
+	AnimatorComponent* GetAnimator() { return m_pAnimator; }
 private:
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
+	AnimatorComponent* m_pAnimator{};
 	BoxColliderComponent* m_pMainCollider{};
 
 	BoxColliderComponent* m_pCeilingTrigger{};

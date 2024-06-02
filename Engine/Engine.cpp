@@ -59,14 +59,26 @@ Engine::Engine(const std::string &dataPath)
 
 	auto& renderer = Renderer::GetInstance();
 
+	Uint32 flags{};
+	if (Renderer::FULLSCREEN)
+	{
+		flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+	}
+	else
+	{
+		flags = SDL_WINDOW_OPENGL;
+	}
+
 	g_window = SDL_CreateWindow(
 		"2GD18 Rupert Vanderstappen",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		renderer.WIDTH,
 		renderer.HEIGHT,
-		SDL_WINDOW_OPENGL
+		flags
 	);
+
+
 	if (g_window == nullptr) 
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());

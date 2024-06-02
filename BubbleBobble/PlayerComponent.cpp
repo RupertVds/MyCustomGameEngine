@@ -3,6 +3,7 @@
 #include <Timer.h>
 #include <Renderer.h>
 #include <Utils.h>
+#include <AnimatorComponent.h>
 
 PlayerComponent::PlayerComponent(GameObject* pOwner)
     :
@@ -12,6 +13,7 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
     // Set the initial state of the player component
     m_StateMachine.SetState(new PlayerEntryState());
     m_pMainCollider = GetOwner()->GetComponent<BoxColliderComponent>();
+    m_pAnimator = GetOwner()->GetComponent<AnimatorComponent>();
 
     auto ceilingTriggerObject = std::make_unique<GameObject>();
     m_pCeilingTrigger = ceilingTriggerObject->AddComponent<BoxColliderComponent>(m_pMainCollider->GetWidth() - 2.f, 12.f, CollisionComponent::ColliderType::STATIC, true);

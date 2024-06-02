@@ -29,6 +29,9 @@ void Renderer::Init(SDL_Window* window)
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
 
+	SDL_RenderSetLogicalSize(m_Renderer, WIDTH, HEIGHT);
+
+
 	//IMGUI_CHECKVERSION();
 	//ImGui::CreateContext();
 	//ImGui_ImplSDL2_InitForOpenGL(m_Window, SDL_GL_GetCurrentContext());

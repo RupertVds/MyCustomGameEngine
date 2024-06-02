@@ -138,6 +138,9 @@
     <ClInclude Include="Utils.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="AnimatorComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -231,6 +234,9 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatorComponent.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>

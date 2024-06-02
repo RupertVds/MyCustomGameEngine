@@ -14,10 +14,11 @@ public:
 	TextComponent(GameObject* pOwner, const std::string& text, std::shared_ptr<Font> font);
 public:
 	virtual void Update() override;
-	void UpdateTexture();
 	//virtual void Render() const override;
 
 	void SetText(const std::string& text);
+private:
+	void UpdateTexture();
 protected:
 	bool m_NeedsUpdate;
 	std::string m_Text;

@@ -2,6 +2,7 @@
 #include "Timer.h"
 #include <Utils.h>
 #include <Renderer.h>
+#include "AnimatorComponent.h"
 
 class BoxColliderComponent;
 
@@ -31,14 +32,15 @@ void PlayerEntryState::Exit(BehaviorStateMachine<PlayerComponent>&)
 }
 
 // Definition of methods for PlayerAliveState
-void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>&)
+void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
     m_MoveSpeed = 120.f;
-    m_JumpSpeed = 245.f;
+    m_JumpSpeed = 240.f;
     m_JumpTime = 0.35f;
     m_JumpTimeThreshold = m_JumpTime * 0.9f;
     m_FallingSpeed = 140.f;
+    stateMachine.GetComponent()->GetAnimator()->Play("Idle");
 }
 
 void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -51,6 +53,24 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
     {
         //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
         playerComp->SetVerticalVelocity(m_FallingSpeed);
+    }
+
+    if (playerComp->IsJumping())
+    {
+        //playerComp->GetAnimator()->Play("Jump");
+    }
+    else
+    {
+        glm::vec2 moveDir = playerComp->GetMovingDirection();
+        if (moveDir.x != 0)
+        {
+            playerComp->GetAnimator()->Play("Run", 12);
+        }
+        else
+        {
+            playerComp->GetAnimator()->Play("Idle", 2);
+        }
+
     }
 }
 
@@ -106,15 +126,15 @@ void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateM
 
     HandleGround(playerComp);
 
-    if (playerComp->GetCeilingTrigger()->IsTriggered() && playerComp->IsJumping() && playerComp->GetJumpCorrectionTrigger()->IsTriggered())
+    if ((playerComp->GetCeilingTrigger()->IsTriggered() && playerComp->IsJumping() && playerComp->GetJumpCorrectionTrigger()->IsTriggered()) || playerComp->GetPosition().y < 0)
     {
-        std::cout << "COLLIDER IS OFF\n";
+        //std::cout << "COLLIDER IS OFF\n";
 
         playerComp->GetCollider()->SetIgnoreStatic(true);
     }
-    else if (!playerComp->IsJumping() && !playerComp->GetJumpCorrectionTrigger()->IsTriggered())
+    else if (!playerComp->IsJumping() && !playerComp->GetJumpCorrectionTrigger()->IsTriggered() && !(playerComp->GetPosition().y < 0))
     {
-        std::cout << "COLLIDER IS ON\n";
+        //std::cout << "COLLIDER IS ON\n";
         playerComp->GetCollider()->SetIgnoreStatic(false);
     }
 
@@ -151,7 +171,7 @@ void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
     // Check if either ray hit the ground
     if (leftRayResult.hit || rightRayResult.hit)
     {
-        if (!playerComp->IsJumping())
+        if (!playerComp->IsJumping() && (playerComp->GetPosition().y > 0))
         {
             playerComp->SetVerticalVelocity(5);
         }

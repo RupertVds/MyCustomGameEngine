@@ -6,15 +6,21 @@
 #include <unordered_map>
 #include <string>
 
+struct Animation
+{
+    std::shared_ptr<Texture2D> m_Sprites;
+    int framesPerSecond{};
+};
+
+
 class AnimatorComponent : public Component
 {
 public:
-    AnimatorComponent(GameObject* pOwner, int spriteWidth, int spriteHeight, int framesPerSecond, bool isLooping = true);
+    AnimatorComponent(GameObject* pOwner, int spriteWidth, int spriteHeight, bool isLooping = true);
 
     void Update() override;
-    void SetAnimation(int startFrame, int endFrame, bool isLooping = true);
-    void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture);
-    void Play(const std::string& animationName, int framesPerSecond = 6, bool isLooping = true);
+    void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int framesPerSecond);
+    void Play(const std::string& animationName, bool isLooping = true);
     RenderComponent* GetRenderComponent() const { return m_RenderComponent; }
 private:
     RenderComponent* m_RenderComponent;
@@ -28,7 +34,7 @@ private:
     int m_TotalColumns{};
     bool m_IsLooping{};
 
-    std::unordered_map<std::string, std::shared_ptr<Texture2D>> m_SpriteSheets;
+    std::unordered_map<std::string, Animation> m_SpriteSheets;
     std::string m_CurrentAnimation;
 
     void UpdateFrame();

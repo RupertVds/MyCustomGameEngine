@@ -40,6 +40,7 @@ void CircleColliderComponent::FixedUpdate()
             {
                 if (collider->GetType() == m_TriggerTargetType)
                 {
+                    m_TriggeredObjects.emplace_back(collider->GetOwner());
                     isTriggered = true;
                 }
             }
@@ -61,6 +62,7 @@ void CircleColliderComponent::FixedUpdate()
             {
                 if (collider->GetType() == m_TriggerTargetType)
                 {
+                    m_TriggeredObjects.emplace_back(collider->GetOwner());
                     isTriggered = true;
                 }
             }
@@ -79,8 +81,16 @@ void CircleColliderComponent::Render() const
         return;
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100); // White color
-    glm::vec2 position = GetOwner()->GetLocalPosition();
+    if (m_IsTriggered)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+    }
+
+    glm::vec2 position = GetOwner()->GetLocalPosition() + m_Offset;
     int centerX = static_cast<int>(position.x + m_Radius);
     int centerY = static_cast<int>(position.y + m_Radius);
     int radius = static_cast<int>(m_Radius);
@@ -92,7 +102,8 @@ void CircleColliderComponent::Render() const
     int dy = 1;
     int err = dx - (radius << 1);
 
-    while (x >= y) {
+    while (x >= y)
+    {
         SDL_RenderDrawPoint(renderer, centerX + x, centerY + y);
         SDL_RenderDrawPoint(renderer, centerX + y, centerY + x);
         SDL_RenderDrawPoint(renderer, centerX - y, centerY + x);
@@ -119,8 +130,8 @@ void CircleColliderComponent::Render() const
 
 bool CircleColliderComponent::CheckCircleCollision(CircleColliderComponent* colliderA, CircleColliderComponent* colliderB)
 {
-    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition() + glm::vec2(m_Radius, m_Radius);
-    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition() + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition() + glm::vec2(m_Radius, m_Radius) + colliderA->GetOffset();
+    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition() + glm::vec2(m_Radius, m_Radius); +colliderB->GetOffset();
     float radiusA = colliderA->GetRadius();
     float radiusB = colliderB->GetRadius();
 
@@ -130,8 +141,8 @@ bool CircleColliderComponent::CheckCircleCollision(CircleColliderComponent* coll
 
 void CircleColliderComponent::ResolveCircleCollision(CircleColliderComponent* colliderA, CircleColliderComponent* colliderB)
 {
-    glm::vec2 posA = glm::vec2(colliderA->GetOwner()->GetWorldPosition()) + glm::vec2(m_Radius, m_Radius);
-    glm::vec2 posB = glm::vec2(colliderB->GetOwner()->GetWorldPosition()) + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posA = glm::vec2(colliderA->GetOwner()->GetWorldPosition() + colliderA->GetOffset()) + glm::vec2(m_Radius, m_Radius);
+    glm::vec2 posB = glm::vec2(colliderB->GetOwner()->GetWorldPosition() + colliderB->GetOffset()) + glm::vec2(m_Radius, m_Radius);
     float radiusA = colliderA->GetRadius();
     float radiusB = colliderB->GetRadius();
 
@@ -144,19 +155,19 @@ void CircleColliderComponent::ResolveCircleCollision(CircleColliderComponent* co
 
     if (colliderA->GetType() == ColliderType::DYNAMIC) {
         posA += correction;
-        colliderA->GetOwner()->SetLocalPosition(posA - glm::vec2(m_Radius, m_Radius));
+        colliderA->GetOwner()->SetLocalPosition(posA - glm::vec2(m_Radius, m_Radius) - colliderA->GetOffset());
     }
 
     if (colliderB->GetType() == ColliderType::DYNAMIC) {
         posB -= correction;
-        colliderB->GetOwner()->SetLocalPosition(posB - glm::vec2(m_Radius, m_Radius));
+        colliderB->GetOwner()->SetLocalPosition(posB - glm::vec2(m_Radius, m_Radius) - colliderB->GetOffset());
     }
 }
 
 bool CircleColliderComponent::CheckCircleBoxCollision(CircleColliderComponent* circle, BoxColliderComponent* box)
 {
-    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
-    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition();
+    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition() + circle->GetOffset()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
+    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition() + box->GetOffset();
     float radius = circle->GetRadius();
 
     // Find the closest point to the circle within the box
@@ -171,8 +182,8 @@ bool CircleColliderComponent::CheckCircleBoxCollision(CircleColliderComponent* c
 
 void CircleColliderComponent::ResolveCircleBoxCollision(CircleColliderComponent* circle, BoxColliderComponent* box)
 {
-    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
-    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition();
+    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition() + circle->GetOffset()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
+    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition() + box->GetOffset();
     float radius = circle->GetRadius();
 
     // Find the closest point to the circle within the box
@@ -190,11 +201,11 @@ void CircleColliderComponent::ResolveCircleBoxCollision(CircleColliderComponent*
 
     if (circle->GetType() == ColliderType::DYNAMIC) {
         circlePos += correction;
-        circle->GetOwner()->SetLocalPosition(circlePos - glm::vec2(radius, radius));
+        circle->GetOwner()->SetLocalPosition(circlePos - glm::vec2(radius, radius) - circle->GetOffset());
     }
 
     if (box->GetType() == ColliderType::DYNAMIC) {
         boxPos -= correction;
-        box->GetOwner()->SetLocalPosition(boxPos);
+        box->GetOwner()->SetLocalPosition(boxPos - box->GetOffset());
     }
 }

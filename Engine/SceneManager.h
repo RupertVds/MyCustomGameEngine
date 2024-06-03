@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include "Singleton.h"
+#include <unordered_map>
 
 class GameObject;
 class Scene;
@@ -17,8 +18,11 @@ public:
 
 	void Render() const;
 	void RenderImGui();
+
+	std::shared_ptr<Scene> GetSceneByName(const std::string& name) const { return m_Scenes.at(name); }
 private:
 	friend class Singleton<SceneManager>;
 	SceneManager() = default;
-	std::vector<std::shared_ptr<Scene>> m_Scenes;
+	//std::vector<std::shared_ptr<Scene>> m_Scenes;
+	std::unordered_map<std::string, std::shared_ptr<Scene>> m_Scenes;
 };

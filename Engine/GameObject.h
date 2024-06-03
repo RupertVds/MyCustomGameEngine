@@ -16,7 +16,7 @@ enum class Event;
 class GameObject final
 {
 public:
-	GameObject() = default;
+	GameObject(const std::string& name = "") : m_Name{ name } {};
 	~GameObject();
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) noexcept = delete;
@@ -49,11 +49,13 @@ public:
 	const Transform& GetLocalTransform() const;
 	void SetScale(const glm::vec3& scale);
 
+	const std::string& GetName() const { return m_Name; }
 	bool IsMarkedForDeletion() const;
 	void DeleteSelf();
 private:
 	void SetPositionDirty();
 private:
+	std::string m_Name{};
 	bool m_IsMarkedForDeletion{ false };
 	bool m_PositionIsDirty{};
 	std::vector<std::unique_ptr<Component>> m_Components{};

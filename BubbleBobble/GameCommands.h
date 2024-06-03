@@ -59,6 +59,23 @@ private:
 	PlayerComponent* m_PlayerComponent;
 };
 
+class PlayerAttackCommand : public GameObjectCommand
+{
+public:
+	PlayerAttackCommand(GameObject* object) : GameObjectCommand(object), m_PlayerComponent(object->GetComponent<PlayerComponent>()) {}
+
+	virtual void Execute() override
+	{
+		if (m_PlayerComponent)
+		{
+			m_PlayerComponent->SetIsAttacking(true);
+		}
+	}
+
+private:
+	PlayerComponent* m_PlayerComponent;
+};
+
 class TakeDamageCommand final : public GameObjectCommand
 {
 public:

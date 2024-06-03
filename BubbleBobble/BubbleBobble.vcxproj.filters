@@ -34,6 +34,9 @@
     <ClCompile Include="PlayerStates.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="BubbleComponent.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommands.h">
@@ -66,6 +69,9 @@
     <ClInclude Include="BehaviorStateMachine.h" />
     <ClInclude Include="PlayerStates.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

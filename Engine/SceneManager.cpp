@@ -6,7 +6,7 @@ void SceneManager::Update()
 {
 	for(auto& scene : m_Scenes)
 	{
-		scene->Update();
+		scene.second->Update();
 	}
 }
 
@@ -14,7 +14,7 @@ void SceneManager::FixedUpdate()
 {
 	for (auto& scene : m_Scenes)
 	{
-		scene->FixedUpdate();
+		scene.second->FixedUpdate();
 	}
 }
 
@@ -22,7 +22,7 @@ void SceneManager::LateUpdate()
 {
 	for (auto& scene : m_Scenes)
 	{
-		scene->LateUpdate();
+		scene.second->LateUpdate();
 	}
 }
 
@@ -30,7 +30,7 @@ void SceneManager::Render() const
 {
 	for (const auto& scene : m_Scenes)
 	{
-		scene->Render();
+		scene.second->Render();
 	}
 }
 
@@ -38,14 +38,15 @@ void SceneManager::RenderImGui()
 {
 	for (const auto& scene : m_Scenes)
 	{
-		scene->RenderImGui();
+		scene.second->RenderImGui();
 	}
 }
 
 Scene& SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
-	m_Scenes.push_back(scene);
+	//m_Scenes.push_back(scene);
+	m_Scenes[name] = scene;
 	//scene->Add(m_RootObject);
 	return *scene;
 }

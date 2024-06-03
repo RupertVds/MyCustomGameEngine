@@ -21,7 +21,15 @@ void GameObject::Update()
         component->Update();
     }
     
+    // Iterate over raw pointers to avoid modifying the container while iterating
+    std::vector<GameObject*> childrenCopy;
+    childrenCopy.reserve(m_Children.size());
     for (auto& child : m_Children)
+    {
+        childrenCopy.emplace_back(child.get());
+    }
+
+    for (auto& child : childrenCopy)
     {
         child->Update();
     }
@@ -44,7 +52,14 @@ void GameObject::FixedUpdate()
         component->FixedUpdate();
     }
 
+    std::vector<GameObject*> childrenCopy;
+    childrenCopy.reserve(m_Children.size());
     for (auto& child : m_Children)
+    {
+        childrenCopy.emplace_back(child.get());
+    }
+
+    for (auto& child : childrenCopy)
     {
         child->FixedUpdate();
     }
@@ -59,7 +74,14 @@ void GameObject::LateUpdate()
         component->LateUpdate();
     }
 
+    std::vector<GameObject*> childrenCopy;
+    childrenCopy.reserve(m_Children.size());
     for (auto& child : m_Children)
+    {
+        childrenCopy.emplace_back(child.get());
+    }
+
+    for (auto& child : childrenCopy)
     {
         child->LateUpdate();
     }
@@ -103,35 +125,6 @@ GameObject* GameObject::GetParent() const
 {
     return m_Parent;
 }
-
-//void GameObject::SetParent(GameObject* pParent, bool keepWorldPosition)
-//{
-//    if (pParent == nullptr)
-//    {
-//        //SetParent(SceneManager::GetInstance().GetRootObject());
-//        // I choose to not allow this (we could also assign the root object of the scene)
-//        throw SetParentIsInvalidException();
-//    }
-//
-//    if (keepWorldPosition)
-//    {
-//        SetLocalPosition(GetWorldPosition() - pParent->GetWorldPosition());
-//        SetPositionDirty();
-//    }
-//
-//    if (pParent == m_Parent ||
-//        pParent == this ||
-//        IsChild(pParent))
-//    {
-//        throw SetParentIsInvalidException();
-//    }
-//
-//    if (m_Parent) m_Parent->RemoveChild(this);
-//
-//    m_Parent = pParent;
-//
-//    if (m_Parent) m_Parent->AddChild(std::unique_ptr<GameObject>(this));
-//}
 
 void GameObject::AddChild(std::unique_ptr<GameObject>&& pChild) {
     // Check if the child is valid
@@ -202,21 +195,6 @@ void GameObject::NotifyObservers(Event event)
         observer->Notify(event, this);
     }
 }
-
-//void GameObject::AddChild(std::unique_ptr<GameObject>&& child)
-//{
-//    m_Children.emplace_back(std::move(child));
-//}
-
-//void GameObject::RemoveChild(GameObject* child)
-//{
-//    auto it = std::remove_if(m_Children.begin(), m_Children.end(),
-//        [child](const std::unique_ptr<GameObject>& c) {
-//            return c.get() == child;
-//        });
-//    m_Children.erase(it, m_Children.end());
-//}
-
 void GameObject::UpdateWorldPosition()
 {
     if (m_PositionIsDirty)
@@ -283,12 +261,6 @@ void GameObject::DeleteSelf()
     {
         child->DeleteSelf();
     }
-    //m_Children.clear();
-
-    //if (m_Parent)
-    //{
-    //    m_Parent->RemoveChild(this);
-    //}
 }
 
 

@@ -28,7 +28,7 @@
 #include <AnimatorComponent.h>
 
 void load() {
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
+	auto& scene = SceneManager::GetInstance().CreateScene("level");
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
 	auto& inputManager = InputManager::GetInstance();
 #if _DEBUG
@@ -59,26 +59,26 @@ void load() {
 	//testCollider->SetLocalPosition({ 300, 200 });
 
 	// Player one
-	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>();
+	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
 	auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
 	auto playerTwoRunTexture = ResourceManager::GetInstance().LoadTexture("player_2_run.png");
 	auto playerOneIdleTexture = ResourceManager::GetInstance().LoadTexture("player_1_idle.png");
 	auto playerTwoIdleTexture = ResourceManager::GetInstance().LoadTexture("player_2_idle.png");
 	playerOneObject->AddComponent<RenderComponent>(playerOneRunTexture);
-	auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>(16, 16, 2, true);
+	auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>(16, 16, true);
 	playerOneObject->SetLocalPosition({ Renderer::WIDTH / 2 - 50, 25 });
 	playerOneObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	//playerOneObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->AddComponent<PlayerComponent>();
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
-	playerOneAnimator->AddSpriteSheet("Run", playerOneRunTexture);
-	playerOneAnimator->AddSpriteSheet("Idle", playerOneIdleTexture);
+	playerOneAnimator->AddSpriteSheet("Run", playerOneRunTexture, 12);
+	playerOneAnimator->AddSpriteSheet("Idle", playerOneIdleTexture, 4);
 
 	// Player two
-	std::unique_ptr<GameObject> playerTwoObject = std::make_unique<GameObject>();
+	std::unique_ptr<GameObject> playerTwoObject = std::make_unique<GameObject>("player_2");
 	playerTwoObject->AddComponent<RenderComponent>(playerTwoRunTexture);
-	auto playerTwoAnimator = playerTwoObject->AddComponent<AnimatorComponent>(16, 16, 2, true);
+	auto playerTwoAnimator = playerTwoObject->AddComponent<AnimatorComponent>(16, 16, true);
 
 	playerTwoObject->SetLocalPosition({ Renderer::WIDTH / 2 + 50, 25 });
 	//playerTwoObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
@@ -86,12 +86,13 @@ void load() {
 	playerTwoObject->AddComponent<PlayerComponent>();
 	playerTwoObject->SetScale({ 2.f, 2.f, 2.f });
 
-	playerTwoAnimator->AddSpriteSheet("Run", playerTwoRunTexture);
-	playerTwoAnimator->AddSpriteSheet("Idle", playerTwoIdleTexture);
+	playerTwoAnimator->AddSpriteSheet("Run", playerTwoRunTexture, 12);
+	playerTwoAnimator->AddSpriteSheet("Idle", playerTwoIdleTexture, 4);
 
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<JumpCommand>(), InputMode::Press });
+	inputManager.BindInput(SDL_SCANCODE_SPACE, InputBinding{ playerOneObject->AddCommand<PlayerAttackCommand>(), InputMode::Press });
 	inputManager.BindInput(SDL_SCANCODE_0, InputBinding{ playerOneObject->AddCommand<PlaySFX>("Mega_Man_3_The_Passing_of_the_Blue_Crown_OC_ReMix.mp3", 0.1f), InputMode::Press});
 	inputManager.BindInput(SDL_SCANCODE_1, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_1.wav", 0.2f), InputMode::Press});
 	inputManager.BindInput(SDL_SCANCODE_2, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_2.wav", 0.2f), InputMode::Press});
@@ -99,6 +100,7 @@ void load() {
 	inputManager.BindInput(SDL_SCANCODE_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_UP, InputBinding{ playerTwoObject->AddCommand<JumpCommand>(), InputMode::Press });
+	inputManager.BindInput(SDL_SCANCODE_RCTRL, InputBinding{ playerTwoObject->AddCommand<PlayerAttackCommand>(), InputMode::Press });
 
 	inputManager.AddController();
 	inputManager.BindInput(0, GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), InputMode::Hold });

@@ -3,6 +3,8 @@
 #include <Utils.h>
 #include <Renderer.h>
 #include "AnimatorComponent.h"
+#include "BubbleComponent.h"
+#include "ResourceManager.h"
 
 class BoxColliderComponent;
 
@@ -64,13 +66,42 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
         glm::vec2 moveDir = playerComp->GetMovingDirection();
         if (moveDir.x != 0)
         {
-            playerComp->GetAnimator()->Play("Run", 12);
+            playerComp->GetAnimator()->Play("Run");
         }
         else
         {
-            playerComp->GetAnimator()->Play("Idle", 2);
+            playerComp->GetAnimator()->Play("Idle");
+        }
+    }
+
+    if (playerComp->IsAttacking())
+    {
+        auto bubbleObject = std::make_unique<GameObject>("bubble");
+        auto bubbleCompleteTexture = ResourceManager::GetInstance().LoadTexture("bubble.png");
+        auto bubbleFormingTexture = ResourceManager::GetInstance().LoadTexture("bubble_forming.png");
+        bubbleObject->AddComponent<RenderComponent>();
+        bubbleObject->SetScale({2.f, 2.f, 2.f});
+        auto bubbleAnimator = bubbleObject->AddComponent<AnimatorComponent>(16, 16, 6);
+        bubbleObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC, true, CollisionComponent::ColliderType::DYNAMIC);
+        
+        bubbleAnimator->AddSpriteSheet("forming", bubbleFormingTexture, 12);
+        bubbleAnimator->AddSpriteSheet("complete", bubbleCompleteTexture, 1);
+
+        if (playerComp->GetAnimator()->GetRenderComponent()->IsFlipped())
+        {
+            bubbleObject->AddComponent<BubbleComponent>(glm::vec2{ 1, 0 });
+            bubbleObject->SetLocalPosition({ playerComp->GetPosition().x + playerComp->GetCollider()->GetWidth() * 1.25f, playerComp->GetPosition().y});
+
+        }
+        else
+        {
+            bubbleObject->AddComponent<BubbleComponent>(glm::vec2{ -1, 0 });
+            bubbleObject->SetLocalPosition({ playerComp->GetPosition().x - playerComp->GetCollider()->GetWidth() * 1.25f, playerComp->GetPosition().y });
         }
 
+        auto scene = SceneManager::GetInstance().GetSceneByName("level");
+        scene->Add(std::move(bubbleObject));
+        playerComp->SetIsAttacking(false);
     }
 }
 
@@ -150,7 +181,7 @@ void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateM
 void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
 {
     // Get the player's position and collider dimensions
-    glm::vec2 position = playerComp->GetPosition();
+    glm::vec2 position = playerComp->GetPosition() + playerComp->GetCollider()->GetOffset();
     float colliderWidth = playerComp->GetCollider()->GetWidth();
     float colliderHeight = playerComp->GetCollider()->GetHeight();
 

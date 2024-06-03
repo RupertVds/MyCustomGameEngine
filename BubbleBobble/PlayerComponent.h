@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "BehaviorStateMachine.h"
 #include "BehaviorState.h"
+#include <Scene.h>
 
 class BoxColliderComponent;
 class CircleColliderComponent;
@@ -32,7 +33,14 @@ public:
 			m_IsJumping = true;
 		}
 	}
-	bool IsJumping() { return m_IsJumping; }
+
+	bool IsJumping() const { return m_IsJumping; }
+
+	void SetIsAttacking(bool state)
+	{
+		m_IsAttacking = state;
+	}
+	bool IsAttacking() const { return m_IsAttacking; }
 
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
@@ -47,6 +55,7 @@ public:
 	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }
 	AnimatorComponent* GetAnimator() { return m_pAnimator; }
 private:
+	std::shared_ptr<Scene> m_CurrentScene;
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
 	AnimatorComponent* m_pAnimator{};
 	BoxColliderComponent* m_pMainCollider{};
@@ -57,6 +66,7 @@ private:
 
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
+	bool m_IsAttacking{};
 	glm::vec2 m_Velocity{};
 	glm::vec2 m_MovementDirection{};
 };

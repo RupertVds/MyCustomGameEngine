@@ -8,7 +8,7 @@ unsigned int Scene::m_IdCounter = 0;
 Scene::Scene(const std::string& name) 
 	: 
 	m_Name(name),
-	m_RootObject{std::make_unique<GameObject>()}
+	m_RootObject{std::make_unique<GameObject>("name")}
 {
 	//m_RootObject->SetParent(nullptr); // Root object has no parent
 }

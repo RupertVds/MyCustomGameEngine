@@ -32,7 +32,7 @@ void BoxColliderComponent::Render() const
     }
 
     SDL_Rect rect;
-    glm::vec2 position = GetOwner()->GetWorldPosition();
+    glm::vec2 position = GetOwner()->GetWorldPosition() + m_Offset;
     rect.x = static_cast<int>(position.x);
     rect.y = static_cast<int>(position.y);
     rect.w = static_cast<int>(m_Width);
@@ -70,6 +70,7 @@ void BoxColliderComponent::FixedUpdate()
             {
                 if (collider->GetType() == m_TriggerTargetType)
                 {
+                    m_TriggeredObjects.emplace_back(collider->GetOwner());
                     isTriggered = true;
                 }
             }
@@ -91,6 +92,7 @@ void BoxColliderComponent::FixedUpdate()
             {
                 if (collider->GetType() == m_TriggerTargetType)
                 {
+                    m_TriggeredObjects.emplace_back(collider->GetOwner());
                     isTriggered = true;
                 }
             }
@@ -103,8 +105,8 @@ void BoxColliderComponent::FixedUpdate()
 bool BoxColliderComponent::CheckCollision(BoxColliderComponent* colliderA, BoxColliderComponent* colliderB)
 {
     // AABB collision detection
-    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition();
-    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition();
+    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition() + colliderA->m_Offset;
+    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition() + colliderB->m_Offset;
 
     return (posA.x < posB.x + colliderB->m_Width &&
         posA.x + colliderA->m_Width > posB.x &&
@@ -115,8 +117,8 @@ bool BoxColliderComponent::CheckCollision(BoxColliderComponent* colliderA, BoxCo
 void BoxColliderComponent::ResolveCollision(BoxColliderComponent* colliderA, BoxColliderComponent* colliderB)
 {
     // Get positions and dimensions of the colliders
-    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition();
-    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition();
+    glm::vec2 posA = colliderA->GetOwner()->GetWorldPosition() + colliderA->m_Offset;
+    glm::vec2 posB = colliderB->GetOwner()->GetWorldPosition() + colliderB->m_Offset;
     float widthA = colliderA->m_Width;
     float heightA = colliderA->m_Height;
     float widthB = colliderB->m_Width;
@@ -151,18 +153,18 @@ void BoxColliderComponent::ResolveCollision(BoxColliderComponent* colliderA, Box
     // Apply correction to dynamic collider
     if (colliderA->GetType() == ColliderType::DYNAMIC) {
         posA -= correction;
-        colliderA->GetOwner()->SetLocalPosition(posA);
+        colliderA->GetOwner()->SetLocalPosition(posA - colliderA->GetOffset());
     }
     else if (colliderB->GetType() == ColliderType::DYNAMIC) {
         posB += correction;
-        colliderB->GetOwner()->SetLocalPosition(posB);
+        colliderB->GetOwner()->SetLocalPosition(posB - colliderB->GetOffset());
     }
 }
 
 bool BoxColliderComponent::CheckCircleBoxCollision(CircleColliderComponent* circle, BoxColliderComponent* box)
 {
-    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
-    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition();
+    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition() + circle->GetOffset()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
+    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition() + box->GetOffset();
     float radius = circle->GetRadius();
     float boxWidth = box->GetWidth();
     float boxHeight = box->GetHeight();
@@ -181,8 +183,8 @@ bool BoxColliderComponent::CheckCircleBoxCollision(CircleColliderComponent* circ
 
 void BoxColliderComponent::ResolveCircleBoxCollision(CircleColliderComponent* circle, BoxColliderComponent* box)
 {
-    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
-    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition();
+    glm::vec2 circlePos = glm::vec2(circle->GetOwner()->GetWorldPosition() + circle->GetOffset()) + glm::vec2(circle->GetRadius(), circle->GetRadius());
+    glm::vec2 boxPos = box->GetOwner()->GetWorldPosition() + box->GetOffset();
     float radius = circle->GetRadius();
     float boxWidth = box->GetWidth();
     float boxHeight = box->GetHeight();
@@ -203,11 +205,11 @@ void BoxColliderComponent::ResolveCircleBoxCollision(CircleColliderComponent* ci
 
     if (circle->GetType() == ColliderType::DYNAMIC) {
         circlePos += correction;
-        circle->GetOwner()->SetLocalPosition(circlePos);
+        circle->GetOwner()->SetLocalPosition(circlePos - circle->GetOffset());
     }
 
     if (box->GetType() == ColliderType::DYNAMIC) {
         boxPos -= correction;
-        box->GetOwner()->SetLocalPosition(boxPos);
+        box->GetOwner()->SetLocalPosition(boxPos - box->GetOffset());
     }
 }

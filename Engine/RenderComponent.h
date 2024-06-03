@@ -19,6 +19,7 @@ public:
     const SDL_Rect& GetDestRect() const;
 
     void SetIsFlipped(bool isFlipped);
+    bool IsFlipped() const { return m_IsFlipped; }
 
 private:
     std::shared_ptr<Texture2D> m_Texture;

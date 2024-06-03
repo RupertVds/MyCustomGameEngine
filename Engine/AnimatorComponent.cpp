@@ -3,11 +3,11 @@
 #include "Timer.h"
 #include <iostream>
 
-AnimatorComponent::AnimatorComponent(GameObject* pOwner, int spriteWidth, int spriteHeight, int framesPerSecond, bool isLooping)
+AnimatorComponent::AnimatorComponent(GameObject* pOwner, int spriteWidth, int spriteHeight, bool isLooping)
     : Component(pOwner),
     m_SpriteWidth(spriteWidth),
     m_SpriteHeight(spriteHeight),
-    m_FramesPerSecond(framesPerSecond),
+    m_FramesPerSecond(0),
     m_CurrentFrame(0),
     m_StartFrame(0),
     m_EndFrame(0),
@@ -37,15 +37,15 @@ void AnimatorComponent::Update()
     }
 }
 
-void AnimatorComponent::AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture)
+void AnimatorComponent::AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int framesPerSecond)
 {
-    m_SpriteSheets[animationName] = texture;
+    m_SpriteSheets[animationName] = { texture, framesPerSecond };
 
-    Play(animationName);
+    Play(animationName, m_FramesPerSecond);
     UpdateFrame();
 }
 
-void AnimatorComponent::Play(const std::string& animationName, int framesPerSecond, bool isLooping)
+void AnimatorComponent::Play(const std::string& animationName, bool isLooping)
 {
     if (m_SpriteSheets.find(animationName) != m_SpriteSheets.end())
     {
@@ -55,10 +55,10 @@ void AnimatorComponent::Play(const std::string& animationName, int framesPerSeco
             //std::cout << "WARNING: ALREADY PLAYING THE: " << animationName << " ANIMATION\n";
         }
 
-        m_FramesPerSecond = framesPerSecond;
+        m_FramesPerSecond = m_SpriteSheets[animationName].framesPerSecond;
         m_CurrentAnimation = animationName;
         m_IsLooping = isLooping;
-        SetSpriteSheet(m_SpriteSheets[animationName]);
+        SetSpriteSheet(m_SpriteSheets[animationName].m_Sprites);
     }
     else
     {

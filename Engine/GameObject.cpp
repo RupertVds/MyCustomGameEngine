@@ -6,10 +6,15 @@
 #include "Exceptions.h"
 #include "SceneManager.h"
 #include <iostream>
+#include "InputManager.h"
 
 GameObject::~GameObject()
 {
-    std::cout << "DESTRUCTED: " << this << '\n';
+    std::cout << "DESTRUCTED-> NAME: " + m_Name << ", ADDRESS: " << this << '\n';
+    if (!m_Commands.empty() && m_IsMarkedForDeletion)
+    {
+        InputManager::GetInstance().UnbindAllForObject(this);
+    }
 }
 
 void GameObject::Update()

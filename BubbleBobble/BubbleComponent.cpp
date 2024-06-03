@@ -41,7 +41,7 @@ void BubbleComponent::Update()
             auto triggeredObjects = m_pMainTrigger->GetTriggeredObjects();
             for (auto triggeredObject : triggeredObjects)
             {
-                if (triggeredObject->GetName() == "player_2")
+                if (triggeredObject->GetName() == "player_1")
                 {
                     GetOwner()->DeleteSelf();
                     triggeredObject->DeleteSelf();

@@ -94,3 +94,54 @@ void InputManager::BindInput(int controllerIndex, unsigned short button, InputBi
     }
     throw std::runtime_error("Invalid Controller Index: " + std::to_string(controllerIndex) + "!");
 }
+
+void InputManager::UnbindInput(SDL_Scancode key)
+{
+    m_KeyboardBindings.erase(key);
+}
+
+void InputManager::UnbindInput(int controllerIndex, unsigned short button)
+{
+    for (auto& controller : m_Controllers)
+    {
+        if (controller->GetIndex() == controllerIndex)
+        {
+            controller->UnbindInput(button);
+            return;
+        }
+    }
+}
+
+void InputManager::UnbindAllForObject(GameObject* object)
+{
+    if (!object) return; // Null check
+
+    std::cout << "Unbinding all for GameObject: " << object << "\n";
+
+    if (!m_KeyboardBindings.empty()) {
+        UnbindAllForObjectInMap(m_KeyboardBindings, object);
+    }
+
+    for (auto& controller : m_Controllers) {
+        if (controller) { // Null check
+            std::cout << "Unbinding all for GameObject in controller: " << controller->GetIndex() << "\n";
+            controller->UnbindAllForObject(object);
+        }
+    }
+}
+
+void InputManager::ClearAllBindings()
+{
+    //std::cout << "Clearing all bindings\n";
+
+    //for (auto& [key, binding] : m_KeyboardBindings) {
+    //    delete binding.command;
+    //}
+    //m_KeyboardBindings.clear();
+
+    //for (auto& controller : m_Controllers) {
+    //    if (controller) {
+    //        controller->ClearAllBindings();
+    //    }
+    //}
+}

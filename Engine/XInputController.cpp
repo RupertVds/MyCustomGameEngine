@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <xinput.h>
 #include <unordered_map>
+#include <iostream>
 
 // PIMPL
 class XInputController::XInputControllerImpl final
@@ -63,6 +64,24 @@ public:
         m_ControllerBindings[button] = std::move(inputBinding);
     }
 
+    void UnbindInput(unsigned short button)
+    {
+        m_ControllerBindings.erase(button);
+    }
+
+    void UnbindAllForObject(GameObject* object)
+    {
+        for (auto it = m_ControllerBindings.begin(); it != m_ControllerBindings.end(); ) {
+            if (it->second.gameObject == object) {
+                std::cout << "Erasing controller binding for button: " << it->first << "\n";
+                it = m_ControllerBindings.erase(it);
+            }
+            else {
+                ++it;
+            }
+        }
+    }
+
     int GetIndex() const { return m_Index; }
 private:
     int m_Index;
@@ -89,6 +108,19 @@ void XInputController::ProcessInput()
 void XInputController::BindInput(unsigned short button, InputBinding inputBinding)
 {
     m_pImpl->BindInput(button, inputBinding);
+}
+
+void XInputController::UnbindInput(unsigned short button)
+{
+    m_pImpl->UnbindInput(button);
+}
+
+void XInputController::UnbindAllForObject(GameObject* object)
+{
+    if (!object) return; // Null check
+
+    std::cout << "Unbinding all for GameObject in XInputController: " << m_pImpl->GetIndex() << "\n";
+    m_pImpl->UnbindAllForObject(object);
 }
 
 int XInputController::GetIndex() const

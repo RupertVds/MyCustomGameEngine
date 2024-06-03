@@ -14,6 +14,8 @@ public:
 	void ProcessInput();
 	// Register a controller command to be executed when a specific button event occurs
 	void BindInput(unsigned short button, InputBinding inputBinding);
+	void UnbindInput(unsigned short button);
+	void UnbindAllForObject(GameObject* object);
 
 	int GetIndex() const;
 private:

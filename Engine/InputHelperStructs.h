@@ -2,6 +2,7 @@
 #include <functional>
 #include <memory>
 #include "Command.h"
+#include "GameObject.h"
 
 // Enum to represent different input modes
 // This allows the user to pass these in when binding input
@@ -16,6 +17,7 @@ enum class InputMode
 struct InputBinding
 {
 	Command* command;
+	GameObject* gameObject = nullptr;
 	InputMode mode = InputMode::Press;
 };
 

@@ -28,11 +28,15 @@ private:
     AnimatorComponent* m_pAnimator{};
     CircleColliderComponent* m_pMainTrigger{};
 
-    const float m_Speed{ 300.f };
+    const float m_FormingSpeed{ 300.f };
     float m_FormingTimer{};
     const float m_FormingTime{ 0.5f };
 
     float m_PoppingTimer{};
-    const float m_PoppingTime{ 0.5f };
+    const float m_PoppingTime{ 3.f };
     glm::vec2 m_Velocity{};
+
+    const float m_CompletedSpeed{ 100.f };
+    const float m_Amplitude{ 0.5f };
+    const float m_Frequency{ 2.f };
 };

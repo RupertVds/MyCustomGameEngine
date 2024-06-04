@@ -9,6 +9,8 @@
 struct Animation
 {
     std::shared_ptr<Texture2D> m_Sprites;
+    int spriteWidth{};
+    int spriteHeight{};
     int framesPerSecond{};
 };
 
@@ -16,10 +18,10 @@ struct Animation
 class AnimatorComponent : public Component
 {
 public:
-    AnimatorComponent(GameObject* pOwner, int spriteWidth, int spriteHeight, bool isLooping = true);
+    AnimatorComponent(GameObject* pOwner, bool isLooping = true);
 
     void Update() override;
-    void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int framesPerSecond);
+    void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int spriteWidth, int spriteHeight, int framesPerSecond);
     void Play(const std::string& animationName, bool isLooping = true);
     RenderComponent* GetRenderComponent() const { return m_RenderComponent; }
     bool ReachedEndFrame() const;

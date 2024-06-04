@@ -13,8 +13,10 @@ void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
 {
     std::cout << "PlayerEntryState: Entered" << '\n';
     PlayerComponent* playerComp = stateMachine.GetComponent();
-    playerComp->GetAnimator()->Play("JumpDown", true);
 
+    // replace to bubble animation
+    playerComp->GetAnimator()->Play("JumpDown", true);
+    playerComp->GetCollider()->SetIgnoreStatic(true);
     // set to constant velocity
     playerComp->SetVelocity({ 0, m_MovingDownSpeed });
 }
@@ -51,12 +53,24 @@ void PlayerEntryState::Exit(BehaviorStateMachine<PlayerComponent>&)
 void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerAliveState: Entered" << std::endl;
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+
     m_MoveSpeed = 120.f;
     m_JumpSpeed = 240.f;
     m_JumpTime = 0.35f;
     m_JumpTimeThreshold = m_JumpTime * 0.9f;
     m_FallingSpeed = 140.f;
-    stateMachine.GetComponent()->GetAnimator()->Play("Idle");
+    playerComp->GetCollider()->SetIsDisabled(false);
+    playerComp->GetAnimator()->Play("Idle");
+
+    if (playerComp->GetOwner()->GetName() == "player_1")
+    {
+        playerComp->GetOwner()->SetLocalPosition({ 75, Renderer::HEIGHT - 52 });
+    }
+    else if (playerComp->GetOwner()->GetName() == "player_2")
+    {
+        playerComp->GetOwner()->SetLocalPosition({ Renderer::WIDTH - 75, Renderer::HEIGHT - 52 });
+    }
 }
 
 void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -94,11 +108,11 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
 
         bubbleObject->AddComponent<RenderComponent>();
         bubbleObject->SetScale({2.f, 2.f, 2.f});
-        auto bubbleAnimator = bubbleObject->AddComponent<AnimatorComponent>(16, 16, 6);
+        auto bubbleAnimator = bubbleObject->AddComponent<AnimatorComponent>(6);
         bubbleObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC, true, CollisionComponent::ColliderType::DYNAMIC);
         
-        bubbleAnimator->AddSpriteSheet("forming", bubbleFormingTexture, 12);
-        bubbleAnimator->AddSpriteSheet("complete", bubbleCompleteTexture, 1);
+        bubbleAnimator->AddSpriteSheet("forming", bubbleFormingTexture, 16, 16, 12);
+        bubbleAnimator->AddSpriteSheet("complete", bubbleCompleteTexture, 16, 16, 1);
 
         if (playerComp->GetAnimator()->GetRenderComponent()->IsFlipped())
         {
@@ -300,7 +314,11 @@ void PlayerAliveState::Exit(BehaviorStateMachine<PlayerComponent>&)
 void PlayerDeadState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerDeadState: Entered" << std::endl;
-    stateMachine.GetComponent()->GetAnimator()->Play("Death", false);
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+
+    playerComp->GetCollider()->SetIsDisabled(true);
+    playerComp->GetAnimator()->Play("Death", false);
+    playerComp->GetOwner()->SetLocalPosition({ playerComp->GetOwner()->GetLocalPosition().x, playerComp->GetOwner()->GetLocalPosition().y - playerComp->GetCollider()->GetHeight() });
 }
 
 void PlayerDeadState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -308,7 +326,7 @@ void PlayerDeadState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine
     std::cout << "PlayerDeadState: Updated" << std::endl;
     if (stateMachine.GetComponent()->GetAnimator()->ReachedEndFrame())
     {
-        stateMachine.SetState(new PlayerEntryState());
+        stateMachine.SetState(new PlayerAliveState());
     }
     
     //stateMachine.SetState(new PlayerEntryState());

@@ -20,12 +20,15 @@ public:
 
     const glm::vec2& GetOffset() const { return m_Offset; }
     void SetOffset(const glm::vec2& offset) { m_Offset = offset; }
+
+    void SetIsDisabled(bool isDisabled) { m_IsDisabled = isDisabled; }
 protected:
     explicit CollisionComponent(GameObject* pOwner, ColliderType type, bool isTrigger, ColliderType triggerTargetType)
         : Component(pOwner),
         m_Type{ type }, m_IsTrigger{ isTrigger }, m_TriggerTargetType{ triggerTargetType }
     {}
 
+    bool m_IsDisabled{};
     ColliderType m_Type{};
     bool m_IsTrigger{};
     bool m_IsTriggered{};

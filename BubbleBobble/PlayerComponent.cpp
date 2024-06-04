@@ -12,7 +12,6 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
 {
     // Set the initial state of the player component
     m_pAnimator = GetOwner()->GetComponent<AnimatorComponent>();
-    m_StateMachine.SetState(new PlayerEntryState());
     
     m_pMainCollider = GetOwner()->GetComponent<BoxColliderComponent>();
     m_pMainCollider->SetOffset({ 5, 0 });
@@ -28,7 +27,9 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
     jumpingCorrectionTriggerObject->SetLocalPosition({ 0, 0});
     jumpingCorrectionTriggerObject->SetLocalPosition(jumpingCorrectionTriggerObject->GetLocalPosition() + m_pMainCollider->GetOffset());
 
+
     this->GetOwner()->AddChild(std::move(jumpingCorrectionTriggerObject));
+    m_StateMachine.SetState(new PlayerEntryState());
 
 }
 

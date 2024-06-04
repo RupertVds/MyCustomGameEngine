@@ -17,6 +17,8 @@ CircleColliderComponent::~CircleColliderComponent()
 
 void CircleColliderComponent::FixedUpdate()
 {
+    if (m_IsDisabled) return;
+
     if (m_Type == ColliderType::STATIC && !m_IsTrigger)
         return; // No need to handle collision for static colliders
 
@@ -81,13 +83,20 @@ void CircleColliderComponent::Render() const
         return;
     }
 
-    if (m_IsTriggered)
+    if (m_IsDisabled)
     {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
     }
     else
     {
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+        if (m_IsTriggered)
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+        }
     }
 
     glm::vec2 position = GetOwner()->GetLocalPosition() + m_Offset;

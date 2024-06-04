@@ -75,24 +75,24 @@ void load() {
 	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
 
 	playerOneObject->AddComponent<RenderComponent>(playerOneRunTexture);
-	auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>(16, 16, true);
+	auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>();
 	playerOneObject->SetLocalPosition({ Renderer::WIDTH / 2 - 50, 25 });
 	playerOneObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	//playerOneObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
 	playerOneObject->AddComponent<PlayerComponent>();
 	playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
-	playerOneAnimator->AddSpriteSheet("Run", playerOneRunTexture, 12);
-	playerOneAnimator->AddSpriteSheet("Idle", playerOneIdleTexture, 4);
-	playerOneAnimator->AddSpriteSheet("Attack", playerOneAttackTexture, 20);
-	playerOneAnimator->AddSpriteSheet("JumpUp", playerOneJumpUpTexture, 6);
-	playerOneAnimator->AddSpriteSheet("Death", playerOneDeathTexture, 12);
-	playerOneAnimator->AddSpriteSheet("JumpDown", playerOneJumpDownTexture, 12);
+	playerOneAnimator->AddSpriteSheet("Run", playerOneRunTexture, 16, 16, 12);
+	playerOneAnimator->AddSpriteSheet("Idle", playerOneIdleTexture, 16, 16, 4);
+	playerOneAnimator->AddSpriteSheet("Attack", playerOneAttackTexture, 16, 16, 20);
+	playerOneAnimator->AddSpriteSheet("JumpUp", playerOneJumpUpTexture, 16, 16, 6);
+	playerOneAnimator->AddSpriteSheet("Death", playerOneDeathTexture, 16, 32, 8);
+	playerOneAnimator->AddSpriteSheet("JumpDown", playerOneJumpDownTexture, 16, 16, 12);
 
 	// Player two
 	std::unique_ptr<GameObject> playerTwoObject = std::make_unique<GameObject>("player_2");
 	playerTwoObject->AddComponent<RenderComponent>(playerTwoRunTexture);
-	auto playerTwoAnimator = playerTwoObject->AddComponent<AnimatorComponent>(16, 16, true);
+	auto playerTwoAnimator = playerTwoObject->AddComponent<AnimatorComponent>();
 
 	playerTwoObject->SetLocalPosition({ Renderer::WIDTH / 2 + 50, 25 });
 	//playerTwoObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
@@ -100,19 +100,19 @@ void load() {
 	playerTwoObject->AddComponent<PlayerComponent>();
 	playerTwoObject->SetScale({ 2.f, 2.f, 2.f });
 
-	playerTwoAnimator->AddSpriteSheet("Run", playerTwoRunTexture, 12);
-	playerTwoAnimator->AddSpriteSheet("Idle", playerTwoIdleTexture, 4);
-	playerTwoAnimator->AddSpriteSheet("Attack", playerTwoAttackTexture, 20);
-	playerTwoAnimator->AddSpriteSheet("JumpUp", playerTwoJumpUpTexture, 6);
-	playerTwoAnimator->AddSpriteSheet("JumpDown", playerTwoJumpDownTexture, 12);
+	playerTwoAnimator->AddSpriteSheet("Run", playerTwoRunTexture, 16, 16, 12);
+	playerTwoAnimator->AddSpriteSheet("Idle", playerTwoIdleTexture, 16, 16, 4);
+	playerTwoAnimator->AddSpriteSheet("Attack", playerTwoAttackTexture, 16, 16, 20);
+	playerTwoAnimator->AddSpriteSheet("JumpUp", playerTwoJumpUpTexture, 16, 16, 6);
+	playerTwoAnimator->AddSpriteSheet("JumpDown", playerTwoJumpDownTexture, 16, 16, 12);
 
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerOneObject.get(), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerOneObject.get(), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_W, InputBinding{ playerOneObject->AddCommand<JumpCommand>(), playerOneObject.get(), InputMode::Press });
 	inputManager.BindInput(SDL_SCANCODE_SPACE, InputBinding{ playerOneObject->AddCommand<PlayerAttackCommand>(), playerOneObject.get(), InputMode::Press });
-	inputManager.BindInput(SDL_SCANCODE_0, InputBinding{ playerOneObject->AddCommand<PlaySFX>("Mega_Man_3_The_Passing_of_the_Blue_Crown_OC_ReMix.mp3", 0.1f), playerOneObject.get(), InputMode::Press});
-	inputManager.BindInput(SDL_SCANCODE_1, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_1.wav", 0.2f), playerOneObject.get(), InputMode::Press});
-	inputManager.BindInput(SDL_SCANCODE_2, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_2.wav", 0.2f), playerOneObject.get(), InputMode::Press});
+	inputManager.BindInput(SDL_SCANCODE_0, InputBinding{ playerOneObject->AddCommand<PlaySFX>("normal_mode.mp3", 0.1f), playerOneObject.get(), InputMode::Press});
+	inputManager.BindInput(SDL_SCANCODE_1, InputBinding{ playerOneObject->AddCommand<PlaySFX>("versus_mode.mp3", 0.2f), playerOneObject.get(), InputMode::Press});
+	inputManager.BindInput(SDL_SCANCODE_2, InputBinding{ playerOneObject->AddCommand<PlaySFX>("versus_mode_2.wav", 0.2f), playerOneObject.get(), InputMode::Press});
 
 	inputManager.BindInput(SDL_SCANCODE_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });

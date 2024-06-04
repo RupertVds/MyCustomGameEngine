@@ -3,10 +3,10 @@
 #include "Timer.h"
 #include <iostream>
 
-AnimatorComponent::AnimatorComponent(GameObject* pOwner, int spriteWidth, int spriteHeight, bool isLooping)
+AnimatorComponent::AnimatorComponent(GameObject* pOwner, bool isLooping)
     : Component(pOwner),
-    m_SpriteWidth(spriteWidth),
-    m_SpriteHeight(spriteHeight),
+    m_SpriteWidth(16),
+    m_SpriteHeight(16),
     m_FramesPerSecond(0),
     m_CurrentFrame(0),
     m_StartFrame(0),
@@ -37,9 +37,9 @@ void AnimatorComponent::Update()
     }
 }
 
-void AnimatorComponent::AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int framesPerSecond)
+void AnimatorComponent::AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int spriteWidth, int spriteHeight, int framesPerSecond)
 {
-    m_SpriteSheets[animationName] = { texture, framesPerSecond };
+    m_SpriteSheets[animationName] = { texture, spriteWidth, spriteHeight, framesPerSecond };
 
     Play(animationName, m_FramesPerSecond);
     UpdateFrame();
@@ -56,6 +56,8 @@ void AnimatorComponent::Play(const std::string& animationName, bool isLooping)
         }
 
         m_FramesPerSecond = m_SpriteSheets[animationName].framesPerSecond;
+        m_SpriteWidth = m_SpriteSheets[animationName].spriteWidth;
+        m_SpriteHeight = m_SpriteSheets[animationName].spriteHeight;
         m_CurrentAnimation = animationName;
         m_IsLooping = isLooping;
         SetSpriteSheet(m_SpriteSheets[animationName].m_Sprites);
@@ -93,6 +95,13 @@ void AnimatorComponent::SetSpriteSheet(const std::shared_ptr<Texture2D>& texture
         srcRect.h = m_SpriteHeight;
 
         m_RenderComponent->SetSrcRect(srcRect);
+
+        SDL_Rect destRect;
+        destRect.x = static_cast<int>(GetOwner()->GetLocalPosition().x);
+        destRect.y = static_cast<int>(GetOwner()->GetLocalPosition().y);
+        destRect.w = m_SpriteWidth;
+        destRect.h = m_SpriteHeight;
+        m_RenderComponent->SetDestRect(destRect);
     }
 }
 

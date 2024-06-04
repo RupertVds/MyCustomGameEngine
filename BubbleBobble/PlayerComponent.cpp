@@ -11,10 +11,11 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
     m_StateMachine(this)
 {
     // Set the initial state of the player component
+    m_pAnimator = GetOwner()->GetComponent<AnimatorComponent>();
     m_StateMachine.SetState(new PlayerEntryState());
+    
     m_pMainCollider = GetOwner()->GetComponent<BoxColliderComponent>();
     m_pMainCollider->SetOffset({ 5, 0 });
-    m_pAnimator = GetOwner()->GetComponent<AnimatorComponent>();
 
     auto ceilingTriggerObject = std::make_unique<GameObject>();
     m_pCeilingTrigger = ceilingTriggerObject->AddComponent<BoxColliderComponent>(m_pMainCollider->GetWidth() - 2.f, 12.f, CollisionComponent::ColliderType::STATIC, true);
@@ -28,6 +29,7 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
     jumpingCorrectionTriggerObject->SetLocalPosition(jumpingCorrectionTriggerObject->GetLocalPosition() + m_pMainCollider->GetOffset());
 
     this->GetOwner()->AddChild(std::move(jumpingCorrectionTriggerObject));
+
 }
 
 void PlayerComponent::Update()
@@ -38,15 +40,6 @@ void PlayerComponent::Update()
 void PlayerComponent::FixedUpdate()
 {
     m_StateMachine.FixedUpdate();
-
-    // Apply velocity
-    glm::vec2 displacement = m_Velocity * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
-
-    // Update position
-    glm::vec2 newPosition = glm::vec2(GetOwner()->GetWorldPosition()) + displacement;
-
-    // Set the new position
-    GetOwner()->SetLocalPosition(newPosition);
 }
 
 void PlayerComponent::LateUpdate()

@@ -1,12 +1,13 @@
 #pragma once
 #include "Component.h"
+#include "PlayerComponent.h"
 
 class AnimatorComponent;
 class CircleColliderComponent;
 
 class BubbleComponent final : public Component{
 public:
-    BubbleComponent(GameObject* pOwner, const glm::vec2& dir);
+    BubbleComponent(GameObject* pOwner, const glm::vec2& dir, PlayerComponent* owner);
     ~BubbleComponent() = default;
     BubbleComponent(const BubbleComponent& other) = delete;
     BubbleComponent& operator=(const BubbleComponent& other) = delete;
@@ -25,6 +26,7 @@ private:
 
     State m_State{ State::FORMING };
 
+    PlayerComponent* m_pPlayerOwner{};
     AnimatorComponent* m_pAnimator{};
     CircleColliderComponent* m_pMainTrigger{};
 

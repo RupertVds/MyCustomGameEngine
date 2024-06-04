@@ -58,12 +58,22 @@ void load() {
 	//testCollider->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::STATIC, true);
 	//testCollider->SetLocalPosition({ 300, 200 });
 
-	// Player one
-	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
+	// ANIMS
 	auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
 	auto playerTwoRunTexture = ResourceManager::GetInstance().LoadTexture("player_2_run.png");
 	auto playerOneIdleTexture = ResourceManager::GetInstance().LoadTexture("player_1_idle.png");
 	auto playerTwoIdleTexture = ResourceManager::GetInstance().LoadTexture("player_2_idle.png");
+	auto playerOneAttackTexture = ResourceManager::GetInstance().LoadTexture("player_1_attack.png");
+	auto playerTwoAttackTexture = ResourceManager::GetInstance().LoadTexture("player_2_attack.png");
+	auto playerOneJumpUpTexture = ResourceManager::GetInstance().LoadTexture("player_1_jump_up.png");
+	auto playerTwoJumpUpTexture = ResourceManager::GetInstance().LoadTexture("player_2_jump_up.png");
+	auto playerOneJumpDownTexture = ResourceManager::GetInstance().LoadTexture("player_1_jump_down.png");
+	auto playerTwoJumpDownTexture = ResourceManager::GetInstance().LoadTexture("player_2_jump_down.png");
+	auto playerOneDeathTexture = ResourceManager::GetInstance().LoadTexture("player_1_death.png");
+
+	// Player one
+	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
+
 	playerOneObject->AddComponent<RenderComponent>(playerOneRunTexture);
 	auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>(16, 16, true);
 	playerOneObject->SetLocalPosition({ Renderer::WIDTH / 2 - 50, 25 });
@@ -74,6 +84,10 @@ void load() {
 
 	playerOneAnimator->AddSpriteSheet("Run", playerOneRunTexture, 12);
 	playerOneAnimator->AddSpriteSheet("Idle", playerOneIdleTexture, 4);
+	playerOneAnimator->AddSpriteSheet("Attack", playerOneAttackTexture, 20);
+	playerOneAnimator->AddSpriteSheet("JumpUp", playerOneJumpUpTexture, 6);
+	playerOneAnimator->AddSpriteSheet("Death", playerOneDeathTexture, 12);
+	playerOneAnimator->AddSpriteSheet("JumpDown", playerOneJumpDownTexture, 12);
 
 	// Player two
 	std::unique_ptr<GameObject> playerTwoObject = std::make_unique<GameObject>("player_2");
@@ -88,6 +102,9 @@ void load() {
 
 	playerTwoAnimator->AddSpriteSheet("Run", playerTwoRunTexture, 12);
 	playerTwoAnimator->AddSpriteSheet("Idle", playerTwoIdleTexture, 4);
+	playerTwoAnimator->AddSpriteSheet("Attack", playerTwoAttackTexture, 20);
+	playerTwoAnimator->AddSpriteSheet("JumpUp", playerTwoJumpUpTexture, 6);
+	playerTwoAnimator->AddSpriteSheet("JumpDown", playerTwoJumpDownTexture, 12);
 
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerOneObject.get(), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_D, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerOneObject.get(), InputMode::Hold });

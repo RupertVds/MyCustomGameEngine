@@ -22,6 +22,7 @@ public:
     void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int framesPerSecond);
     void Play(const std::string& animationName, bool isLooping = true);
     RenderComponent* GetRenderComponent() const { return m_RenderComponent; }
+    bool ReachedEndFrame() const;
 private:
     RenderComponent* m_RenderComponent;
     int m_SpriteWidth{};

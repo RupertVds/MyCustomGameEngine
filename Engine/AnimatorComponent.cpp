@@ -64,7 +64,12 @@ void AnimatorComponent::Play(const std::string& animationName, bool isLooping)
     {
         std::cout << "WARNING: INVALID: " << animationName << " ANIMATION\n";
     }
-} 
+}
+bool AnimatorComponent::ReachedEndFrame() const
+{
+    return m_CurrentFrame == m_EndFrame;
+}
+
 
 void AnimatorComponent::SetSpriteSheet(const std::shared_ptr<Texture2D>& texture)
 {

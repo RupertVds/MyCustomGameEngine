@@ -129,19 +129,3 @@ void InputManager::UnbindAllForObject(GameObject* object)
         }
     }
 }
-
-void InputManager::ClearAllBindings()
-{
-    //std::cout << "Clearing all bindings\n";
-
-    //for (auto& [key, binding] : m_KeyboardBindings) {
-    //    delete binding.command;
-    //}
-    //m_KeyboardBindings.clear();
-
-    //for (auto& controller : m_Controllers) {
-    //    if (controller) {
-    //        controller->ClearAllBindings();
-    //    }
-    //}
-}

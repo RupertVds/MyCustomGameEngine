@@ -6,9 +6,6 @@
 class InputManager final : public Singleton<InputManager>
 {
 public:
-	virtual ~InputManager() {
-		ClearAllBindings();
-	}
 	// The main update method of the input manager
 	// This is where everything comes together
 	bool ProcessInput();

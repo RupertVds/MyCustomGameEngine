@@ -3,10 +3,12 @@
 #include <AnimatorComponent.h>
 #include <CircleColliderComponent.h>
 #include <cmath>
+#include "PlayerStates.h"
 
-BubbleComponent::BubbleComponent(GameObject* pOwner, const glm::vec2& dir)
+BubbleComponent::BubbleComponent(GameObject* pOwner, const glm::vec2& dir, PlayerComponent* owner)
     : Component(pOwner),
     m_Velocity{ dir },
+    m_pPlayerOwner{owner},
     m_Amplitude{ 0.5f },   // Amplitude of the sine wave
     m_Frequency{ 2.0f }    // Frequency of the sine wave
 {
@@ -41,10 +43,15 @@ void BubbleComponent::Update()
             auto triggeredObjects = m_pMainTrigger->GetTriggeredObjects();
             for (auto triggeredObject : triggeredObjects)
             {
-                if (triggeredObject->GetName() == "player_1")
+                if ((triggeredObject->GetName() == "player_1" || triggeredObject->GetName() == "player_2") && triggeredObject != m_pPlayerOwner->GetOwner())
                 {
                     GetOwner()->DeleteSelf();
-                    triggeredObject->DeleteSelf();
+                    // we could assume this is always safe
+                    auto playerComp = triggeredObject->GetComponent<PlayerComponent>();
+                    if (playerComp)
+                    {
+                        playerComp->GetStateMachine()->SetState(new PlayerDeadState());
+                    }
                 }
             }
         }

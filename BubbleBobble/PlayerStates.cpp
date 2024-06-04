@@ -13,6 +13,7 @@ void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
 {
     std::cout << "PlayerEntryState: Entered" << '\n';
     PlayerComponent* playerComp = stateMachine.GetComponent();
+    playerComp->GetAnimator()->Play("JumpDown", true);
 
     // set to constant velocity
     playerComp->SetVelocity({ 0, m_MovingDownSpeed });
@@ -26,6 +27,19 @@ void PlayerEntryState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
     {
         stateMachine.SetState(new PlayerAliveState());
     }
+}
+
+void PlayerEntryState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)
+{
+    auto playerComp = stateMachine.GetComponent();
+    // Apply velocity
+    glm::vec2 displacement = playerComp->GetVelocity() * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
+
+    // Update position
+    glm::vec2 newPosition = glm::vec2(playerComp->GetOwner()->GetWorldPosition()) + displacement;
+
+    // Set the new position
+    playerComp->GetOwner()->SetLocalPosition(newPosition);
 }
 
 void PlayerEntryState::Exit(BehaviorStateMachine<PlayerComponent>&) 
@@ -53,32 +67,31 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
 
     if (!playerComp->IsJumping() && !playerComp->IsGrounded())
     {
-        //stateMachine.GetComponent()->GetCollider()->SetVerticalCorrection(true);
         playerComp->SetVerticalVelocity(m_FallingSpeed);
     }
 
-    if (playerComp->IsJumping())
-    {
-        //playerComp->GetAnimator()->Play("Jump");
-    }
-    else
-    {
-        glm::vec2 moveDir = playerComp->GetMovingDirection();
-        if (moveDir.x != 0)
-        {
-            playerComp->GetAnimator()->Play("Run");
-        }
-        else
-        {
-            playerComp->GetAnimator()->Play("Idle");
-        }
-    }
+    HandleAnimation(playerComp);
 
-    if (playerComp->IsAttacking())
+    if (playerComp->IsAttacking() && !playerComp->CanAttack())
     {
+        playerComp->GetAnimator()->Play("Attack", false);
+
         auto bubbleObject = std::make_unique<GameObject>("bubble");
-        auto bubbleCompleteTexture = ResourceManager::GetInstance().LoadTexture("bubble.png");
-        auto bubbleFormingTexture = ResourceManager::GetInstance().LoadTexture("bubble_forming.png");
+
+        std::shared_ptr<Texture2D> bubbleCompleteTexture{};
+        std::shared_ptr<Texture2D> bubbleFormingTexture{};
+        if (playerComp->GetOwner()->GetName() == "player_1")
+        {
+            bubbleCompleteTexture = ResourceManager::GetInstance().LoadTexture("player_1_bubble.png");
+            bubbleFormingTexture = ResourceManager::GetInstance().LoadTexture("player_1_bubble_forming.png");
+        }
+        else if (playerComp->GetOwner()->GetName() == "player_2")
+        {
+            bubbleCompleteTexture = ResourceManager::GetInstance().LoadTexture("player_2_bubble.png");
+            bubbleFormingTexture = ResourceManager::GetInstance().LoadTexture("player_2_bubble_forming.png");
+        }
+
+
         bubbleObject->AddComponent<RenderComponent>();
         bubbleObject->SetScale({2.f, 2.f, 2.f});
         auto bubbleAnimator = bubbleObject->AddComponent<AnimatorComponent>(16, 16, 6);
@@ -89,19 +102,64 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
 
         if (playerComp->GetAnimator()->GetRenderComponent()->IsFlipped())
         {
-            bubbleObject->AddComponent<BubbleComponent>(glm::vec2{ 1, 0 });
+            bubbleObject->AddComponent<BubbleComponent>(glm::vec2{ 1, 0 }, playerComp);
             bubbleObject->SetLocalPosition({ playerComp->GetPosition().x + playerComp->GetCollider()->GetWidth() * 1.25f, playerComp->GetPosition().y});
-
         }
         else
         {
-            bubbleObject->AddComponent<BubbleComponent>(glm::vec2{ -1, 0 });
+            bubbleObject->AddComponent<BubbleComponent>(glm::vec2{ -1, 0 }, playerComp);
             bubbleObject->SetLocalPosition({ playerComp->GetPosition().x - playerComp->GetCollider()->GetWidth() * 1.25f, playerComp->GetPosition().y });
         }
 
         auto scene = SceneManager::GetInstance().GetSceneByName("level");
         scene->Add(std::move(bubbleObject));
         playerComp->SetIsAttacking(false);
+    }
+    else if (!playerComp->CanAttack())
+    {
+        if (playerComp->GetAnimator()->ReachedEndFrame())
+        {
+            playerComp->SetCanAttack(true);
+        }
+    }
+}
+
+void PlayerAliveState::HandleAnimation(PlayerComponent* playerComp)
+{
+    if (!playerComp->IsAttacking() && playerComp->CanAttack())
+    {
+        if (playerComp->IsJumping())
+        {
+            playerComp->GetAnimator()->Play("JumpUp");
+        }
+
+        // falling down animation
+        if (playerComp->GetVelocity().y > 0 && !playerComp->IsGrounded())
+        {
+            m_FallingTimer += Timer::GetInstance().GetDeltaTime();
+
+            if (m_FallingTimer >= m_FallingTime)
+            {
+                playerComp->GetAnimator()->Play("JumpDown");
+            }
+        }
+        else
+        {
+            m_FallingTimer = 0;
+        }
+
+        if (!playerComp->IsJumping() && playerComp->IsGrounded())
+        {
+            glm::vec2 moveDir = playerComp->GetMovingDirection();
+            if (moveDir.x != 0)
+            {
+                playerComp->GetAnimator()->Play("Run");
+            }
+            else
+            {
+                playerComp->GetAnimator()->Play("Idle");
+            }
+        }
     }
 }
 
@@ -172,6 +230,16 @@ void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateM
         playerComp->GetCollider()->SetIgnoreStatic(false);
     }
 
+
+    // Apply velocity
+    glm::vec2 displacement = playerComp->GetVelocity() * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
+
+    // Update position
+    glm::vec2 newPosition = glm::vec2(playerComp->GetOwner()->GetWorldPosition()) + displacement;
+
+    // Set the new position
+    playerComp->GetOwner()->SetLocalPosition(newPosition);
+
     // Clamp player horizontally when needed
     glm::vec2 clampedPos{ playerComp->GetPosition() };
     clampedPos.x = std::min(std::max(clampedPos.x, 34.f), static_cast<float>(Renderer::WIDTH) - playerComp->GetCollider()->GetWidth() - 32.f);
@@ -187,7 +255,7 @@ void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
 
     // Define the raycast parameters
     glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
-    float rayDistance = 3.0f;
+    float rayDistance = 4.0f;
 
     // Calculate ray origins for left and right raycasts
     glm::vec2 leftRayOrigin = position;
@@ -218,7 +286,6 @@ void PlayerAliveState::HandleGround(PlayerComponent* playerComp)
     }
 }
 
-
 void PlayerAliveState::LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     stateMachine.GetComponent()->SetMovingDirection({ 0, 0 });
@@ -230,15 +297,21 @@ void PlayerAliveState::Exit(BehaviorStateMachine<PlayerComponent>&)
 }
 
 // Definition of methods for PlayerDeadState
-void PlayerDeadState::Entry(BehaviorStateMachine<PlayerComponent>&)
+void PlayerDeadState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerDeadState: Entered" << std::endl;
+    stateMachine.GetComponent()->GetAnimator()->Play("Death", false);
 }
 
 void PlayerDeadState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerDeadState: Updated" << std::endl;
-    stateMachine.SetState(new PlayerEntryState());
+    if (stateMachine.GetComponent()->GetAnimator()->ReachedEndFrame())
+    {
+        stateMachine.SetState(new PlayerEntryState());
+    }
+    
+    //stateMachine.SetState(new PlayerEntryState());
 }
 
 void PlayerDeadState::Exit(BehaviorStateMachine<PlayerComponent>&) 

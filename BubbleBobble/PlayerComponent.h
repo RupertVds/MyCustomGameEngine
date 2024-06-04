@@ -38,9 +38,25 @@ public:
 
 	void SetIsAttacking(bool state)
 	{
+		if (m_CanAttack)
+		{
+			if (state == true)
+			{
+				m_CanAttack = false;
+			}
+		}
+
 		m_IsAttacking = state;
+
 	}
 	bool IsAttacking() const { return m_IsAttacking; }
+
+	void SetCanAttack(bool state)
+	{
+		m_CanAttack = state;
+	}
+	bool CanAttack() const { return m_CanAttack; }
+
 
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
@@ -54,6 +70,7 @@ public:
 	BoxColliderComponent* GetCeilingTrigger() const { return m_pCeilingTrigger; }
 	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }
 	AnimatorComponent* GetAnimator() { return m_pAnimator; }
+	BehaviorStateMachine<PlayerComponent>* GetStateMachine() { return &m_StateMachine; }
 private:
 	std::shared_ptr<Scene> m_CurrentScene;
 	BehaviorStateMachine<PlayerComponent> m_StateMachine;
@@ -67,6 +84,7 @@ private:
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
 	bool m_IsAttacking{};
+	bool m_CanAttack{ true };
 	glm::vec2 m_Velocity{};
 	glm::vec2 m_MovementDirection{};
 };

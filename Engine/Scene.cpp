@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include <algorithm>
 #include <imgui.h>
+#include <iostream>
 
 
 unsigned int Scene::m_IdCounter = 0;
@@ -29,23 +30,38 @@ void Scene::Add(std::unique_ptr<GameObject>&& object)
 void Scene::Update()
 {
 	// Update all objects in the scene
-	m_RootObject->Update();
-
-	// Erase-remove idiom to remove objects marked for deletion
-	//m_Objects.erase(std::remove_if(m_Objects.begin(), m_Objects.end(),
-	//	[](auto& obj) {
-	//		return obj->IsMarkedForDeletion();
-	//	}), m_Objects.end());
+	try
+	{
+		m_RootObject->Update();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << '\n';
+	}
 }
 
 void Scene::FixedUpdate()
 {
-	m_RootObject->FixedUpdate();
+	try
+	{
+		m_RootObject->FixedUpdate();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << '\n';
+	}
 }
 
 void Scene::LateUpdate()
 {
-	m_RootObject->LateUpdate();
+	try
+	{
+		m_RootObject->LateUpdate();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << '\n';
+	}
 }
 
 void Scene::Render() const

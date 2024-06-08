@@ -37,6 +37,12 @@
     <ClCompile Include="BubbleComponent.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="ZenChanComponent.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZenChanStates.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommands.h">
@@ -71,6 +77,12 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="BubbleComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ZenChanStates.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZenChanComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

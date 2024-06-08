@@ -24,6 +24,7 @@ public:
     void AddSpriteSheet(const std::string& animationName, std::shared_ptr<Texture2D> texture, int spriteWidth, int spriteHeight, int framesPerSecond);
     void Play(const std::string& animationName, bool isLooping = true);
     RenderComponent* GetRenderComponent() const { return m_RenderComponent; }
+    void SetCurrentFrame(int frame);
     bool ReachedEndFrame() const;
 private:
     RenderComponent* m_RenderComponent;

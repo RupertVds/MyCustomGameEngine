@@ -26,6 +26,7 @@
 #include "CircleColliderComponent.h"
 #include <Renderer.h>
 #include <AnimatorComponent.h>
+#include "ZenChanComponent.h"
 
 void load() {
 	auto& scene = SceneManager::GetInstance().CreateScene("level");
@@ -37,13 +38,13 @@ void load() {
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 #endif
 
-	//auto levelObject = std::make_unique<GameObject>();
-	//levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
-	//levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
-
 	auto levelObject = std::make_unique<GameObject>();
-	levelObject->AddComponent<TilemapComponent>("level_2_collisions.txt", 16, 16);
-	levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_2.png"));
+	levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
+	levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
+
+	//auto levelObject = std::make_unique<GameObject>();
+	//levelObject->AddComponent<TilemapComponent>("level_2_collisions.txt", 16, 16);
+	//levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_2.png"));
 
 	// Add other components like FPS, player, etc.
 	scene.Add(std::move(levelObject));
@@ -53,10 +54,6 @@ void load() {
 	fpsObject->AddComponent<TextComponent>(" ", font);
 	fpsObject->AddComponent<FPSComponent>();
 	fpsObject->SetLocalPosition({ 40, 20 });
-
-	//auto testCollider = std::make_unique<GameObject>();
-	//testCollider->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::STATIC, true);
-	//testCollider->SetLocalPosition({ 300, 200 });
 
 	// ANIMS
 	auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -70,6 +67,30 @@ void load() {
 	auto playerOneJumpDownTexture = ResourceManager::GetInstance().LoadTexture("player_1_jump_down.png");
 	auto playerTwoJumpDownTexture = ResourceManager::GetInstance().LoadTexture("player_2_jump_down.png");
 	auto playerOneDeathTexture = ResourceManager::GetInstance().LoadTexture("player_1_death.png");
+	auto playerTwoDeathTexture = ResourceManager::GetInstance().LoadTexture("player_2_death.png");
+
+	auto zenChanRunTexture = ResourceManager::GetInstance().LoadTexture("enemy_1.png");
+
+	// Zen Chan
+	std::unique_ptr<GameObject> zenChanObject = std::make_unique<GameObject>("zenChan");
+	zenChanObject->AddComponent<RenderComponent>();
+	auto zenChanAnimator = zenChanObject->AddComponent<AnimatorComponent>();
+	zenChanAnimator->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
+	zenChanObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+	zenChanObject->AddComponent<ZenChanComponent>();
+
+	zenChanObject->SetScale({ 2.f, 2.f, 2.f });
+	zenChanObject->SetLocalPosition({ Renderer::WIDTH / 2 - 8 + 30, 0 });
+
+	std::unique_ptr<GameObject> zenChanObject2 = std::make_unique<GameObject>("zenChan");
+	zenChanObject2->AddComponent<RenderComponent>();
+	auto zenChanAnimator2 = zenChanObject2->AddComponent<AnimatorComponent>();
+	zenChanAnimator2->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
+	zenChanObject2->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+	zenChanObject2->AddComponent<ZenChanComponent>();
+
+	zenChanObject2->SetScale({ 2.f, 2.f, 2.f });
+	zenChanObject2->SetLocalPosition({ Renderer::WIDTH / 2 - 8 - 30, 0 });
 
 	// Player one
 	std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
@@ -104,6 +125,7 @@ void load() {
 	playerTwoAnimator->AddSpriteSheet("Idle", playerTwoIdleTexture, 16, 16, 4);
 	playerTwoAnimator->AddSpriteSheet("Attack", playerTwoAttackTexture, 16, 16, 20);
 	playerTwoAnimator->AddSpriteSheet("JumpUp", playerTwoJumpUpTexture, 16, 16, 6);
+	playerTwoAnimator->AddSpriteSheet("Death", playerTwoDeathTexture, 16, 32, 8);
 	playerTwoAnimator->AddSpriteSheet("JumpDown", playerTwoJumpDownTexture, 16, 16, 12);
 
 	inputManager.BindInput(SDL_SCANCODE_A, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerOneObject.get(), InputMode::Hold });
@@ -112,7 +134,7 @@ void load() {
 	inputManager.BindInput(SDL_SCANCODE_SPACE, InputBinding{ playerOneObject->AddCommand<PlayerAttackCommand>(), playerOneObject.get(), InputMode::Press });
 	inputManager.BindInput(SDL_SCANCODE_0, InputBinding{ playerOneObject->AddCommand<PlaySFX>("normal_mode.mp3", 0.1f), playerOneObject.get(), InputMode::Press});
 	inputManager.BindInput(SDL_SCANCODE_1, InputBinding{ playerOneObject->AddCommand<PlaySFX>("versus_mode.mp3", 0.2f), playerOneObject.get(), InputMode::Press});
-	inputManager.BindInput(SDL_SCANCODE_2, InputBinding{ playerOneObject->AddCommand<PlaySFX>("versus_mode_2.wav", 0.2f), playerOneObject.get(), InputMode::Press});
+	inputManager.BindInput(SDL_SCANCODE_2, InputBinding{ playerOneObject->AddCommand<PlaySFX>("versus_mode_2.mp3", 0.2f), playerOneObject.get(), InputMode::Press});
 
 	inputManager.BindInput(SDL_SCANCODE_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });
 	inputManager.BindInput(SDL_SCANCODE_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });
@@ -131,6 +153,8 @@ void load() {
 	scene.Add(std::move(fpsObject));
 	scene.Add(std::move(playerOneObject));
 	scene.Add(std::move(playerTwoObject));
+	scene.Add(std::move(zenChanObject));
+	scene.Add(std::move(zenChanObject2));
 	//scene.Add(std::move(testCollider));
 }
 

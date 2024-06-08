@@ -1,6 +1,5 @@
 #pragma once
 #include "PlayerComponent.h"
-#include <iostream>
 
 // Forward declarations
 class PlayerComponent;
@@ -25,14 +24,14 @@ class PlayerAliveState final : public BehaviorState<PlayerComponent> {
 public:
     void Entry(BehaviorStateMachine<PlayerComponent>&);
     void Update(BehaviorStateMachine<PlayerComponent>& stateMachine);
-    void HandleAnimation(PlayerComponent* playerComp);
-    void HandleJumping(PlayerComponent* playerComp);
-    void HandleHorizontalMovement(PlayerComponent* playerComp);
     void FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine);
-    void HandleGround(PlayerComponent* playerComp);
     void LateUpdate(BehaviorStateMachine<PlayerComponent>& stateMachine);
     void Exit(BehaviorStateMachine<PlayerComponent>&);
 private:
+    void HandleAnimation(PlayerComponent* playerComp);
+    void HandleJumping(PlayerComponent* playerComp);
+    void HandleHorizontalMovement(PlayerComponent* playerComp);
+    void HandleGround(PlayerComponent* playerComp);
     float m_MoveSpeed{};
     float m_JumpTimer{};
     float m_JumpTime{};

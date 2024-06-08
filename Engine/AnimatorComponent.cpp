@@ -41,7 +41,7 @@ void AnimatorComponent::AddSpriteSheet(const std::string& animationName, std::sh
 {
     m_SpriteSheets[animationName] = { texture, spriteWidth, spriteHeight, framesPerSecond };
 
-    Play(animationName, m_FramesPerSecond);
+    Play(animationName);
     UpdateFrame();
 }
 
@@ -67,11 +67,18 @@ void AnimatorComponent::Play(const std::string& animationName, bool isLooping)
         std::cout << "WARNING: INVALID: " << animationName << " ANIMATION\n";
     }
 }
+void AnimatorComponent::SetCurrentFrame(int frame)
+{
+    if (frame <= m_EndFrame)
+    {
+        m_CurrentFrame = frame;
+    }
+}
+
 bool AnimatorComponent::ReachedEndFrame() const
 {
     return m_CurrentFrame == m_EndFrame;
 }
-
 
 void AnimatorComponent::SetSpriteSheet(const std::shared_ptr<Texture2D>& texture)
 {

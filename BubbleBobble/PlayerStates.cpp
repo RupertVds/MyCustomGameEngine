@@ -5,6 +5,7 @@
 #include "AnimatorComponent.h"
 #include "BubbleComponent.h"
 #include "ResourceManager.h"
+#include <iostream>
 
 class BoxColliderComponent;
 
@@ -104,7 +105,6 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
             bubbleCompleteTexture = ResourceManager::GetInstance().LoadTexture("player_2_bubble.png");
             bubbleFormingTexture = ResourceManager::GetInstance().LoadTexture("player_2_bubble_forming.png");
         }
-
 
         bubbleObject->AddComponent<RenderComponent>();
         bubbleObject->SetScale({2.f, 2.f, 2.f});
@@ -244,7 +244,6 @@ void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateM
         playerComp->GetCollider()->SetIgnoreStatic(false);
     }
 
-
     // Apply velocity
     glm::vec2 displacement = playerComp->GetVelocity() * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
 
@@ -332,7 +331,11 @@ void PlayerDeadState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine
     //stateMachine.SetState(new PlayerEntryState());
 }
 
-void PlayerDeadState::Exit(BehaviorStateMachine<PlayerComponent>&) 
+void PlayerDeadState::Exit(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
     std::cout << "PlayerDeadState: Exited" << std::endl;
+    PlayerComponent* playerComp = stateMachine.GetComponent();
+
+    playerComp->GetOwner()->SetLocalPosition({ playerComp->GetOwner()->GetLocalPosition().x, playerComp->GetOwner()->GetLocalPosition().y + playerComp->GetCollider()->GetHeight() });
+
 }

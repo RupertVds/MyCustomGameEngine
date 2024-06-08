@@ -57,7 +57,6 @@ public:
 	}
 	bool CanAttack() const { return m_CanAttack; }
 
-
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
 
@@ -78,7 +77,6 @@ private:
 	BoxColliderComponent* m_pMainCollider{};
 
 	BoxColliderComponent* m_pCeilingTrigger{};
-	BoxColliderComponent* m_pGroundTrigger{};
 	BoxColliderComponent* m_pJumpCorrectionTrigger{};
 
 	bool m_IsGrounded{};

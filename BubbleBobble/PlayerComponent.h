@@ -64,7 +64,7 @@ public:
 	void SetHorizontalVelocity(float norm) { m_Velocity.x = norm; }
 	void SetVerticalVelocity(float norm) { m_Velocity.y = norm; }
 	const glm::vec2& GetVelocity() const { return m_Velocity; }
-	glm::vec2 GetPosition() const { return GetOwner()->GetLocalPosition(); }
+	const glm::vec2& GetPosition() const { return GetOwner()->GetLocalPosition(); }
 	BoxColliderComponent* GetCollider() const { return m_pMainCollider; }
 	BoxColliderComponent* GetCeilingTrigger() const { return m_pCeilingTrigger; }
 	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }

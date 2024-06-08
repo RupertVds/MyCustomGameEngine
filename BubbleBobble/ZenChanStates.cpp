@@ -5,6 +5,7 @@
 #include "AnimatorComponent.h"
 #include "PlayerComponent.h"
 #include "PlayerStates.h"
+#include <Renderer.h>
 
 class BoxColliderComponent;
 
@@ -138,6 +139,11 @@ void ZenChanWanderState::Update(BehaviorStateMachine<ZenChanComponent>& stateMac
                 }
             }
         }
+    }
+
+    if (zenChanComp->GetPosition().y >= Renderer::HEIGHT + zenChanComp->GetCollider()->GetHeight())
+    {
+        zenChanComp->GetOwner()->SetLocalPosition({ zenChanComp->GetPosition().x, -zenChanComp->GetCollider()->GetHeight() });
     }
 }
 
@@ -351,6 +357,10 @@ void ZenChanDeadState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachi
         }
     }
 
+    if (zenChanComp->GetPosition().y >= Renderer::HEIGHT + zenChanComp->GetCollider()->GetHeight())
+    {
+        zenChanComp->GetOwner()->SetLocalPosition({ zenChanComp->GetPosition().x, -zenChanComp->GetCollider()->GetHeight() });
+    }
 }
 
 void ZenChanDeadState::FixedUpdate(BehaviorStateMachine<ZenChanComponent>& stateMachine)

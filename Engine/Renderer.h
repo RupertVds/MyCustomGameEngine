@@ -9,9 +9,9 @@ class Texture2D;
 class Renderer final : public Singleton<Renderer>
 {
 public:
-	static const int UI_HEIGHT{ 50 };
-	static const int WIDTH{ 510 };
-	static const int HEIGHT{ 400 + UI_HEIGHT };
+	static const int UI_WIDTH{ 50 };
+	static const int WIDTH{ 510 + UI_WIDTH };
+	static const int HEIGHT{ 400 };
 	static const bool FULLSCREEN{ false };
 private:
 	SDL_Renderer* m_Renderer{};

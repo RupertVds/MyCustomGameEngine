@@ -67,11 +67,11 @@ void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
 
     if (playerComp->GetOwner()->GetName() == "player_1")
     {
-        playerComp->GetOwner()->SetLocalPosition({ 75, Renderer::HEIGHT - Renderer::UI_HEIGHT - 52 });
+        playerComp->GetOwner()->SetLocalPosition({ 75, Renderer::HEIGHT - 52 });
     }
     else if (playerComp->GetOwner()->GetName() == "player_2")
     {
-        playerComp->GetOwner()->SetLocalPosition({ Renderer::WIDTH - 75, Renderer::HEIGHT - Renderer::UI_HEIGHT - 52 });
+        playerComp->GetOwner()->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH - 75, Renderer::HEIGHT - 52 });
     }
 }
 
@@ -139,6 +139,11 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
         {
             playerComp->SetCanAttack(true);
         }
+    }
+
+    if (playerComp->GetPosition().y >= Renderer::HEIGHT + playerComp->GetCollider()->GetHeight())
+    {
+        playerComp->GetOwner()->SetLocalPosition({ playerComp->GetPosition().x, -playerComp->GetCollider()->GetHeight() });
     }
 }
 
@@ -259,7 +264,7 @@ void PlayerAliveState::FixedUpdate(BehaviorStateMachine<PlayerComponent>& stateM
 
     // Clamp player horizontally when needed
     glm::vec2 clampedPos{ playerComp->GetPosition() };
-    clampedPos.x = std::min(std::max(clampedPos.x, 34.f), static_cast<float>(Renderer::WIDTH) - playerComp->GetCollider()->GetWidth() - 32.f);
+    clampedPos.x = std::min(std::max(clampedPos.x, 34.f), static_cast<float>((Renderer::WIDTH - Renderer::UI_WIDTH - 3)) - playerComp->GetCollider()->GetWidth() - 32.f);
     playerComp->GetOwner()->SetLocalPosition(clampedPos);
 }
 

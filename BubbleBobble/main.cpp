@@ -38,13 +38,13 @@ void load() {
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 #endif
 
-	auto levelObject = std::make_unique<GameObject>();
-	levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
-	levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
-
 	//auto levelObject = std::make_unique<GameObject>();
-	//levelObject->AddComponent<TilemapComponent>("level_2_collisions.txt", 16, 16);
-	//levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_2.png"));
+	//levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
+	//levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
+
+	auto levelObject = std::make_unique<GameObject>();
+	levelObject->AddComponent<TilemapComponent>("level_2_collisions.txt", 16, 16);
+	levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_2.png"));
 
 	// Add other components like FPS, player, etc.
 	scene.Add(std::move(levelObject));
@@ -76,7 +76,7 @@ void load() {
 	zenChanObject->AddComponent<RenderComponent>();
 	auto zenChanAnimator = zenChanObject->AddComponent<AnimatorComponent>();
 	zenChanAnimator->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
-	zenChanObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+	zenChanObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	zenChanObject->AddComponent<ZenChanComponent>();
 
 	zenChanObject->SetScale({ 2.f, 2.f, 2.f });
@@ -86,7 +86,7 @@ void load() {
 	zenChanObject2->AddComponent<RenderComponent>();
 	auto zenChanAnimator2 = zenChanObject2->AddComponent<AnimatorComponent>();
 	zenChanAnimator2->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
-	zenChanObject2->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+	zenChanObject2->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	zenChanObject2->AddComponent<ZenChanComponent>();
 
 	zenChanObject2->SetScale({ 2.f, 2.f, 2.f });
@@ -145,7 +145,9 @@ void load() {
 	inputManager.BindInput(0, GAMEPAD_DPAD_LEFT, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerOneObject.get(), InputMode::Hold });
 	inputManager.BindInput(0, GAMEPAD_DPAD_RIGHT, InputBinding{ playerOneObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerOneObject.get(), InputMode::Hold });
 	inputManager.BindInput(0, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<JumpCommand>(), playerOneObject.get(), InputMode::Press });
-	inputManager.BindInput(0, GAMEPAD_X, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_1.wav", 0.2f), playerOneObject.get(), InputMode::Press });
+	inputManager.BindInput(0, GAMEPAD_X, InputBinding{ playerOneObject->AddCommand<PlayerAttackCommand>(), playerOneObject.get(), InputMode::Press });
+
+	//inputManager.BindInput(0, GAMEPAD_X, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_1.wav", 0.2f), playerOneObject.get(), InputMode::Press });
 	inputManager.BindInput(0, GAMEPAD_Y, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_2.wav", 0.2f), playerOneObject.get(), InputMode::Press });
 	inputManager.BindInput(0, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_3.wav", 0.2f), playerOneObject.get(), InputMode::Press });
 	//inputManager.BindInput(0, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_4.wav", 0.2f), InputMode::Press });

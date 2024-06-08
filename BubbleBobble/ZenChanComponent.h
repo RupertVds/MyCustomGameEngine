@@ -32,13 +32,13 @@ public:
 	const glm::vec2& GetVelocity() const { return m_Velocity; }
 	glm::vec2 GetPosition() const { return GetOwner()->GetLocalPosition(); }
 	BoxColliderComponent* GetCollider() const { return m_pMainCollider; }
-	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }
+	BoxColliderComponent* GetTrigger() const { return m_pMainTrigger; }
 	AnimatorComponent* GetAnimator() { return m_pAnimator; }
 private:
 	BehaviorStateMachine<ZenChanComponent> m_StateMachine;
 	AnimatorComponent* m_pAnimator{};
 	BoxColliderComponent* m_pMainCollider{};
-	BoxColliderComponent* m_pJumpCorrectionTrigger{};
+	BoxColliderComponent* m_pMainTrigger{};
 
 	bool m_IsGrounded{};
 

@@ -39,7 +39,7 @@ private:
     bool m_IsJumping{};
     bool m_IsUnderCeiling{};
 
-    float m_MinJumpInterval = 0.5f; // Minimum interval between jumps
-    float m_MaxJumpInterval = 4.0f; // Maximum interval between jumps
+    float m_MinJumpInterval = 0.25f; // Minimum interval between jumps
+    float m_MaxJumpInterval = 2.5f; // Maximum interval between jumps
     float m_CurrentJumpInterval = 0.0f;
 };

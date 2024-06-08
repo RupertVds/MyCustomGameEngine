@@ -3,6 +3,8 @@
 #include "Timer.h"
 #include <Utils.h>
 #include "AnimatorComponent.h"
+#include "PlayerComponent.h"
+#include "PlayerStates.h"
 
 class BoxColliderComponent;
 
@@ -81,7 +83,7 @@ void ZenChanWanderState::Entry(BehaviorStateMachine<ZenChanComponent>& stateMach
 {
     std::cout << "ZenChanWanderState: Entered" << '\n';
     ZenChanComponent* zenChanComp = stateMachine.GetComponent();
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
+    std::srand(static_cast<unsigned>(std::time(nullptr) + reinterpret_cast<uintptr_t>(zenChanComp)));
     (rand() % 2) ? zenChanComp->SetHorizontalVelocity(m_MoveSpeed) : zenChanComp->SetHorizontalVelocity(-m_MoveSpeed);
     m_CurrentJumpInterval = m_MinJumpInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (m_MaxJumpInterval - m_MinJumpInterval)));
 
@@ -116,6 +118,26 @@ void ZenChanWanderState::Update(BehaviorStateMachine<ZenChanComponent>& stateMac
         m_IsUnderCeiling = false;
         m_JumpDelayElapsedTime = 0;
         m_CurrentJumpInterval = m_MinJumpInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (m_MaxJumpInterval - m_MinJumpInterval)));
+    }
+    if (zenChanComp->GetTrigger()->IsTriggered())
+    {
+        auto triggeredObjects = zenChanComp->GetTrigger()->GetTriggeredObjects();
+        std::cout << "TRIGGERED OBJECTS SIZE: " << triggeredObjects.size() << '\n';
+        // Copy triggered objects to avoid modifying the container while iterating
+        //std::vector<GameObject*> triggeredObjectsCopy(triggeredObjects.begin(), triggeredObjects.end());
+
+        for (auto triggeredObject : triggeredObjects)
+        {
+         
+            if (triggeredObject->GetName() == "player_1" || triggeredObject->GetName() == "player_2")
+            {
+                auto playerComp = triggeredObject->GetComponent<PlayerComponent>();
+                if (playerComp)
+                {
+                    playerComp->GetStateMachine()->SetState(new PlayerDeadState());
+                }
+            }
+        }
     }
 }
 
@@ -197,7 +219,7 @@ void ZenChanWanderState::HandleJumping(ZenChanComponent* zenChanComp)
 
     if (middleRayResult.hit)
     {
-        std::cout << "IS UNDER CEILING\n";
+        //std::cout << "IS UNDER CEILING\n";
         m_IsUnderCeiling = true;
     }
     else

@@ -63,7 +63,7 @@ void BoxColliderComponent::FixedUpdate()
             continue; // Skip self
         }
 
-        if (collider->GetType() == ColliderType::DYNAMIC) continue;
+        if (collider->GetType() != m_TriggerTargetType) continue;
 
         if (m_IsTrigger && collider->IsTrigger()) continue;
 

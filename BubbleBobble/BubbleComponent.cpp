@@ -4,6 +4,7 @@
 #include <CircleColliderComponent.h>
 #include <cmath>
 #include "PlayerStates.h"
+#include "ZenChanComponent.h"
 
 BubbleComponent::BubbleComponent(GameObject* pOwner, const glm::vec2& dir, PlayerComponent* owner)
     : Component(pOwner),
@@ -51,6 +52,17 @@ void BubbleComponent::Update()
                     if (playerComp)
                     {
                         playerComp->GetStateMachine()->SetState(new PlayerDeadState());
+                    }
+                }
+
+                if (triggeredObject)
+                {
+                    auto zenChanObject = triggeredObject->GetComponent<ZenChanComponent>();
+                    if (zenChanObject)
+                    {
+                        // TODO: replace with going in death state
+                        zenChanObject->GetOwner()->DeleteSelf();
+                        this->GetOwner()->DeleteSelf();
                     }
                 }
             }

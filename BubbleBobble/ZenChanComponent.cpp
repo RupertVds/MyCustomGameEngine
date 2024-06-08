@@ -12,13 +12,12 @@ ZenChanComponent::ZenChanComponent(GameObject* pOwner)
 
 	m_pMainCollider = GetOwner()->GetComponent<BoxColliderComponent>();
 
-	auto jumpingCorrectionTriggerObject = std::make_unique<GameObject>();
-	m_pJumpCorrectionTrigger = jumpingCorrectionTriggerObject->AddComponent<BoxColliderComponent>(m_pMainCollider->GetWidth(), m_pMainCollider->GetHeight(), CollisionComponent::ColliderType::STATIC, true);
-	jumpingCorrectionTriggerObject->SetLocalPosition({ 0, 0 });
-	jumpingCorrectionTriggerObject->SetLocalPosition(jumpingCorrectionTriggerObject->GetLocalPosition() + m_pMainCollider->GetOffset());
-
+	auto mainTriggerObject = std::make_unique<GameObject>();
+	m_pMainTrigger = mainTriggerObject->AddComponent<BoxColliderComponent>(m_pMainCollider->GetWidth(), m_pMainCollider->GetHeight(), CollisionComponent::ColliderType::DYNAMIC, true, CollisionComponent::ColliderType::DYNAMIC);
+	mainTriggerObject->SetLocalPosition({ 5, 0 });
+	mainTriggerObject->SetLocalPosition(mainTriggerObject->GetLocalPosition() + m_pMainCollider->GetOffset());
+	this->GetOwner()->AddChild(std::move(mainTriggerObject));
 	m_StateMachine.SetState(new ZenChanEntryState());
-
 }
 
 void ZenChanComponent::Update()

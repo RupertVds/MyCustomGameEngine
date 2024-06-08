@@ -5,6 +5,7 @@
 #include <cmath>
 #include "PlayerStates.h"
 #include "ZenChanComponent.h"
+#include "ZenChanStates.h"
 
 BubbleComponent::BubbleComponent(GameObject* pOwner, const glm::vec2& dir, PlayerComponent* owner)
     : Component(pOwner),
@@ -61,7 +62,8 @@ void BubbleComponent::Update()
                     if (zenChanObject)
                     {
                         // TODO: replace with going in death state
-                        zenChanObject->GetOwner()->DeleteSelf();
+                        zenChanObject->GetStateMachine()->SetState(new ZenChanDeadState());
+
                         this->GetOwner()->DeleteSelf();
                     }
                 }

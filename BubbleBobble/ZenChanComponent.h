@@ -34,6 +34,7 @@ public:
 	BoxColliderComponent* GetCollider() const { return m_pMainCollider; }
 	BoxColliderComponent* GetTrigger() const { return m_pMainTrigger; }
 	AnimatorComponent* GetAnimator() { return m_pAnimator; }
+	BehaviorStateMachine<ZenChanComponent>* GetStateMachine() { return &m_StateMachine; }
 private:
 	BehaviorStateMachine<ZenChanComponent> m_StateMachine;
 	AnimatorComponent* m_pAnimator{};

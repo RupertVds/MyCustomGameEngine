@@ -86,7 +86,7 @@ void ZenChanWanderState::Entry(BehaviorStateMachine<ZenChanComponent>& stateMach
     std::srand(static_cast<unsigned>(std::time(nullptr) + reinterpret_cast<uintptr_t>(zenChanComp)));
     (rand() % 2) ? zenChanComp->SetHorizontalVelocity(m_MoveSpeed) : zenChanComp->SetHorizontalVelocity(-m_MoveSpeed);
     m_CurrentJumpInterval = m_MinJumpInterval + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (m_MaxJumpInterval - m_MinJumpInterval)));
-
+    zenChanComp->GetAnimator()->Play("Run");
 }
 
 void ZenChanWanderState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachine)
@@ -286,11 +286,117 @@ void ZenChanWanderState::HandleHorizontalMovement(ZenChanComponent* zenChanComp)
 
         if (zenChanComp->GetVelocity().x > 0)
         {
-            zenChanComp->GetAnimator()->GetRenderComponent()->SetIsFlipped(true);
+            zenChanComp->GetAnimator()->GetRenderComponent()->SetIsFlipped(false);
         }
         else
         {
-            zenChanComp->GetAnimator()->GetRenderComponent()->SetIsFlipped(false);
+            zenChanComp->GetAnimator()->GetRenderComponent()->SetIsFlipped(true);
         }
+    }
+}
+
+void ZenChanDeadState::Entry(BehaviorStateMachine<ZenChanComponent>& stateMachine)
+{
+    ZenChanComponent* zenChanComp = stateMachine.GetComponent();
+
+    zenChanComp->GetAnimator()->Play("DeadBubble");
+
+    // Start the downward movement
+    zenChanComp->SetVelocity({ 0, -m_MoveSpeed });
+}
+
+void ZenChanDeadState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachine)
+{
+    if (!m_IsPopped)
+    {
+        m_PoppingElapsedTime += Timer::GetInstance().GetDeltaTime();
+        if (m_PoppingElapsedTime >= m_PoppingTime)
+        {
+            stateMachine.SetState(new ZenChanWanderState());
+        }
+    }
+
+    ZenChanComponent* zenChanComp = stateMachine.GetComponent();
+
+    HandleGround(zenChanComp);
+
+    if (zenChanComp->GetTrigger()->IsTriggered())
+    {
+        auto triggeredObjects = zenChanComp->GetTrigger()->GetTriggeredObjects();
+        std::cout << "TRIGGERED OBJECTS SIZE: " << triggeredObjects.size() << '\n';
+        // Copy triggered objects to avoid modifying the container while iterating
+        //std::vector<GameObject*> triggeredObjectsCopy(triggeredObjects.begin(), triggeredObjects.end());
+
+        for (auto triggeredObject : triggeredObjects)
+        {
+
+            if (triggeredObject->GetName() == "player_1" || triggeredObject->GetName() == "player_2")
+            {
+                auto playerComp = triggeredObject->GetComponent<PlayerComponent>();
+                if (playerComp)
+                {
+                    m_IsPopped = true;
+                    zenChanComp->SetVerticalVelocity(m_FallingSpeed);
+                    zenChanComp->GetAnimator()->Play("Dead");
+
+                }
+            }
+        }
+    }
+
+    if (m_IsPopped)
+    {
+        if (zenChanComp->IsGrounded())
+        {
+            zenChanComp->GetOwner()->DeleteSelf();
+        }
+    }
+
+}
+
+void ZenChanDeadState::FixedUpdate(BehaviorStateMachine<ZenChanComponent>& stateMachine)
+{
+    ZenChanComponent* zenChanComp = stateMachine.GetComponent();
+
+    // Apply velocity
+    glm::vec2 displacement = zenChanComp->GetVelocity() * Timer::GetInstance().GetFixedTimeStep(); // Displacement = velocity * time
+
+    glm::vec2 newPosition = glm::vec2(zenChanComp->GetOwner()->GetWorldPosition()) + displacement;
+
+    // Set the new position
+    zenChanComp->GetOwner()->SetLocalPosition(newPosition);
+}
+
+void ZenChanDeadState::Exit(BehaviorStateMachine<ZenChanComponent>&)
+{
+}
+
+void ZenChanDeadState::HandleGround(ZenChanComponent* zenChanComp)
+{
+    glm::vec2 position = zenChanComp->GetPosition() + zenChanComp->GetCollider()->GetOffset();
+    float colliderWidth = zenChanComp->GetCollider()->GetWidth();
+    float colliderHeight = zenChanComp->GetCollider()->GetHeight();
+
+    glm::vec2 rayDirection(0.0f, 1.0f); // Downwards direction
+    float rayDistance = 3.0f;
+
+    glm::vec2 leftRayOrigin = position;
+    leftRayOrigin.x += 1.f;
+    leftRayOrigin.y += colliderHeight - rayDistance;
+
+    glm::vec2 rightRayOrigin = position;
+    rightRayOrigin.x += colliderWidth - 1.f;
+    rightRayOrigin.y += colliderHeight - rayDistance;
+
+    RaycastResult leftRayResult = Raycast(leftRayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
+    RaycastResult rightRayResult = Raycast(rightRayOrigin, rayDirection, rayDistance, CollisionComponent::ColliderType::STATIC);
+
+    if (leftRayResult.hit || rightRayResult.hit)
+    {
+        zenChanComp->SetIsGrounded(true);
+    }
+    else
+    {
+        zenChanComp->SetIsGrounded(false);
     }
 }

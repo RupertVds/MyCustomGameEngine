@@ -4,6 +4,7 @@
 // Forward declarations
 class ZenChanEntryState;
 class ZenChanWanderState;
+class ZenChanDeadState;
 
 class ZenChanEntryState final : public BehaviorState<ZenChanComponent> {
 public:
@@ -42,4 +43,19 @@ private:
     float m_MinJumpInterval = 0.25f; // Minimum interval between jumps
     float m_MaxJumpInterval = 2.5f; // Maximum interval between jumps
     float m_CurrentJumpInterval = 0.0f;
+};
+
+class ZenChanDeadState final : public BehaviorState<ZenChanComponent> {
+public:
+    void Entry(BehaviorStateMachine<ZenChanComponent>&);
+    void Update(BehaviorStateMachine<ZenChanComponent>& stateMachine);
+    void FixedUpdate(BehaviorStateMachine<ZenChanComponent>& stateMachine);
+    void Exit(BehaviorStateMachine<ZenChanComponent>&);
+private:
+    void HandleGround(ZenChanComponent* zenChanComp);
+    const float m_MoveSpeed = 50.f;
+    float m_FallingSpeed{ 140.f };
+    const float m_PoppingTime = 3.f;
+    float m_PoppingElapsedTime = 0.f;
+    bool m_IsPopped{};
 };

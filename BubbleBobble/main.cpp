@@ -69,12 +69,16 @@ void load() {
 	auto playerOneDeathTexture = ResourceManager::GetInstance().LoadTexture("player_1_death.png");
 	auto playerTwoDeathTexture = ResourceManager::GetInstance().LoadTexture("player_2_death.png");
 
-	auto zenChanRunTexture = ResourceManager::GetInstance().LoadTexture("enemy_1.png");
+	auto zenChanRunTexture = ResourceManager::GetInstance().LoadTexture("ZenChan/Run_Anim.png");
+	auto zenChanDeadBubbleTexture = ResourceManager::GetInstance().LoadTexture("ZenChan/Bubble_Anim.png");
+	auto zenChanDeadTexture = ResourceManager::GetInstance().LoadTexture("ZenChan/Death_Anim.png");
 
 	// Zen Chan
 	std::unique_ptr<GameObject> zenChanObject = std::make_unique<GameObject>("zenChan");
 	zenChanObject->AddComponent<RenderComponent>();
 	auto zenChanAnimator = zenChanObject->AddComponent<AnimatorComponent>();
+	zenChanAnimator->AddSpriteSheet("DeadBubble", zenChanDeadBubbleTexture, 16, 16, 8);
+	zenChanAnimator->AddSpriteSheet("Dead", zenChanDeadTexture, 16, 16, 8);
 	zenChanAnimator->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
 	zenChanObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	zenChanObject->AddComponent<ZenChanComponent>();
@@ -85,6 +89,8 @@ void load() {
 	std::unique_ptr<GameObject> zenChanObject2 = std::make_unique<GameObject>("zenChan");
 	zenChanObject2->AddComponent<RenderComponent>();
 	auto zenChanAnimator2 = zenChanObject2->AddComponent<AnimatorComponent>();
+	zenChanAnimator2->AddSpriteSheet("DeadBubble", zenChanDeadBubbleTexture, 16, 16, 4);
+	zenChanAnimator2->AddSpriteSheet("Dead", zenChanDeadTexture, 16, 16, 4);
 	zenChanAnimator2->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
 	zenChanObject2->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
 	zenChanObject2->AddComponent<ZenChanComponent>();
@@ -152,6 +158,12 @@ void load() {
 	inputManager.BindInput(0, GAMEPAD_B, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_3.wav", 0.2f), playerOneObject.get(), InputMode::Press });
 	//inputManager.BindInput(0, GAMEPAD_A, InputBinding{ playerOneObject->AddCommand<PlaySFX>("BubbleBobble_SFX_4.wav", 0.2f), InputMode::Press });
 	
+	inputManager.AddController();
+	inputManager.BindInput(1, GAMEPAD_DPAD_LEFT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{-1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });
+	inputManager.BindInput(1, GAMEPAD_DPAD_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });
+	inputManager.BindInput(1, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<JumpCommand>(), playerTwoObject.get(), InputMode::Press });
+	inputManager.BindInput(1, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<PlayerAttackCommand>(), playerTwoObject.get(), InputMode::Press });
+
 	scene.Add(std::move(fpsObject));
 	scene.Add(std::move(playerOneObject));
 	scene.Add(std::move(playerTwoObject));

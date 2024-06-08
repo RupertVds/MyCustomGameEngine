@@ -16,6 +16,7 @@
 #include <iostream>
 #include "GameCommands.h"
 #include "TilemapComponent.h"
+#include "LevelComponent.h"
 
 void GameManager::LoadScene()
 {
@@ -108,8 +109,9 @@ void GameManager::LoadSinglePlayer()
     auto& inputManager = InputManager::GetInstance();
 
     auto levelObject = std::make_unique<GameObject>();
-    levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
-    levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
+    //levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
+    //levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
+    levelObject->AddComponent<LevelComponent>(); // Add LevelComponent to manage the levels and enemies
 
     // ANIMS
     auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -119,34 +121,30 @@ void GameManager::LoadSinglePlayer()
     auto playerOneJumpDownTexture = ResourceManager::GetInstance().LoadTexture("player_1_jump_down.png");
     auto playerOneDeathTexture = ResourceManager::GetInstance().LoadTexture("player_1_death.png");
 
-    auto zenChanRunTexture = ResourceManager::GetInstance().LoadTexture("ZenChan/Run_Anim.png");
-    auto zenChanDeadBubbleTexture = ResourceManager::GetInstance().LoadTexture("ZenChan/Bubble_Anim.png");
-    auto zenChanDeadTexture = ResourceManager::GetInstance().LoadTexture("ZenChan/Death_Anim.png");
+    //// Zen Chan
+    //std::unique_ptr<GameObject> zenChanObject = std::make_unique<GameObject>("zenChan");
+    //zenChanObject->AddComponent<RenderComponent>();
+    //auto zenChanAnimator = zenChanObject->AddComponent<AnimatorComponent>();
+    //zenChanAnimator->AddSpriteSheet("DeadBubble", zenChanDeadBubbleTexture, 16, 16, 8);
+    //zenChanAnimator->AddSpriteSheet("Dead", zenChanDeadTexture, 16, 16, 8);
+    //zenChanAnimator->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
+    //zenChanObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+    //zenChanObject->AddComponent<ZenChanComponent>();
 
-    // Zen Chan
-    std::unique_ptr<GameObject> zenChanObject = std::make_unique<GameObject>("zenChan");
-    zenChanObject->AddComponent<RenderComponent>();
-    auto zenChanAnimator = zenChanObject->AddComponent<AnimatorComponent>();
-    zenChanAnimator->AddSpriteSheet("DeadBubble", zenChanDeadBubbleTexture, 16, 16, 8);
-    zenChanAnimator->AddSpriteSheet("Dead", zenChanDeadTexture, 16, 16, 8);
-    zenChanAnimator->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
-    zenChanObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
-    zenChanObject->AddComponent<ZenChanComponent>();
+    //zenChanObject->SetScale({ 2.f, 2.f, 2.f });
+    //zenChanObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 8 + 30, 0 });
 
-    zenChanObject->SetScale({ 2.f, 2.f, 2.f });
-    zenChanObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 8 + 30, 0 });
+    //std::unique_ptr<GameObject> zenChanObject2 = std::make_unique<GameObject>("zenChan");
+    //zenChanObject2->AddComponent<RenderComponent>();
+    //auto zenChanAnimator2 = zenChanObject2->AddComponent<AnimatorComponent>();
+    //zenChanAnimator2->AddSpriteSheet("DeadBubble", zenChanDeadBubbleTexture, 16, 16, 4);
+    //zenChanAnimator2->AddSpriteSheet("Dead", zenChanDeadTexture, 16, 16, 4);
+    //zenChanAnimator2->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
+    //zenChanObject2->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+    //zenChanObject2->AddComponent<ZenChanComponent>();
 
-    std::unique_ptr<GameObject> zenChanObject2 = std::make_unique<GameObject>("zenChan");
-    zenChanObject2->AddComponent<RenderComponent>();
-    auto zenChanAnimator2 = zenChanObject2->AddComponent<AnimatorComponent>();
-    zenChanAnimator2->AddSpriteSheet("DeadBubble", zenChanDeadBubbleTexture, 16, 16, 4);
-    zenChanAnimator2->AddSpriteSheet("Dead", zenChanDeadTexture, 16, 16, 4);
-    zenChanAnimator2->AddSpriteSheet("Run", zenChanRunTexture, 16, 16, 8);
-    zenChanObject2->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
-    zenChanObject2->AddComponent<ZenChanComponent>();
-
-    zenChanObject2->SetScale({ 2.f, 2.f, 2.f });
-    zenChanObject2->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 8 - 30, 0 });
+    //zenChanObject2->SetScale({ 2.f, 2.f, 2.f });
+    //zenChanObject2->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 8 - 30, 0 });
 
     // Player one
     std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
@@ -184,8 +182,8 @@ void GameManager::LoadSinglePlayer()
     //scene.Add(std::move(fpsObject));
     scene.Add(std::move(levelObject));
     scene.Add(std::move(playerOneObject));
-    scene.Add(std::move(zenChanObject));
-    scene.Add(std::move(zenChanObject2));
+    //scene.Add(std::move(zenChanObject));
+    //scene.Add(std::move(zenChanObject2));
     std::cout << "Single Player Loaded" << std::endl;
 
 }

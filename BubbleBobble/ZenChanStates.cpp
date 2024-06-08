@@ -145,6 +145,11 @@ void ZenChanWanderState::Update(BehaviorStateMachine<ZenChanComponent>& stateMac
     {
         zenChanComp->GetOwner()->SetLocalPosition({ zenChanComp->GetPosition().x, -zenChanComp->GetCollider()->GetHeight() });
     }
+
+    // Clamp zenchan horizontally when needed
+    glm::vec2 clampedPos{ zenChanComp->GetPosition() };
+    clampedPos.x = std::min(std::max(clampedPos.x, 34.f), static_cast<float>((Renderer::WIDTH - Renderer::UI_WIDTH - 3)) - zenChanComp->GetCollider()->GetWidth() - 32.f);
+    zenChanComp->GetOwner()->SetLocalPosition(clampedPos);
 }
 
 void ZenChanWanderState::FixedUpdate(BehaviorStateMachine<ZenChanComponent>& stateMachine)
@@ -330,8 +335,6 @@ void ZenChanDeadState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachi
     {
         auto triggeredObjects = zenChanComp->GetTrigger()->GetTriggeredObjects();
         std::cout << "TRIGGERED OBJECTS SIZE: " << triggeredObjects.size() << '\n';
-        // Copy triggered objects to avoid modifying the container while iterating
-        //std::vector<GameObject*> triggeredObjectsCopy(triggeredObjects.begin(), triggeredObjects.end());
 
         for (auto triggeredObject : triggeredObjects)
         {

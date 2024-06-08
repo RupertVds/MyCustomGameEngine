@@ -36,7 +36,7 @@ void load() {
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 #endif
 
-	GameManager::GetInstance().SetGameState(GameManager::GameState::MULTIPLAYER);
+	GameManager::GetInstance().SetGameState(GameManager::GameState::SINGLEPLAYER);
 	GameManager::GetInstance().LoadScene();
 }
 

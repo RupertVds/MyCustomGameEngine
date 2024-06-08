@@ -1,0 +1,4 @@
+ZenChan -50 0
+ZenChan 50 0
+ZenChan -50 -50
+ZenChan 50 -50

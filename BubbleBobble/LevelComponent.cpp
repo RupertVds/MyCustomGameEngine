@@ -32,6 +32,15 @@ void LevelComponent::Update() {
 
     if (AllEnemiesDefeated()) {
         m_CurrentLevel++;
+
+        if (m_CurrentLevel > m_MaxLevel)
+        {
+            std::cout << "FINAL LEVEL COMPLETED\n";
+            GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
+            SceneManager::GetInstance().DestroyAllScenes();
+            GameManager::GetInstance().LoadScene();
+            return;
+        }
         LoadLevel(m_CurrentLevel);
     }
 }

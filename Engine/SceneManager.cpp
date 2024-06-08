@@ -4,41 +4,108 @@
 
 void SceneManager::Update()
 {
-	for(auto& scene : m_Scenes)
+	std::vector<std::string> sceneNames;
+	sceneNames.reserve(m_Scenes.size());
+	for (const auto& scenePair : m_Scenes)
 	{
-		scene.second->Update();
+		sceneNames.push_back(scenePair.first);
+	}
+
+	// Iterate over the copied keys and update the scenes
+	for (const auto& sceneName : sceneNames)
+	{
+		// Find the scene by name in the original unordered_map
+		auto it = m_Scenes.find(sceneName);
+		if (it != m_Scenes.end() && it->second)
+		{
+			it->second->Update();
+		}
 	}
 }
 
 void SceneManager::FixedUpdate()
 {
-	for (auto& scene : m_Scenes)
+	// Create a copy of the keys (scene names) to avoid modifying the container while iterating
+	std::vector<std::string> sceneNames;
+	sceneNames.reserve(m_Scenes.size());
+	for (const auto& scenePair : m_Scenes)
 	{
-		scene.second->FixedUpdate();
+		sceneNames.push_back(scenePair.first);
+	}
+
+	// Iterate over the copied keys and update the scenes
+	for (const auto& sceneName : sceneNames)
+	{
+		// Find the scene by name in the original unordered_map
+		auto it = m_Scenes.find(sceneName);
+		if (it != m_Scenes.end() && it->second)
+		{
+			it->second->FixedUpdate();
+		}
 	}
 }
 
 void SceneManager::LateUpdate()
 {
-	for (auto& scene : m_Scenes)
+	// Create a copy of the keys (scene names) to avoid modifying the container while iterating
+	std::vector<std::string> sceneNames;
+	sceneNames.reserve(m_Scenes.size());
+	for (const auto& scenePair : m_Scenes)
 	{
-		scene.second->LateUpdate();
+		sceneNames.push_back(scenePair.first);
+	}
+
+	// Iterate over the copied keys and update the scenes
+	for (const auto& sceneName : sceneNames)
+	{
+		// Find the scene by name in the original unordered_map
+		auto it = m_Scenes.find(sceneName);
+		if (it != m_Scenes.end() && it->second)
+		{
+			it->second->LateUpdate();
+		}
 	}
 }
 
 void SceneManager::Render() const
 {
-	for (const auto& scene : m_Scenes)
+	std::vector<std::string> sceneNames;
+	sceneNames.reserve(m_Scenes.size());
+	for (const auto& scenePair : m_Scenes)
 	{
-		scene.second->Render();
+		sceneNames.push_back(scenePair.first);
+	}
+
+	// Iterate over the copied keys and update the scenes
+	for (const auto& sceneName : sceneNames)
+	{
+		// Find the scene by name in the original unordered_map
+		auto it = m_Scenes.find(sceneName);
+		if (it != m_Scenes.end() && it->second)
+		{
+			it->second->Render();
+		}
 	}
 }
 
 void SceneManager::RenderImGui()
 {
-	for (const auto& scene : m_Scenes)
+	std::vector<std::string> sceneNames;
+	sceneNames.reserve(m_Scenes.size());
+	for (const auto& scenePair : m_Scenes)
 	{
-		scene.second->RenderImGui();
+		sceneNames.push_back(scenePair.first);
+	}
+
+	// Iterate over the copied keys and update the scenes
+	for (const auto& sceneName : sceneNames)
+	{
+		// Find the scene by name in the original unordered_map
+		auto it = m_Scenes.find(sceneName);
+		if (it != m_Scenes.end() && it->second)
+		{
+			it->second->RenderImGui();
+		}
 	}
 }
 
@@ -56,4 +123,9 @@ void SceneManager::DestroyScene(const std::string& name)
 	// delete scene
 	// will probably need to let reference be notified
 	m_Scenes.erase(name);
+}
+
+void SceneManager::DestroyAllScenes()
+{
+	m_Scenes.clear();
 }

@@ -13,6 +13,7 @@ class SceneManager final : public Singleton<SceneManager>
 public:
 	Scene& CreateScene(const std::string& name);
 	void DestroyScene(const std::string& name);
+	void DestroyAllScenes();
 
 	void Update();
 	void FixedUpdate();

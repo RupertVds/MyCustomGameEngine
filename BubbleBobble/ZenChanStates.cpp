@@ -273,7 +273,7 @@ void ZenChanWanderState::HandleHorizontalMovement(ZenChanComponent* zenChanComp)
         float colliderHeight = zenChanComp->GetCollider()->GetHeight();
 
         glm::vec2 rayDirection{ 1.0f , 0.0f };
-        float rayReach = 2.f;
+        float rayReach = 10.f;
         float rayDistance = colliderWidth + rayReach;
 
         glm::vec2 middleRayOrigin = position;

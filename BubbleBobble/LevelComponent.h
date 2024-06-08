@@ -21,8 +21,8 @@ public:
 
 private:
     int m_CurrentLevel;
+    const int m_MaxLevel{ 3 };
     std::vector<GameObject*> m_Enemies;  // Store raw pointers to enemies
     GameObject* m_CurrentActiveLevelObject{};
-    void SpawnEnemies();
     bool AllEnemiesDefeated() const;
 };

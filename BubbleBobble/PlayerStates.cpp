@@ -6,6 +6,7 @@
 #include "BubbleComponent.h"
 #include "ResourceManager.h"
 #include <iostream>
+#include "GameManager.h"
 
 class BoxColliderComponent;
 
@@ -66,11 +67,11 @@ void PlayerAliveState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
 
     if (playerComp->GetOwner()->GetName() == "player_1")
     {
-        playerComp->GetOwner()->SetLocalPosition({ 75, Renderer::HEIGHT - 52 });
+        playerComp->GetOwner()->SetLocalPosition({ 75, Renderer::HEIGHT - Renderer::UI_HEIGHT - 52 });
     }
     else if (playerComp->GetOwner()->GetName() == "player_2")
     {
-        playerComp->GetOwner()->SetLocalPosition({ Renderer::WIDTH - 75, Renderer::HEIGHT - 52 });
+        playerComp->GetOwner()->SetLocalPosition({ Renderer::WIDTH - 75, Renderer::HEIGHT - Renderer::UI_HEIGHT - 52 });
     }
 }
 
@@ -125,8 +126,11 @@ void PlayerAliveState::Update(BehaviorStateMachine<PlayerComponent>& stateMachin
             bubbleObject->SetLocalPosition({ playerComp->GetPosition().x - playerComp->GetCollider()->GetWidth() * 1.25f, playerComp->GetPosition().y });
         }
 
-        auto scene = SceneManager::GetInstance().GetSceneByName("level");
-        scene->Add(std::move(bubbleObject));
+        auto scene = SceneManager::GetInstance().GetSceneByName(GameManager::GetInstance().GetCurrentGameSceneName());
+        if (scene)
+        {
+            scene->Add(std::move(bubbleObject));
+        }
         playerComp->SetIsAttacking(false);
     }
     else if (!playerComp->CanAttack())

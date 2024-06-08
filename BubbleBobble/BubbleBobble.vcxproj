@@ -182,6 +182,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BubbleComponent.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerLivesObserver.cpp" />
@@ -196,6 +197,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="BehaviorStateMachine.h" />
     <ClInclude Include="BubbleComponent.h" />
     <ClInclude Include="GameCommands.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerLivesObserver.h" />

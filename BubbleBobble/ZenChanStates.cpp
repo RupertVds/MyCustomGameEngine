@@ -338,7 +338,6 @@ void ZenChanDeadState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachi
                     m_IsPopped = true;
                     zenChanComp->SetVerticalVelocity(m_FallingSpeed);
                     zenChanComp->GetAnimator()->Play("Dead");
-
                 }
             }
         }

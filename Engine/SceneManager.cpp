@@ -50,3 +50,10 @@ Scene& SceneManager::CreateScene(const std::string& name)
 	//scene->Add(m_RootObject);
 	return *scene;
 }
+
+void SceneManager::DestroyScene(const std::string& name)
+{
+	// delete scene
+	// will probably need to let reference be notified
+	m_Scenes.erase(name);
+}

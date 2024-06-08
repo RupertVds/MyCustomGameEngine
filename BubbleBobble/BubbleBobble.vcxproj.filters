@@ -43,6 +43,9 @@
     <ClCompile Include="ZenChanStates.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommands.h">
@@ -85,5 +88,6 @@
     <ClInclude Include="ZenChanComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="GameManager.h" />
   </ItemGroup>
 </Project>

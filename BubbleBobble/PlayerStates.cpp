@@ -331,7 +331,7 @@ void PlayerDeadState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 
 void PlayerDeadState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
-    std::cout << "PlayerDeadState: Updated" << std::endl;
+    //std::cout << "PlayerDeadState: Updated" << std::endl;
     if (stateMachine.GetComponent()->GetAnimator()->ReachedEndFrame())
     {
         stateMachine.SetState(new PlayerAliveState());

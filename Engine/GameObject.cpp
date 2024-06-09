@@ -101,7 +101,14 @@ void GameObject::Render() const
         component->Render();
     }
 
+    std::vector<GameObject*> childrenCopy;
+    childrenCopy.reserve(m_Children.size());
     for (auto& child : m_Children)
+    {
+        childrenCopy.emplace_back(child.get());
+    }
+
+    for (auto& child : childrenCopy)
     {
         child->Render();
     }
@@ -120,7 +127,14 @@ void GameObject::RenderImGui()
         component->RenderImGui();
     }
 
+    std::vector<GameObject*> childrenCopy;
+    childrenCopy.reserve(m_Children.size());
     for (auto& child : m_Children)
+    {
+        childrenCopy.emplace_back(child.get());
+    }
+
+    for (auto& child : childrenCopy)
     {
         child->RenderImGui();
     }

@@ -9,7 +9,7 @@ class Texture2D;
 class Renderer final : public Singleton<Renderer>
 {
 public:
-	static const int UI_WIDTH{ 50 };
+	static const int UI_WIDTH{ 96 };
 	static const int WIDTH{ 510 + UI_WIDTH };
 	static const int HEIGHT{ 400 };
 	static const bool FULLSCREEN{ false };

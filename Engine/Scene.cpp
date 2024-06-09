@@ -29,6 +29,7 @@ void Scene::Add(std::unique_ptr<GameObject>&& object)
 
 void Scene::Update()
 {
+	if (m_IsMarkedForDeletion) return;
 	// Update all objects in the scene
 	try
 	{
@@ -42,6 +43,8 @@ void Scene::Update()
 
 void Scene::FixedUpdate()
 {
+	if (m_IsMarkedForDeletion) return;
+
 	try
 	{
 		m_RootObject->FixedUpdate();
@@ -54,6 +57,8 @@ void Scene::FixedUpdate()
 
 void Scene::LateUpdate()
 {
+	if (m_IsMarkedForDeletion) return;
+
 	try
 	{
 		m_RootObject->LateUpdate();
@@ -66,6 +71,8 @@ void Scene::LateUpdate()
 
 void Scene::Render() const
 {
+	if (m_IsMarkedForDeletion) return;
+
 	// Render all objects in the scene
 	m_RootObject->Render();
 }

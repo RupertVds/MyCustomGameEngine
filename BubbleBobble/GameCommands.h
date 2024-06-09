@@ -4,6 +4,8 @@
 #include "PlayerMovementComponent.h"
 #include "HealthComponent.h"
 #include "PlayerPointsComponent.h"
+#include "GameManager.h"
+#include "InputManager.h"
 
 class MoveHorizontalCommand : public GameObjectCommand
 {
@@ -131,4 +133,22 @@ public:
 private:
 	const std::string m_Id{};
 	const float m_Volume{};
+};
+
+class LoadGameModeCommand final : public GameObjectCommand
+{
+public:
+	LoadGameModeCommand(GameObject* object, GameManager::GameState state) : GameObjectCommand(object),
+		m_State{state}
+	{}
+
+	virtual void Execute() override
+	{
+		GameManager::GetInstance().SetGameState(m_State);
+		SceneManager::GetInstance().DestroyAllScenes();
+		GameManager::GetInstance().LoadScene();
+	}
+
+private:
+	GameManager::GameState m_State{};
 };

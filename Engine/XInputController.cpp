@@ -26,7 +26,8 @@ public:
         {
             // Handle controller disconnected or other error
             // I may want to implement error handling here
-            //return true;
+            std::cout << "A CONTROLLER IS MISSING \n";
+            return;
         }
 
         auto buttonChanges = m_CurrentControllerState.Gamepad.wButtons ^ m_PreviousControllerState.Gamepad.wButtons;
@@ -35,6 +36,11 @@ public:
 
         for (auto const& [button, binding] : m_ControllerBindings)
         {
+            if (binding.command == nullptr)
+            {
+                continue;
+            }
+
             switch (binding.mode)
             {
             case InputMode::Release:
@@ -83,6 +89,12 @@ public:
     }
 
     int GetIndex() const { return m_Index; }
+
+    void ClearAllBindings()
+    {
+        m_ControllerBindings.clear();
+    }
+
 private:
     int m_Index;
     std::unordered_map<WORD, InputBinding> m_ControllerBindings;
@@ -121,6 +133,11 @@ void XInputController::UnbindAllForObject(GameObject* object)
 
     std::cout << "Unbinding all for GameObject in XInputController: " << m_pImpl->GetIndex() << "\n";
     m_pImpl->UnbindAllForObject(object);
+}
+
+void XInputController::ClearAllBindings()
+{
+    m_pImpl->ClearAllBindings();
 }
 
 int XInputController::GetIndex() const

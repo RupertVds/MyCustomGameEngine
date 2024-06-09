@@ -18,6 +18,9 @@ public:
 	void Render() const;
 	void RenderImGui();
 
+	bool GetIsMarkedForDeletion() const { return m_IsMarkedForDeletion; }
+	void SetIsMarkedForDeletion(bool isMarkedForDeletion) { m_IsMarkedForDeletion = isMarkedForDeletion; }
+
 	~Scene();
 	Scene(const Scene& other) = delete;
 	Scene(Scene&& other) = delete;
@@ -28,6 +31,7 @@ private:
 	explicit Scene(const std::string& name);
 
 	std::string m_Name;
+	bool m_IsMarkedForDeletion{};
 	std::unique_ptr<GameObject> m_RootObject{};
 
 	static unsigned int m_IdCounter; 

@@ -49,23 +49,23 @@ void TilemapComponent::LoadFileData(const std::string& fileName, std::vector<std
         }
 
         // Debug output to check the values being read
-        std::cout << "Loaded row: ";
-        for (int val : row) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
+        //std::cout << "Loaded row: ";
+        //for (int val : row) {
+        //    std::cout << val << " ";
+        //}
+        //std::cout << std::endl;
     }
 
     file.close();
 
     // Debug output to check the entire data
-    std::cout << "Loaded data from " << fileName << ":" << std::endl;
-    for (const auto& row : data) {
-        for (int val : row) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
-    }
+    //std::cout << "Loaded data from " << fileName << ":" << std::endl;
+    //for (const auto& row : data) {
+    //    for (int val : row) {
+    //        std::cout << val << " ";
+    //    }
+    //    std::cout << std::endl;
+    //}
 }
 
 

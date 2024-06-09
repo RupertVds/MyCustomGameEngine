@@ -65,6 +65,22 @@ void SceneManager::LateUpdate()
 			it->second->LateUpdate();
 		}
 	}
+
+	// Collect scenes marked for deletion
+	std::vector<std::string> scenesToDelete;
+	for (const auto& scenePair : m_Scenes)
+	{
+		if (scenePair.second->GetIsMarkedForDeletion())
+		{
+			scenesToDelete.push_back(scenePair.first);
+		}
+	}
+
+	// Erase scenes marked for deletion
+	for (const auto& sceneName : scenesToDelete)
+	{
+		m_Scenes.erase(sceneName);
+	}
 }
 
 void SceneManager::Render() const
@@ -127,5 +143,9 @@ void SceneManager::DestroyScene(const std::string& name)
 
 void SceneManager::DestroyAllScenes()
 {
-	m_Scenes.clear();
+	for (auto& scene : m_Scenes)
+	{
+		scene.second->GetRoot()->DeleteSelf();
+		scene.second->SetIsMarkedForDeletion(true);
+	}
 }

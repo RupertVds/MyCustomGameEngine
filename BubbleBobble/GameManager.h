@@ -34,5 +34,6 @@ private:
 
 	void LoadGameUI();
 	GameState m_CurrentState{ GameState::TITLESCREEN };
+	bool m_AddedControllers{};
 };
 

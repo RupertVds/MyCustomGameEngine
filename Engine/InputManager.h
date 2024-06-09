@@ -22,6 +22,7 @@ public:
 	void UnbindInput(int controllerIndex, unsigned short button);
 
 	void UnbindAllForObject(GameObject* object);
+	void ClearAllBindings();
 private:
 	friend class Singleton<InputManager>;
 	InputManager() = default;
@@ -31,8 +32,6 @@ private:
 	const Uint8* m_CurrentKeyState = nullptr;
 
 	std::vector<std::unique_ptr<XInputController>> m_Controllers;
-
-	void ClearAllBindings();
 
 	template<typename T>
 	void UnbindAllForObjectInMap(std::unordered_map<T, InputBinding>& bindings, GameObject* object);

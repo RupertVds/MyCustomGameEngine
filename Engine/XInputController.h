@@ -16,10 +16,10 @@ public:
 	void BindInput(unsigned short button, InputBinding inputBinding);
 	void UnbindInput(unsigned short button);
 	void UnbindAllForObject(GameObject* object);
+	void ClearAllBindings();
 
 	int GetIndex() const;
 private:
 	class XInputControllerImpl;
 	std::unique_ptr<XInputControllerImpl> m_pImpl;
 };
-

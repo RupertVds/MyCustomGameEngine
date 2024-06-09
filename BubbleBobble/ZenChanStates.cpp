@@ -123,10 +123,6 @@ void ZenChanWanderState::Update(BehaviorStateMachine<ZenChanComponent>& stateMac
     if (zenChanComp->GetTrigger()->IsTriggered())
     {
         auto triggeredObjects = zenChanComp->GetTrigger()->GetTriggeredObjects();
-        std::cout << "TRIGGERED OBJECTS SIZE: " << triggeredObjects.size() << '\n';
-        // Copy triggered objects to avoid modifying the container while iterating
-        //std::vector<GameObject*> triggeredObjectsCopy(triggeredObjects.begin(), triggeredObjects.end());
-
         for (auto triggeredObject : triggeredObjects)
         {
          
@@ -284,7 +280,7 @@ void ZenChanWanderState::HandleHorizontalMovement(ZenChanComponent* zenChanComp)
 
         if (middleRayResult.hit)
         {
-            std::cout << "Hit Detected! Reversing Direction.\n";
+            //std::cout << "Hit Detected! Reversing Direction.\n";
             zenChanComp->SetHorizontalVelocity(-zenChanComp->GetVelocity().x);
         }
 
@@ -334,7 +330,7 @@ void ZenChanDeadState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachi
     if (zenChanComp->GetTrigger()->IsTriggered())
     {
         auto triggeredObjects = zenChanComp->GetTrigger()->GetTriggeredObjects();
-        std::cout << "TRIGGERED OBJECTS SIZE: " << triggeredObjects.size() << '\n';
+        //std::cout << "TRIGGERED OBJECTS SIZE: " << triggeredObjects.size() << '\n';
 
         for (auto triggeredObject : triggeredObjects)
         {

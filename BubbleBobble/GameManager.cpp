@@ -220,19 +220,6 @@ void GameManager::LoadSinglePlayer()
     playerOneIconObject->SetScale({ 2.f, 2.f, 2.f });
     scene.Add(std::move(playerOneIconObject));
 
-    auto scoreHeaderFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 22);
-    auto highScoreHeaderObject = std::make_unique<GameObject>();
-    auto highScoreHeaderTextObject = highScoreHeaderObject->AddComponent<RenderComponent>();
-    highScoreHeaderObject->AddComponent<TextComponent>("HI SCORE", scoreHeaderFont);
-    highScoreHeaderObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreHeaderTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f - highScoreHeaderTextObject->GetDestRect().h });
-    scene.Add(std::move(highScoreHeaderObject));
-
-    auto highScoreObject = std::make_unique<GameObject>();
-    auto highScoreTextObject = highScoreObject->AddComponent<RenderComponent>();
-    highScoreObject->AddComponent<TextComponent>("99999", scoreFont);
-    highScoreObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f });
-    scene.Add(std::move(highScoreObject));
-
     scene.Add(std::move(levelObject));
     scene.Add(std::move(playerOneObject));
     std::cout << "Single Player Loaded" << std::endl;
@@ -374,19 +361,6 @@ void GameManager::LoadMultiplayer()
     playerTwoIconObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f , Renderer::HEIGHT * 0.5f });
     playerTwoIconObject->SetScale({ 2.f, 2.f, 2.f });
     scene.Add(std::move(playerTwoIconObject));
-
-    auto scoreHeaderFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 22);
-    auto highScoreHeaderObject = std::make_unique<GameObject>();
-    auto highScoreHeaderTextObject = highScoreHeaderObject->AddComponent<RenderComponent>();
-    highScoreHeaderObject->AddComponent<TextComponent>("HI SCORE", scoreHeaderFont);
-    highScoreHeaderObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreHeaderTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f - highScoreHeaderTextObject->GetDestRect().h });
-    scene.Add(std::move(highScoreHeaderObject));
-
-    auto highScoreObject = std::make_unique<GameObject>();
-    auto highScoreTextObject = highScoreObject->AddComponent<RenderComponent>();
-    highScoreObject->AddComponent<TextComponent>("99999", scoreFont);
-    highScoreObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f });
-    scene.Add(std::move(highScoreObject));
 
     scene.Add(std::move(levelObject));
     scene.Add(std::move(playerOneObject));

@@ -19,6 +19,7 @@ public:
 public:
 	void TakeDamage(int amount)
 	{
+		if (m_Health - amount < 0) return;
 		m_Health -= amount;
 		GetOwner()->NotifyObservers(Event::PLAYER_DAMAGE);
 		//EventQueue::GetInstance().NotifyEvent(Event::PLAYER_DAMAGE);

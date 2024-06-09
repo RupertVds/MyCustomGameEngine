@@ -10,6 +10,7 @@
 #include <Renderer.h>
 #include "BoxColliderComponent.h"
 #include "WatermelonComponent.h"
+#include "HealthComponent.h"
 
 class BoxColliderComponent;
 

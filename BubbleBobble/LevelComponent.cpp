@@ -139,6 +139,9 @@ void LevelComponent::Notify(Event event, GameObject* object)
     case Event::PLAYER_DAMAGE:
         break;
     case Event::PLAYER_DIED:
+        GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
+        SceneManager::GetInstance().DestroyAllScenes();
+        GameManager::GetInstance().LoadScene();
         break;
     case Event::PLAYER_SCORE:
         break;

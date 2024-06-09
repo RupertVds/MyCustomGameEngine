@@ -7,6 +7,7 @@
 class BoxColliderComponent;
 class CircleColliderComponent;
 class AnimatorComponent;
+class HealthComponent;
 
 class PlayerComponent final : public Component
 {
@@ -72,6 +73,7 @@ public:
 	BoxColliderComponent* GetCeilingTrigger() const { return m_pCeilingTrigger; }
 	BoxColliderComponent* GetJumpCorrectionTrigger() const { return m_pJumpCorrectionTrigger; }
 	AnimatorComponent* GetAnimator() { return m_pAnimator; }
+	HealthComponent* GetHealth() { return m_pHealthComponent; }
 	BehaviorStateMachine<PlayerComponent>* GetStateMachine() { return &m_StateMachine; }
 private:
 	std::shared_ptr<Scene> m_CurrentScene;
@@ -83,6 +85,8 @@ private:
 	BoxColliderComponent* m_pJumpCorrectionTrigger{};
 
 	int m_Score{};
+	HealthComponent* m_pHealthComponent{};
+
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
 	bool m_IsAttacking{};

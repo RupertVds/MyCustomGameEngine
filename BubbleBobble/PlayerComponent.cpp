@@ -4,6 +4,7 @@
 #include <Renderer.h>
 #include <Utils.h>
 #include <AnimatorComponent.h>
+#include "HealthComponent.h"
 
 PlayerComponent::PlayerComponent(GameObject* pOwner)
     :
@@ -31,6 +32,7 @@ PlayerComponent::PlayerComponent(GameObject* pOwner)
     this->GetOwner()->AddChild(std::move(jumpingCorrectionTriggerObject));
     m_StateMachine.SetState(new PlayerEntryState());
 
+    m_pHealthComponent = GetOwner()->GetComponent<HealthComponent>();
 }
 
 void PlayerComponent::Update()

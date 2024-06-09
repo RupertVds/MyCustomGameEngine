@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include <iostream>
 #include "GameManager.h"
+#include "HealthComponent.h"
 
 class BoxColliderComponent;
 
@@ -16,11 +17,18 @@ void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
     std::cout << "PlayerEntryState: Entered" << '\n';
     PlayerComponent* playerComp = stateMachine.GetComponent();
 
-    // replace to bubble animation
+    // todo: replace to bubble animation
     playerComp->GetAnimator()->Play("JumpDown", true);
-    playerComp->GetCollider()->SetIgnoreStatic(true);
     // set to constant velocity
-    playerComp->SetVelocity({ 0, m_MovingDownSpeed });
+    playerComp->SetVelocity({ 0, 0 });
+    if (playerComp->GetOwner()->GetName() == "player_1")
+    {
+        playerComp->GetOwner()->SetLocalPosition({ 75, Renderer::HEIGHT - 52 });
+    }
+    else if (playerComp->GetOwner()->GetName() == "player_2")
+    {
+        playerComp->GetOwner()->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH - 75, Renderer::HEIGHT - 52 });
+    }
     playerComp->GetOwner()->NotifyObservers(Event::PLAYER_JOIN);
 }
 
@@ -326,6 +334,8 @@ void PlayerDeadState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
     PlayerComponent* playerComp = stateMachine.GetComponent();
 
     playerComp->GetCollider()->SetIsDisabled(true);
+    playerComp->SetIsAttacking(false);
+    playerComp->SetIsJumping(false);
     playerComp->GetAnimator()->Play("Death", false);
     playerComp->GetOwner()->SetLocalPosition({ playerComp->GetOwner()->GetLocalPosition().x, playerComp->GetOwner()->GetLocalPosition().y - playerComp->GetCollider()->GetHeight() });
 }
@@ -347,5 +357,9 @@ void PlayerDeadState::Exit(BehaviorStateMachine<PlayerComponent>& stateMachine)
     PlayerComponent* playerComp = stateMachine.GetComponent();
 
     playerComp->GetOwner()->SetLocalPosition({ playerComp->GetOwner()->GetLocalPosition().x, playerComp->GetOwner()->GetLocalPosition().y + playerComp->GetCollider()->GetHeight() });
-
+    if (playerComp->GetAnimator()->ReachedEndFrame())
+    {
+        playerComp->GetHealth()->TakeDamage(1);
+        playerComp->GetOwner()->NotifyObservers(Event::PLAYER_DAMAGE);
+    }
 }

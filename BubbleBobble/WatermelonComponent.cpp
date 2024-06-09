@@ -30,8 +30,8 @@ void WatermelonComponent::FixedUpdate()
                 auto playerComp = triggeredObject->GetComponent<PlayerComponent>();
                 if (playerComp)
                 {
-                    playerComp->GetOwner()->NotifyObservers(Event::WATERMELON_PICKUP);
                     playerComp->AddScore(m_ScoreGain);
+                    playerComp->GetOwner()->NotifyObservers(Event::WATERMELON_PICKUP);
                 }
             }
         }

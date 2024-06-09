@@ -148,7 +148,6 @@ void GameManager::LoadSinglePlayer()
 
     auto levelObject = std::make_unique<GameObject>();
     auto levelComp = levelObject->AddComponent<LevelComponent>();
-    //levelComp->No
 
     // ANIMS
     auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -166,6 +165,7 @@ void GameManager::LoadSinglePlayer()
     auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>();
     playerOneObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 50, 25 });
     playerOneObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+    playerOneObject->AddComponent<HealthComponent>();
     playerOneObject->AddComponent<PlayerComponent>();
     playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
@@ -193,7 +193,7 @@ void GameManager::LoadSinglePlayer()
     auto scoreFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 24);
     auto playerOneScoreObject = std::make_unique<GameObject>();
     auto textPlayerOneScoreObject = playerOneScoreObject->AddComponent<RenderComponent>();
-    playerOneScoreObject->AddComponent<TextComponent>("1000", scoreFont);
+    playerOneScoreObject->AddComponent<TextComponent>("000", scoreFont);
     auto playerOnePointsObserver = playerOneScoreObject->AddComponent<PlayerPointsObserver>();
     playerOneScoreObject->SetLocalPosition({ Renderer::WIDTH - textPlayerOneScoreObject->GetDestRect().w, Renderer::HEIGHT * 0.3f });
     playerOneObject->AddObserver(playerOnePointsObserver);
@@ -214,25 +214,6 @@ void GameManager::LoadSinglePlayer()
     playerOneIconObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f , Renderer::HEIGHT * 0.2f});
     playerOneIconObject->SetScale({ 2.f, 2.f, 2.f });
     scene.Add(std::move(playerOneIconObject));
-
-    auto playerTwoScoreObject = std::make_unique<GameObject>();
-    auto textPlayerTwoScoreObject = playerTwoScoreObject->AddComponent<RenderComponent>();
-    playerTwoScoreObject->AddComponent<TextComponent>("2", scoreFont);
-    playerTwoScoreObject->SetLocalPosition({ Renderer::WIDTH - textPlayerTwoScoreObject->GetDestRect().w, Renderer::HEIGHT * 0.6f });
-    scene.Add(std::move(playerTwoScoreObject));
-
-    auto playerTwoHealthObject = std::make_unique<GameObject>();
-    auto textPlayerTwoHealthObject = playerTwoHealthObject->AddComponent<RenderComponent>();
-    playerTwoHealthObject->AddComponent<TextComponent>("3", healthFont);
-    playerTwoHealthObject->SetLocalPosition({ Renderer::WIDTH - textPlayerTwoHealthObject->GetDestRect().w, Renderer::HEIGHT * 0.5f });
-    scene.Add(std::move(playerTwoHealthObject));
-
-    auto playerTwoIconTexture = ResourceManager::GetInstance().LoadTexture("player_2.png");
-    auto playerTwoIconObject = std::make_unique<GameObject>();
-    playerTwoIconObject->AddComponent<RenderComponent>(playerTwoIconTexture);
-    playerTwoIconObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f , Renderer::HEIGHT * 0.5f });
-    playerTwoIconObject->SetScale({ 2.f, 2.f, 2.f });
-    scene.Add(std::move(playerTwoIconObject));
 
     auto scoreHeaderFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 22);
     auto highScoreHeaderObject = std::make_unique<GameObject>();
@@ -266,7 +247,7 @@ void GameManager::LoadMultiplayer()
     fpsObject->SetLocalPosition({ 40, 20 });
 
     auto levelObject = std::make_unique<GameObject>();
-    levelObject->AddComponent<LevelComponent>();
+    auto levelComp = levelObject->AddComponent<LevelComponent>();
 
     // ANIMS
     auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -285,11 +266,13 @@ void GameManager::LoadMultiplayer()
     // Player one
     std::unique_ptr<GameObject> playerOneObject = std::make_unique<GameObject>("player_1");
 
+    playerOneObject->AddObserver(levelComp);
     playerOneObject->AddComponent<RenderComponent>(playerOneRunTexture);
     auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>();
     playerOneObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 50, 25 });
     playerOneObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
     //playerOneObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
+    playerOneObject->AddComponent<HealthComponent>();
     playerOneObject->AddComponent<PlayerComponent>();
     playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
@@ -302,12 +285,14 @@ void GameManager::LoadMultiplayer()
 
     // Player two
     std::unique_ptr<GameObject> playerTwoObject = std::make_unique<GameObject>("player_2");
+    playerTwoObject->AddObserver(levelComp);
     playerTwoObject->AddComponent<RenderComponent>(playerTwoRunTexture);
     auto playerTwoAnimator = playerTwoObject->AddComponent<AnimatorComponent>();
 
     playerTwoObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 + 50, 25 });
     //playerTwoObject->AddComponent<CircleColliderComponent>(16.f, CollisionComponent::ColliderType::DYNAMIC);
     playerTwoObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+    playerTwoObject->AddComponent<HealthComponent>();
     playerTwoObject->AddComponent<PlayerComponent>();
     playerTwoObject->SetScale({ 2.f, 2.f, 2.f });
 
@@ -340,6 +325,68 @@ void GameManager::LoadMultiplayer()
     inputManager.BindInput(1, GAMEPAD_DPAD_RIGHT, InputBinding{ playerTwoObject->AddCommand<MoveHorizontalCommand>(glm::vec2{1.f, 0.f}), playerTwoObject.get(), InputMode::Hold });
     inputManager.BindInput(1, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<JumpCommand>(), playerTwoObject.get(), InputMode::Press });
     inputManager.BindInput(1, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<PlayerAttackCommand>(), playerTwoObject.get(), InputMode::Press });
+
+    //UI
+    auto scoreFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 24);
+    auto playerOneScoreObject = std::make_unique<GameObject>();
+    auto textPlayerOneScoreObject = playerOneScoreObject->AddComponent<RenderComponent>();
+    playerOneScoreObject->AddComponent<TextComponent>("000", scoreFont);
+    auto playerOnePointsObserver = playerOneScoreObject->AddComponent<PlayerPointsObserver>();
+    playerOneScoreObject->SetLocalPosition({ Renderer::WIDTH - textPlayerOneScoreObject->GetDestRect().w, Renderer::HEIGHT * 0.3f });
+    playerOneObject->AddObserver(playerOnePointsObserver);
+    scene.Add(std::move(playerOneScoreObject));
+
+    auto healthFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 34);
+    auto playerOneHealthObject = std::make_unique<GameObject>();
+    auto textPlayerOneHealthObject = playerOneHealthObject->AddComponent<RenderComponent>();
+    playerOneHealthObject->AddComponent<TextComponent>("3", healthFont);
+    auto playerOneLivesObserver = playerOneHealthObject->AddComponent<PlayerLivesObserver>();
+    playerOneHealthObject->SetLocalPosition({ Renderer::WIDTH - textPlayerOneHealthObject->GetDestRect().w, Renderer::HEIGHT * 0.2f });
+    playerOneObject->AddObserver(playerOneLivesObserver);
+    scene.Add(std::move(playerOneHealthObject));
+
+    auto playerOneIconTexture = ResourceManager::GetInstance().LoadTexture("player_1.png");
+    auto playerOneIconObject = std::make_unique<GameObject>();
+    playerOneIconObject->AddComponent<RenderComponent>(playerOneIconTexture);
+    playerOneIconObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f , Renderer::HEIGHT * 0.2f });
+    playerOneIconObject->SetScale({ 2.f, 2.f, 2.f });
+    scene.Add(std::move(playerOneIconObject));
+
+    auto playerTwoScoreObject = std::make_unique<GameObject>();
+    auto textPlayerTwoScoreObject = playerTwoScoreObject->AddComponent<RenderComponent>();
+    playerTwoScoreObject->AddComponent<TextComponent>("000", scoreFont);
+    auto playerTwoPointsObserver = playerTwoScoreObject->AddComponent<PlayerPointsObserver>();
+    playerTwoScoreObject->SetLocalPosition({ Renderer::WIDTH - textPlayerTwoScoreObject->GetDestRect().w, Renderer::HEIGHT * 0.6f });
+    playerTwoObject->AddObserver(playerTwoPointsObserver);
+    scene.Add(std::move(playerTwoScoreObject));
+
+    auto playerTwoHealthObject = std::make_unique<GameObject>();
+    auto textPlayerTwoHealthObject = playerTwoHealthObject->AddComponent<RenderComponent>();
+    playerTwoHealthObject->AddComponent<TextComponent>("3", healthFont);
+    auto playerTwoHealthObserver = playerTwoHealthObject->AddComponent<PlayerLivesObserver>();
+    playerTwoHealthObject->SetLocalPosition({ Renderer::WIDTH - textPlayerTwoHealthObject->GetDestRect().w, Renderer::HEIGHT * 0.5f });
+    playerTwoObject->AddObserver(playerTwoHealthObserver);
+    scene.Add(std::move(playerTwoHealthObject));
+
+    auto playerTwoIconTexture = ResourceManager::GetInstance().LoadTexture("player_2.png");
+    auto playerTwoIconObject = std::make_unique<GameObject>();
+    playerTwoIconObject->AddComponent<RenderComponent>(playerTwoIconTexture);
+    playerTwoIconObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f , Renderer::HEIGHT * 0.5f });
+    playerTwoIconObject->SetScale({ 2.f, 2.f, 2.f });
+    scene.Add(std::move(playerTwoIconObject));
+
+    auto scoreHeaderFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 22);
+    auto highScoreHeaderObject = std::make_unique<GameObject>();
+    auto highScoreHeaderTextObject = highScoreHeaderObject->AddComponent<RenderComponent>();
+    highScoreHeaderObject->AddComponent<TextComponent>("HI SCORE", scoreHeaderFont);
+    highScoreHeaderObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreHeaderTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f - highScoreHeaderTextObject->GetDestRect().h });
+    scene.Add(std::move(highScoreHeaderObject));
+
+    auto highScoreObject = std::make_unique<GameObject>();
+    auto highScoreTextObject = highScoreObject->AddComponent<RenderComponent>();
+    highScoreObject->AddComponent<TextComponent>("99999", scoreFont);
+    highScoreObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f });
+    scene.Add(std::move(highScoreObject));
 
     scene.Add(std::move(fpsObject));
     scene.Add(std::move(levelObject));
@@ -387,6 +434,7 @@ void GameManager::LoadVersus()
     auto playerOneAnimator = playerOneObject->AddComponent<AnimatorComponent>();
     playerOneObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 - 50, 25 });
     playerOneObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+    playerOneObject->AddComponent<HealthComponent>();
     playerOneObject->AddComponent<PlayerComponent>();
     playerOneObject->SetScale({ 2.f, 2.f, 2.f });
 
@@ -404,6 +452,7 @@ void GameManager::LoadVersus()
 
     playerTwoObject->SetLocalPosition({ (Renderer::WIDTH - Renderer::UI_WIDTH) / 2 + 50, 25 });
     playerTwoObject->AddComponent<BoxColliderComponent>(24.f, 32.f, CollisionComponent::ColliderType::DYNAMIC);
+    playerTwoObject->AddComponent<HealthComponent>();
     playerTwoObject->AddComponent<PlayerComponent>();
     playerTwoObject->SetScale({ 2.f, 2.f, 2.f });
 

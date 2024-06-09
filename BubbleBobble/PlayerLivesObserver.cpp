@@ -18,7 +18,7 @@ void PlayerLivesObserver::Notify(Event event, GameObject* object)
 		break;
 	case Event::PLAYER_DAMAGE:
 		auto healthComponent = object->GetComponent<HealthComponent>();
-		if (healthComponent) m_pTextComponent->SetText("# lives: " + std::to_string(healthComponent->GetHealth()));
+		if (healthComponent) m_pTextComponent->SetText(std::to_string(healthComponent->GetHealth()));
 		break;
 	}
 }

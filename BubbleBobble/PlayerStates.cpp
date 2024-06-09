@@ -21,6 +21,7 @@ void PlayerEntryState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine
     playerComp->GetCollider()->SetIgnoreStatic(true);
     // set to constant velocity
     playerComp->SetVelocity({ 0, m_MovingDownSpeed });
+    playerComp->GetOwner()->NotifyObservers(Event::PLAYER_JOIN);
 }
 
 void PlayerEntryState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine)
@@ -321,7 +322,7 @@ void PlayerAliveState::Exit(BehaviorStateMachine<PlayerComponent>&)
 // Definition of methods for PlayerDeadState
 void PlayerDeadState::Entry(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
-    std::cout << "PlayerDeadState: Entered" << std::endl;
+    //std::cout << "PlayerDeadState: Entered" << std::endl;
     PlayerComponent* playerComp = stateMachine.GetComponent();
 
     playerComp->GetCollider()->SetIsDisabled(true);
@@ -342,7 +343,7 @@ void PlayerDeadState::Update(BehaviorStateMachine<PlayerComponent>& stateMachine
 
 void PlayerDeadState::Exit(BehaviorStateMachine<PlayerComponent>& stateMachine)
 {
-    std::cout << "PlayerDeadState: Exited" << std::endl;
+    //std::cout << "PlayerDeadState: Exited" << std::endl;
     PlayerComponent* playerComp = stateMachine.GetComponent();
 
     playerComp->GetOwner()->SetLocalPosition({ playerComp->GetOwner()->GetLocalPosition().x, playerComp->GetOwner()->GetLocalPosition().y + playerComp->GetCollider()->GetHeight() });

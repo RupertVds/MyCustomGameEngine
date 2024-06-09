@@ -190,6 +190,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     <ClCompile Include="PlayerPointsObserver.cpp" />
     <ClCompile Include="PlayerStates.cpp" />
     <ClCompile Include="TilemapComponent.cpp" />
+    <ClCompile Include="WatermelonComponent.cpp" />
     <ClCompile Include="ZenChanComponent.cpp" />
     <ClCompile Include="ZenChanStates.cpp" />
   </ItemGroup>
@@ -208,6 +209,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer-2.8.0\lib\$(PlatformTarget)\*.dll" "$(O
     <ClInclude Include="PlayerPointsObserver.h" />
     <ClInclude Include="PlayerStates.h" />
     <ClInclude Include="TilemapComponent.h" />
+    <ClInclude Include="WatermelonComponent.h" />
     <ClInclude Include="ZenChanComponent.h" />
     <ClInclude Include="ZenChanStates.h" />
   </ItemGroup>

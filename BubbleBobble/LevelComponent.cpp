@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include "PlayerComponent.h"
 
 LevelComponent::LevelComponent(GameObject* pOwner)
     : Component(pOwner), m_CurrentLevel(1) {
@@ -22,6 +23,9 @@ void LevelComponent::Render() const {
 }
 
 void LevelComponent::Update() {
+}
+
+void LevelComponent::LateUpdate() {
     // Remove enemies marked for deletion from the vector
     m_Enemies.erase(
         std::remove_if(m_Enemies.begin(), m_Enemies.end(), [](GameObject* enemy) {
@@ -41,12 +45,9 @@ void LevelComponent::Update() {
             GameManager::GetInstance().LoadScene();
             return;
         }
+
         LoadLevel(m_CurrentLevel);
     }
-}
-
-void LevelComponent::LateUpdate() {
-    // Implement any late update logic if needed
 }
 
 void LevelComponent::LoadLevel(int levelNumber) {
@@ -54,6 +55,9 @@ void LevelComponent::LoadLevel(int levelNumber) {
 
     // Clear previous level objects if needed
     m_Enemies.clear();
+    scene->DeleteObjectsByName("watermelon");
+    scene->DeleteObjectsByName("bubble");
+
     if(m_CurrentActiveLevelObject) m_CurrentActiveLevelObject->DeleteSelf();
 
     std::string levelCollisionsFile = "level_" + std::to_string(levelNumber) + "_collisions.txt";
@@ -123,4 +127,46 @@ bool LevelComponent::AllEnemiesDefeated() const {
     // Check if all enemies are nullptr
     // Check if the enemy vector is empty
     return m_Enemies.empty();
+}
+
+void LevelComponent::Notify(Event event, GameObject* object)
+{
+    switch (event)
+    {
+    case Event::PLAYER_JOIN:
+        std::cout << "LEVEL: PLAYER JOINED DETECTED\n";
+        break;
+    case Event::PLAYER_DAMAGE:
+        break;
+    case Event::PLAYER_DIED:
+        break;
+    case Event::PLAYER_SCORE:
+        break;
+    case Event::WATERMELON_PICKUP:
+        std::cout << "LEVEL: WATERMELON_PICKUP DETECTED\n";
+        if (object->GetName() == "player_1")
+        {
+            // we are safe to assume it has a player comp
+            PlayerComponent* playerOneComp = object->GetComponent<PlayerComponent>();
+            if (playerOneComp)
+            {
+                m_PlayerOneScore = playerOneComp->GetScore();
+                playerOneComp->GetOwner()->NotifyObservers(Event::PLAYER_SCORE);
+            }
+        }
+        else if (object->GetName() == "player_2")
+        {
+            // we are safe to assume it has a player comp
+            PlayerComponent* playerTwoComp = object->GetComponent<PlayerComponent>();
+            if (playerTwoComp)
+            {
+                m_PlayerTwoScore = playerTwoComp->GetScore();
+                playerTwoComp->GetOwner()->NotifyObservers(Event::PLAYER_SCORE);
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    object;
 }

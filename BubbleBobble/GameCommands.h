@@ -144,6 +144,7 @@ public:
 
 	virtual void Execute() override
 	{
+		ServiceLocator::GetSoundSystem().Play("Select.wav", 1.f);
 		GameManager::GetInstance().SetGameState(m_State);
 		SceneManager::GetInstance().DestroyAllScenes();
 		GameManager::GetInstance().LoadScene();

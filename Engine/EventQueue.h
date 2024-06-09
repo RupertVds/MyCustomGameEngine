@@ -2,15 +2,8 @@
 #include "Singleton.h"
 #include <functional>
 #include <unordered_map>
+#include "Observer.h"
 #include <vector>
-
-enum class Event
-{
-	PLAYER_JOIN,
-	PLAYER_DAMAGE,
-	PLAYER_DIED,
-	PLAYER_SCORE,
-};
 
 class EventQueue final : public Singleton<EventQueue>
 {

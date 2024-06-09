@@ -21,6 +21,8 @@ public:
 	bool GetIsMarkedForDeletion() const { return m_IsMarkedForDeletion; }
 	void SetIsMarkedForDeletion(bool isMarkedForDeletion) { m_IsMarkedForDeletion = isMarkedForDeletion; }
 
+	void DeleteObjectsByName(const std::string& name);
+
 	~Scene();
 	Scene(const Scene& other) = delete;
 	Scene(Scene&& other) = delete;
@@ -29,6 +31,7 @@ public:
 
 private: 
 	explicit Scene(const std::string& name);
+	void DeleteObjectsByNameRecursive(GameObject* currentObject, const std::string& name);
 
 	std::string m_Name;
 	bool m_IsMarkedForDeletion{};

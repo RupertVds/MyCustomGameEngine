@@ -35,6 +35,7 @@ void load() {
 #else
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDLSoundSystem>());
 #endif
+	ServiceLocator::GetSoundSystem().Play("Opening.wav", 0.5f);
 
 	GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
 	GameManager::GetInstance().LoadScene();

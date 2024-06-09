@@ -37,9 +37,6 @@
     <ClCompile Include="BubbleComponent.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="ZenChanComponent.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
     <ClCompile Include="ZenChanStates.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
@@ -47,6 +44,12 @@
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="LevelComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ZenChanComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="WatermelonComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="LevelComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="WatermelonComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,7 +21,7 @@ public:
 	{
 		m_Health -= amount;
 		GetOwner()->NotifyObservers(Event::PLAYER_DAMAGE);
-		EventQueue::GetInstance().NotifyEvent(Event::PLAYER_DAMAGE);
+		//EventQueue::GetInstance().NotifyEvent(Event::PLAYER_DAMAGE);
 		if (m_Health == 0)
 		{
 			GetOwner()->NotifyObservers(Event::PLAYER_DIED);

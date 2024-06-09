@@ -57,6 +57,9 @@ public:
 	}
 	bool CanAttack() const { return m_CanAttack; }
 
+	void AddScore(int score) { m_Score += score; }
+	int GetScore() const { return m_Score; }
+
 	const glm::vec2& GetMovingDirection() { return m_MovementDirection; }
 	void SetMovingDirection(const glm::vec2& direction) { m_MovementDirection = direction; }
 
@@ -79,6 +82,7 @@ private:
 	BoxColliderComponent* m_pCeilingTrigger{};
 	BoxColliderComponent* m_pJumpCorrectionTrigger{};
 
+	int m_Score{};
 	bool m_IsGrounded{};
 	bool m_IsJumping{};
 	bool m_IsAttacking{};

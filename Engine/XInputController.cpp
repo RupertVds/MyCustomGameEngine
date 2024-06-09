@@ -26,7 +26,7 @@ public:
         {
             // Handle controller disconnected or other error
             // I may want to implement error handling here
-            std::cout << "A CONTROLLER IS MISSING \n";
+            //std::cout << "A CONTROLLER IS MISSING \n";
             return;
         }
 

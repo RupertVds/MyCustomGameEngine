@@ -1,16 +1,16 @@
 #pragma once
 #include "GameObject.h"
-#include "EventQueue.h"
 
 class GameObject;
 
-//enum class Event
-//{
-//	ActorDied,
-//	ActorDamaged,
-//	ActorFell,
-//	IncreasedScore,
-//};
+enum class Event
+{
+	PLAYER_JOIN,
+	PLAYER_DAMAGE,
+	PLAYER_DIED,
+	PLAYER_SCORE,
+	WATERMELON_PICKUP
+};
 
 class Observer
 {

@@ -5,7 +5,11 @@
 #include "AnimatorComponent.h"
 #include "PlayerComponent.h"
 #include "PlayerStates.h"
+#include "ResourceManager.h"
+#include "GameManager.h"
 #include <Renderer.h>
+#include "BoxColliderComponent.h"
+#include "WatermelonComponent.h"
 
 class BoxColliderComponent;
 
@@ -352,6 +356,22 @@ void ZenChanDeadState::Update(BehaviorStateMachine<ZenChanComponent>& stateMachi
     {
         if (zenChanComp->IsGrounded())
         {
+            auto waterMelonObject = std::make_unique<GameObject>("watermelon");
+
+            std::shared_ptr<Texture2D> waterMelonTexture = ResourceManager::GetInstance().LoadTexture("Watermelon.png");
+
+            waterMelonObject->AddComponent<RenderComponent>(waterMelonTexture);
+            waterMelonObject->SetScale({ 2.f, 2.f, 2.f });
+
+            waterMelonObject->AddComponent<BoxColliderComponent>(32.f, 32.f, CollisionComponent::ColliderType::DYNAMIC, true, CollisionComponent::ColliderType::DYNAMIC);
+            waterMelonObject->AddComponent<WatermelonComponent>();
+            waterMelonObject->SetLocalPosition({ zenChanComp->GetPosition().x, zenChanComp->GetPosition().y });
+
+            auto scene = SceneManager::GetInstance().GetSceneByName(GameManager::GetInstance().GetCurrentGameSceneName());
+            if (scene)
+            {
+                scene->Add(std::move(waterMelonObject));
+            }
             zenChanComp->GetOwner()->DeleteSelf();
         }
     }
@@ -375,8 +395,9 @@ void ZenChanDeadState::FixedUpdate(BehaviorStateMachine<ZenChanComponent>& state
     zenChanComp->GetOwner()->SetLocalPosition(newPosition);
 }
 
-void ZenChanDeadState::Exit(BehaviorStateMachine<ZenChanComponent>&)
+void ZenChanDeadState::Exit(BehaviorStateMachine<ZenChanComponent>& stateMachine)
 {
+    stateMachine;
 }
 
 void ZenChanDeadState::HandleGround(ZenChanComponent* zenChanComp)

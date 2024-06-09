@@ -2,3 +2,9 @@ ZenChan -80 0
 ZenChan 80 0
 ZenChan -80 -50
 ZenChan 80 -50
+ZenChan -130 -50
+ZenChan 130 -50
+ZenChan -130 -100
+ZenChan 130 -100
+ZenChan -130 -150
+ZenChan 130 -150

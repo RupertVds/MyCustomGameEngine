@@ -6,6 +6,7 @@
 #include "PlayerStates.h"
 #include "ZenChanComponent.h"
 #include "ZenChanStates.h"
+#include "GameManager.h"
 
 BubbleComponent::BubbleComponent(GameObject* pOwner, const glm::vec2& dir, PlayerComponent* owner)
     : Component(pOwner),
@@ -45,16 +46,20 @@ void BubbleComponent::Update()
             auto triggeredObjects = m_pMainTrigger->GetTriggeredObjects();
             for (auto triggeredObject : triggeredObjects)
             {
-                if ((triggeredObject->GetName() == "player_1" || triggeredObject->GetName() == "player_2") && triggeredObject != m_pPlayerOwner->GetOwner())
+                if (GameManager::GetInstance().GetGameState() == GameManager::GameState::VERSUS)
                 {
-                    GetOwner()->DeleteSelf();
-                    // we could assume this is always safe
-                    auto playerComp = triggeredObject->GetComponent<PlayerComponent>();
-                    if (playerComp)
+                    if ((triggeredObject->GetName() == "player_1" || triggeredObject->GetName() == "player_2") && triggeredObject != m_pPlayerOwner->GetOwner())
                     {
-                        playerComp->GetStateMachine()->SetState(new PlayerDeadState());
+                        GetOwner()->DeleteSelf();
+                        // we could assume this is always safe
+                        auto playerComp = triggeredObject->GetComponent<PlayerComponent>();
+                        if (playerComp)
+                        {
+                            playerComp->GetStateMachine()->SetState(new PlayerDeadState());
+                        }
                     }
                 }
+
 
                 if (triggeredObject)
                 {

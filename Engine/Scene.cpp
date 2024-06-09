@@ -103,7 +103,7 @@ void Scene::DeleteObjectsByNameRecursive(GameObject* currentObject, const std::s
 	}
 
 	// Recursively traverse child objects
-	for (int i = 0; i < currentObject->GetChildCount(); ++i)
+	for (int i = 0; i < static_cast<int>(currentObject->GetChildCount()); ++i)
 	{
 		auto child = currentObject->GetChildAtIndex(i);
 		DeleteObjectsByNameRecursive(child, name);

@@ -39,10 +39,7 @@ void LevelComponent::LateUpdate() {
 
         if (m_CurrentLevel > m_MaxLevel)
         {
-            std::cout << "FINAL LEVEL COMPLETED\n";
-            GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
-            SceneManager::GetInstance().DestroyAllScenes();
-            GameManager::GetInstance().LoadScene();
+            ExitLevel();
             return;
         }
 
@@ -84,13 +81,25 @@ void LevelComponent::SkipLevel()
     if (m_CurrentLevel > m_MaxLevel)
     {
         std::cout << "FINAL LEVEL COMPLETED\n";
-        GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
-        SceneManager::GetInstance().DestroyAllScenes();
-        GameManager::GetInstance().LoadScene();
+        ExitLevel();
         return;
     }
 
     LoadLevel(m_CurrentLevel);
+}
+
+void LevelComponent::ExitLevel()
+{
+    GameManager::GetInstance().SetGameState(GameManager::GameState::HIGHSCORES);
+    SceneManager::GetInstance().DestroyAllScenes();
+    GameManager::GetInstance().LoadScene();
+
+    // Final level completed, update high scores
+    HighScoreSystem& highScoreSystem = GameManager::GetInstance().GetHighScoreSystem();
+    highScoreSystem.AddHighScore(GameManager::GetInstance().GetPlayerOneName(), m_PlayerOneScore);
+    highScoreSystem.AddHighScore(GameManager::GetInstance().GetPlayerTwoName(), m_PlayerTwoScore);
+    highScoreSystem.SaveHighScores("highscores.txt");
+    highScoreSystem.LoadHighScores("highscores.txt");
 }
 
 void LevelComponent::LoadEnemies(const std::string& fileName) {
@@ -155,9 +164,7 @@ void LevelComponent::Notify(Event event, GameObject* object)
     case Event::PLAYER_DAMAGE:
         break;
     case Event::PLAYER_DIED:
-        GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
-        SceneManager::GetInstance().DestroyAllScenes();
-        GameManager::GetInstance().LoadScene();
+        ExitLevel();
         break;
     case Event::PLAYER_SCORE:
         break;
@@ -169,8 +176,8 @@ void LevelComponent::Notify(Event event, GameObject* object)
             PlayerComponent* playerOneComp = object->GetComponent<PlayerComponent>();
             if (playerOneComp)
             {
-                m_PlayerOneScore = playerOneComp->GetScore();
                 playerOneComp->GetOwner()->NotifyObservers(Event::PLAYER_SCORE);
+                m_PlayerOneScore = playerOneComp->GetScore();
             }
         }
         else if (object->GetName() == "player_2")
@@ -179,8 +186,8 @@ void LevelComponent::Notify(Event event, GameObject* object)
             PlayerComponent* playerTwoComp = object->GetComponent<PlayerComponent>();
             if (playerTwoComp)
             {
-                m_PlayerTwoScore = playerTwoComp->GetScore();
                 playerTwoComp->GetOwner()->NotifyObservers(Event::PLAYER_SCORE);
+                m_PlayerTwoScore = playerTwoComp->GetScore();
             }
         }
         break;

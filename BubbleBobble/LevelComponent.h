@@ -18,6 +18,8 @@ public:
     void LoadLevel(int levelNumber);
     void SkipLevel();
 
+    void ExitLevel();
+
     void LoadEnemies(const std::string& fileName);
 
     void SpawnEnemy(const std::string& name, const glm::vec2& position);

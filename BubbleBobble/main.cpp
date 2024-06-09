@@ -28,6 +28,7 @@
 #include <Renderer.h>
 #include <AnimatorComponent.h>
 #include "ZenChanComponent.h"
+#include <iostream>
 
 void load() {
 #if _DEBUG
@@ -39,6 +40,18 @@ void load() {
 
 	GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
 	GameManager::GetInstance().LoadScene();
+
+	// Prompt the user to enter player names
+	std::string playerOneName, playerTwoName;
+	std::cout << "Enter Player 1 name: ";
+	std::cin >> playerOneName;
+
+	std::cout << "Enter Player 2 name: ";
+	std::cin >> playerTwoName;
+
+	// Set player names in the GameManager
+	GameManager::GetInstance().SetPlayerOneName(playerOneName);
+	GameManager::GetInstance().SetPlayerTwoName(playerTwoName);
 }
 
 int main(int, char* []) 

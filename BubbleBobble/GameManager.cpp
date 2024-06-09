@@ -28,6 +28,7 @@ void GameManager::LoadScene()
         auto& inputManager = InputManager::GetInstance();
         inputManager.AddController();
         inputManager.AddController();
+
         m_AddedControllers = true;
     }
     //InputManager::GetInstance().ClearAllBindings();
@@ -45,6 +46,9 @@ void GameManager::LoadScene()
         break;
     case GameState::VERSUS:
         LoadVersus();
+        break;
+    case GameState::HIGHSCORES:
+        LoadHighScores();
         break;
     }
 }
@@ -487,4 +491,46 @@ void GameManager::LoadVersus()
     scene.Add(std::move(playerTwoObject));
 
     std::cout << "Versus Loaded" << std::endl;
+}
+
+void GameManager::LoadHighScores()
+{
+    auto& scene = SceneManager::GetInstance().CreateScene("HighScores");
+    auto& inputManager = InputManager::GetInstance();
+    auto font = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 16);
+
+    const float textSpacing = 25.0f;
+    const float startY = Renderer::HEIGHT * 0.2f;
+
+    // Display title
+    auto titleObject = std::make_unique<GameObject>();
+    auto titleComponent = titleObject->AddComponent<RenderComponent>();
+    titleObject->AddComponent<TextComponent>("High Scores", font);
+    titleObject->SetLocalPosition({ Renderer::WIDTH * 0.5f - titleComponent->GetDestRect().w * 0.5f, startY });
+    inputManager.BindInput(SDL_SCANCODE_F1, InputBinding{ titleObject->AddCommand<LoadGameModeCommand>(GameState::TITLESCREEN), titleObject.get(), InputMode::Press });
+    inputManager.BindInput(0, GAMEPAD_A, InputBinding{ titleObject->AddCommand<LoadGameModeCommand>(GameState::TITLESCREEN), titleObject.get(), InputMode::Press });
+    inputManager.BindInput(1, GAMEPAD_A, InputBinding{ titleObject->AddCommand<LoadGameModeCommand>(GameState::TITLESCREEN), titleObject.get(), InputMode::Press });
+    scene.Add(std::move(titleObject));
+
+    // Display high scores
+    const auto& highScores = GameManager::GetInstance().GetHighScoreSystem().GetHighScores();
+    float yPos = startY + textSpacing;
+    for (const auto& entry : highScores)
+    {
+        auto scoreObject = std::make_unique<GameObject>();
+        auto scoreComponent = scoreObject->AddComponent<RenderComponent>();
+        scoreObject->AddComponent<TextComponent>(entry.playerName + " - " + std::to_string(entry.score), font);
+        scoreObject->SetLocalPosition({ Renderer::WIDTH * 0.5f - scoreComponent->GetDestRect().w * 0.5f, yPos });
+        scene.Add(std::move(scoreObject));
+
+        yPos += textSpacing;
+    }
+
+    auto exitObject = std::make_unique<GameObject>();
+    auto exitComponent = exitObject->AddComponent<RenderComponent>();
+    exitObject->AddComponent<TextComponent>("Press F1/A to exit", font);
+    exitObject->SetLocalPosition({ Renderer::WIDTH * 0.5f - exitComponent->GetDestRect().w * 0.5f, Renderer::HEIGHT - exitComponent->GetDestRect().h });
+    scene.Add(std::move(exitObject));
+
+    std::cout << "High Scores Screen Loaded" << std::endl;
 }

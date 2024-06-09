@@ -1,0 +1,10 @@
+x 200
+r 200
+player 0
+player 0
+player 0
+player 0
+player 0
+player 0
+player 0
+player 0

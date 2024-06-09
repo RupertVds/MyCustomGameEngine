@@ -52,6 +52,9 @@
     <ClCompile Include="WatermelonComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="HighScoreSystem.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCommands.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="WatermelonComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreSystem.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

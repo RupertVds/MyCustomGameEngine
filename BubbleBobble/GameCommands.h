@@ -6,6 +6,7 @@
 #include "PlayerPointsComponent.h"
 #include "GameManager.h"
 #include "InputManager.h"
+#include "LevelComponent.h"
 
 class MoveHorizontalCommand : public GameObjectCommand
 {
@@ -152,4 +153,20 @@ public:
 
 private:
 	GameManager::GameState m_State{};
+};
+
+class SkipLevelCommand final : public GameObjectCommand
+{
+public:
+	SkipLevelCommand(GameObject* object, LevelComponent* level) : GameObjectCommand(object),
+		m_Level{ level }
+	{}
+
+	virtual void Execute() override
+	{
+		m_Level->SkipLevel();
+	}
+
+private:
+	LevelComponent* m_Level {};
 };

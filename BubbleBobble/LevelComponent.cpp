@@ -57,6 +57,7 @@ void LevelComponent::LoadLevel(int levelNumber) {
     m_Enemies.clear();
     scene->DeleteObjectsByName("watermelon");
     scene->DeleteObjectsByName("bubble");
+    scene->DeleteObjectsByName("ZenChan");
 
     if(m_CurrentActiveLevelObject) m_CurrentActiveLevelObject->DeleteSelf();
 
@@ -75,6 +76,21 @@ void LevelComponent::LoadLevel(int levelNumber) {
 
     // Spawn enemies
     LoadEnemies(enemyFile);
+}
+
+void LevelComponent::SkipLevel()
+{
+    ++m_CurrentLevel;
+    if (m_CurrentLevel > m_MaxLevel)
+    {
+        std::cout << "FINAL LEVEL COMPLETED\n";
+        GameManager::GetInstance().SetGameState(GameManager::GameState::TITLESCREEN);
+        SceneManager::GetInstance().DestroyAllScenes();
+        GameManager::GetInstance().LoadScene();
+        return;
+    }
+
+    LoadLevel(m_CurrentLevel);
 }
 
 void LevelComponent::LoadEnemies(const std::string& fileName) {

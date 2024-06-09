@@ -16,6 +16,7 @@ public:
     virtual void LateUpdate() override;
 
     void LoadLevel(int levelNumber);
+    void SkipLevel();
 
     void LoadEnemies(const std::string& fileName);
 

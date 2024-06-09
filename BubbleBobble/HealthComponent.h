@@ -4,7 +4,7 @@
 class HealthComponent final : public Component
 {
 public:
-	HealthComponent(GameObject* pOwner, int maxHealth = 3) : 
+	HealthComponent(GameObject* pOwner, int maxHealth = 4) : 
 		Component(pOwner), 
 		m_MaxHealth{ maxHealth }, 
 		m_Health{ maxHealth } 

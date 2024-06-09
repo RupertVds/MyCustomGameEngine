@@ -148,6 +148,7 @@ void GameManager::LoadSinglePlayer()
 
     auto levelObject = std::make_unique<GameObject>();
     auto levelComp = levelObject->AddComponent<LevelComponent>();
+    inputManager.BindInput(SDL_SCANCODE_F1, InputBinding{ levelObject->AddCommand<SkipLevelCommand>(levelComp), levelObject.get(), InputMode::Press });
 
     // ANIMS
     auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -202,7 +203,7 @@ void GameManager::LoadSinglePlayer()
     auto healthFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 34);
     auto playerOneHealthObject = std::make_unique<GameObject>();
     auto textPlayerOneHealthObject = playerOneHealthObject->AddComponent<RenderComponent>();
-    playerOneHealthObject->AddComponent<TextComponent>("3", healthFont);
+    playerOneHealthObject->AddComponent<TextComponent>("4", healthFont);
     auto playerOneLivesObserver = playerOneHealthObject->AddComponent<PlayerLivesObserver>();
     playerOneHealthObject->SetLocalPosition({ Renderer::WIDTH - textPlayerOneHealthObject->GetDestRect().w, Renderer::HEIGHT * 0.2f });
     playerOneObject->AddObserver(playerOneLivesObserver);
@@ -240,14 +241,9 @@ void GameManager::LoadMultiplayer()
     auto font = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 24);
     auto& inputManager = InputManager::GetInstance();
 
-    std::unique_ptr<GameObject> fpsObject = std::make_unique<GameObject>();
-    fpsObject->AddComponent<RenderComponent>();
-    fpsObject->AddComponent<TextComponent>(" ", font);
-    fpsObject->AddComponent<FPSComponent>();
-    fpsObject->SetLocalPosition({ 40, 20 });
-
     auto levelObject = std::make_unique<GameObject>();
     auto levelComp = levelObject->AddComponent<LevelComponent>();
+    inputManager.BindInput(SDL_SCANCODE_F1, InputBinding{ levelObject->AddCommand<SkipLevelCommand>(levelComp), levelObject.get(), InputMode::Press });
 
     // ANIMS
     auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -339,7 +335,7 @@ void GameManager::LoadMultiplayer()
     auto healthFont = ResourceManager::GetInstance().LoadFont("Pixel_NES.otf", 34);
     auto playerOneHealthObject = std::make_unique<GameObject>();
     auto textPlayerOneHealthObject = playerOneHealthObject->AddComponent<RenderComponent>();
-    playerOneHealthObject->AddComponent<TextComponent>("3", healthFont);
+    playerOneHealthObject->AddComponent<TextComponent>("4", healthFont);
     auto playerOneLivesObserver = playerOneHealthObject->AddComponent<PlayerLivesObserver>();
     playerOneHealthObject->SetLocalPosition({ Renderer::WIDTH - textPlayerOneHealthObject->GetDestRect().w, Renderer::HEIGHT * 0.2f });
     playerOneObject->AddObserver(playerOneLivesObserver);
@@ -362,7 +358,7 @@ void GameManager::LoadMultiplayer()
 
     auto playerTwoHealthObject = std::make_unique<GameObject>();
     auto textPlayerTwoHealthObject = playerTwoHealthObject->AddComponent<RenderComponent>();
-    playerTwoHealthObject->AddComponent<TextComponent>("3", healthFont);
+    playerTwoHealthObject->AddComponent<TextComponent>("4", healthFont);
     auto playerTwoHealthObserver = playerTwoHealthObject->AddComponent<PlayerLivesObserver>();
     playerTwoHealthObject->SetLocalPosition({ Renderer::WIDTH - textPlayerTwoHealthObject->GetDestRect().w, Renderer::HEIGHT * 0.5f });
     playerTwoObject->AddObserver(playerTwoHealthObserver);
@@ -388,7 +384,6 @@ void GameManager::LoadMultiplayer()
     highScoreObject->SetLocalPosition({ Renderer::WIDTH - Renderer::UI_WIDTH * 0.5f - highScoreTextObject->GetDestRect().w * 0.5f, Renderer::HEIGHT * 0.9f });
     scene.Add(std::move(highScoreObject));
 
-    scene.Add(std::move(fpsObject));
     scene.Add(std::move(levelObject));
     scene.Add(std::move(playerOneObject));
     scene.Add(std::move(playerTwoObject));
@@ -405,13 +400,14 @@ void GameManager::LoadVersus()
     auto levelObject = std::make_unique<GameObject>();
     levelObject->AddComponent<TilemapComponent>("level_1_collisions.txt", 16, 16);
     levelObject->AddComponent<RenderComponent>(ResourceManager::GetInstance().LoadTexture("level_1.png"));
+    inputManager.BindInput(SDL_SCANCODE_F1, InputBinding{ levelObject->AddCommand<LoadGameModeCommand>(GameManager::GameState::TITLESCREEN), levelObject.get(), InputMode::Press });
     scene.Add(std::move(levelObject));
 
-    std::unique_ptr<GameObject> fpsObject = std::make_unique<GameObject>();
-    fpsObject->AddComponent<RenderComponent>();
-    fpsObject->AddComponent<TextComponent>(" ", font);
-    fpsObject->AddComponent<FPSComponent>();
-    fpsObject->SetLocalPosition({ 0, Renderer::HEIGHT });
+    //std::unique_ptr<GameObject> fpsObject = std::make_unique<GameObject>();
+    //fpsObject->AddComponent<RenderComponent>();
+    //fpsObject->AddComponent<TextComponent>(" ", font);
+    //fpsObject->AddComponent<FPSComponent>();
+    //fpsObject->SetLocalPosition({ 0, Renderer::HEIGHT });
 
     // ANIMS
     auto playerOneRunTexture = ResourceManager::GetInstance().LoadTexture("player_1_run.png");
@@ -486,7 +482,7 @@ void GameManager::LoadVersus()
     inputManager.BindInput(1, GAMEPAD_A, InputBinding{ playerTwoObject->AddCommand<JumpCommand>(), playerTwoObject.get(), InputMode::Press });
     inputManager.BindInput(1, GAMEPAD_X, InputBinding{ playerTwoObject->AddCommand<PlayerAttackCommand>(), playerTwoObject.get(), InputMode::Press });
 
-    scene.Add(std::move(fpsObject));
+    //scene.Add(std::move(fpsObject));
     scene.Add(std::move(playerOneObject));
     scene.Add(std::move(playerTwoObject));
 
